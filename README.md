@@ -70,7 +70,10 @@ dnd-labyrinth-v2/
 
 ### Prerequisites
 
-- **Node.js 18+** and npm
+**You need to install Node.js first:**
+- Download Node.js 18+ from https://nodejs.org
+- Verify installation: `node --version` (should show v18 or higher)
+- npm comes with Node.js automatically
 - **Modern web browser** (Chrome, Firefox, Safari, Edge)
 
 ### Installation
@@ -83,13 +86,17 @@ dnd-labyrinth-v2/
 
 2. **Install dependencies:**
    ```bash
+   # Install root dependencies
    npm install
+   
+   # Install client dependencies (React, Vite, etc.)
    cd client
    npm install
    ```
 
 3. **Start the development server:**
    ```bash
+   # (You should already be in the client folder from step 2)
    npm run dev
    ```
 
