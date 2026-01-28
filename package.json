@@ -1,0 +1,22 @@
+{
+  "name": "dnd-computer-labyrinth",
+  "version": "1.0.0",
+  "description": "A modernized tribute to the 1980 Mattel Electronics D&D Computer Labyrinth Game",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "setup": "node setup-audio.js && npm install && cd client && npm install",
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "npm run dev --workspace=client",
+    "dev:server": "npm run dev --workspace=server",
+    "build": "npm run build --workspace=client && npm run build --workspace=server",
+    "install:all": "npm install && npm install --workspace=client && npm install --workspace=server && npm install --workspace=shared"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

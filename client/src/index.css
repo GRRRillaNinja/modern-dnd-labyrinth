@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-gray-300;
+    font-family: 'Arial', sans-serif;
+  }
+
+  .font-medieval {
+    font-family: 'MedievalSharp', cursive;
+  }
+}
+
+@layer utilities {
+  .text-shadow-glow {
+    text-shadow: 0 0 10px currentColor;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1c1917;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7f1d1d;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #991b1b;
+}
+
+/* Secret room icon customization */
+.text-8xl {
+  font-size: 3em;
+  line-height: 1;
+  opacity: 15%;
+}
