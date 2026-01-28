@@ -86,25 +86,16 @@ dnd-labyrinth-v2/
    npm install
    cd client
    npm install
-   cd ..
    ```
 
-3. **Copy audio files (if needed):**
+3. **Start the development server:**
    ```bash
-   npm run setup
-   ```
-   This automatically copies audio files from the original project.
-
-### Development
-
-1. **Start the development server:**
-   ```bash
-   cd client
    npm run dev
    ```
 
-2. **Open your browser:**
-   - The game opens automatically at `http://localhost:3000`
+4. **Open your browser:**
+   - Visit `http://localhost:3000`
+   - The game should load automatically!
 
 ### Building for Production
 
