@@ -58,21 +58,32 @@ function App() {
       </div>
 
       {/* Main Content Area */}
-      <div className="max-w-[1600px] mx-auto px-4 py-2" style={{ height: 'calc(100vh - 68px)' }}>
-        <div className="h-full flex flex-col lg:flex-row gap-4">
-          {/* Help Sidebar - Left */}
-          <div className="lg:order-1 lg:w-80 flex-shrink-0 overflow-y-auto">
+      <div className="max-w-[1600px] mx-auto px-2 sm:px-4 py-2 overflow-y-auto" style={{ height: 'calc(100vh - 68px)' }}>
+        <div className="flex flex-col lg:flex-row gap-2 sm:gap-4 lg:h-full">
+          
+          {/* Game Controls - First on Mobile, part of Right Sidebar on Desktop */}
+          <div className="lg:hidden order-1">
+            <RightSidebar onlyControls />
+          </div>
+
+          {/* Help Sidebar - Left (Desktop) / Third on Mobile */}
+          <div className="lg:w-80 lg:flex-shrink-0 lg:overflow-y-auto order-3 lg:order-1">
             <HelpSidebar />
           </div>
 
           {/* Game Board - Center */}
-          <div className="flex-1 lg:order-2 min-h-0">
+          <div className="flex-1 order-2 flex items-center justify-center" style={{ minHeight: '300px' }}>
             <Board />
           </div>
 
-          {/* Controls Sidebar - Right */}
-          <div className="lg:order-3 lg:w-80 flex-shrink-0">
+          {/* Right Sidebar - Desktop only / Controls moved to top on mobile */}
+          <div className="hidden lg:block lg:w-80 lg:flex-shrink-0 lg:order-3">
             <RightSidebar />
+          </div>
+          
+          {/* Sound Preview - Last on Mobile */}
+          <div className="lg:hidden order-4">
+            <RightSidebar onlySounds />
           </div>
         </div>
       </div>

@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../store/gameStore';
 import { HomeIcon } from './HomeIcon';
 
 export const HelpSidebar: React.FC = () => {
   const { showHelp, toggleHelp, helpMessage, gameState, setHelpMessage } = useGameStore();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const currentWarrior = gameState?.state === 3 ? 0 : 1;
   const warrior = gameState?.warriors[currentWarrior];
 
   return (
     <div className="w-full lg:w-80 flex-shrink-0 h-full flex flex-col justify-between">
-      {/* Help Toggle */}
-      <div className="bg-stone-900 border-2 border-amber-700 rounded-lg p-3">
+      {/* Help Toggle - Desktop Only */}
+      <div className="hidden lg:block bg-stone-900 border-2 border-amber-700 rounded-lg p-3">
         <label className="flex items-center justify-between cursor-pointer">
           <span className="text-amber-400 font-medieval text-lg">Help Tips</span>
           <div className="relative">
@@ -27,9 +37,9 @@ export const HelpSidebar: React.FC = () => {
         </label>
       </div>
 
-      {/* Help Content */}
+      {/* Help Content - Always visible on mobile */}
       <AnimatePresence>
-        {showHelp && (
+        {(showHelp || isMobile) && (
           <motion.div
             initial={{ opacity: 0, scaleY: 0, originY: 0 }}
             animate={{ opacity: 1, scaleY: 1 }}
@@ -173,7 +183,7 @@ export const HelpSidebar: React.FC = () => {
       {/* Quick Legend */}
       <motion.div
         animate={{
-          y: showHelp ? 0 : '-58vh'
+          y: (showHelp || isMobile) ? 0 : '-58vh'
         }}
         transition={{
           duration: 0.3,

@@ -4,7 +4,7 @@ import { useGameStore } from '../store/gameStore';
 import { GameState, DragonState } from '@shared/types';
 import { audioService } from '../services/AudioService';
 
-export const RightSidebar: React.FC = () => {
+export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boolean }> = ({ onlyControls, onlySounds }) => {
   const {
     gameState,
     resetGame,
@@ -59,36 +59,92 @@ export const RightSidebar: React.FC = () => {
   };
 
   return (
-    <div className="w-full lg:w-80 flex-shrink-0 space-y-4">
+    <div className="w-full lg:w-80 flex-shrink-0 flex flex-col gap-4">
       {/* Controls Panel */}
+      {!onlySounds && (
       <div className="bg-stone-900 border-2 border-amber-700 rounded-lg p-4">
         <h3 className="text-amber-500 font-medieval text-lg mb-4 text-center">
           Game Controls
         </h3>
         
-        <div className="space-y-3">
+        {/* Mobile: Single row with smaller buttons */}
+        <div className="flex lg:flex-col gap-2">
           {/* Next Turn Button */}
           <button
             onClick={handleNextTurn}
             disabled={isNextTurnDisabled}
-            className="w-full px-6 py-3 bg-green-900 hover:bg-green-800 text-white rounded border-2 border-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medieval text-lg"
+            className="flex-1 lg:w-full px-3 lg:px-6 py-2 lg:py-3 bg-green-900 hover:bg-green-800 text-white rounded border-2 border-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medieval text-sm lg:text-lg"
           >
-            {getNextTurnLabel()}
+            <span className="hidden sm:inline">{getNextTurnLabel()}</span>
+            <span className="sm:hidden">Next</span>
           </button>
 
           {/* Reset Game Button */}
           <button
             onClick={resetGame}
-            className="w-full px-6 py-3 bg-red-900 hover:bg-red-800 text-white rounded border-2 border-red-700 transition-colors font-medieval text-lg"
+            className="flex-1 lg:w-full px-3 lg:px-6 py-2 lg:py-3 bg-red-900 hover:bg-red-800 text-white rounded border-2 border-red-700 transition-colors font-medieval text-sm lg:text-lg"
           >
-            Reset Game
+            <span className="hidden sm:inline">Reset Game</span>
+            <span className="sm:hidden">Reset</span>
           </button>
         </div>
 
-        {/* Warrior Info */}
+        {/* Warrior Info - Compact on Mobile, Full on Desktop */}
         {(gameState.state === GameState.WarriorOneTurn || gameState.state === GameState.WarriorTwoTurn) && (
-          <div className="mt-6 pt-4 border-t border-stone-700">
-            <div className="text-center space-y-3">
+          <div className="mt-4 lg:mt-6 pt-4 border-t border-stone-700">
+            {/* Mobile: Single Row Layout */}
+            <div className="lg:hidden">
+              <div className="flex items-center justify-between gap-3">
+                {/* Left: Current Turn + Icon */}
+                <div className="flex items-center gap-2">
+                  <span className="text-3xl">
+                    {gameState.state === GameState.WarriorOneTurn ? '🗡️' : '⚔️'}
+                  </span>
+                  <div>
+                    <div className="text-xs text-gray-400">Turn</div>
+                    <div className="text-amber-400 font-medieval text-sm">
+                      {gameState.state === GameState.WarriorOneTurn ? 'Warrior One' : 'Warrior Two'}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Right: Lives */}
+                <div className="text-right">
+                  <div className="text-xs text-gray-400 mb-1">Lives</div>
+                  <div className="flex gap-1">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <span
+                        key={i}
+                        className={`text-xl ${
+                          i < (gameState.state === GameState.WarriorOneTurn 
+                            ? gameState.warriors[0].lives 
+                            : gameState.warriors[1].lives)
+                            ? 'text-red-500'
+                            : 'text-gray-700'
+                        }`}
+                      >
+                        ♥
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Moves Remaining - Mobile */}
+              {(gameState.numberOfWarriors === 2 || gameState.dragon.state === DragonState.Awake) && (
+                <div className="mt-3 text-center">
+                  <span className="text-xs text-gray-400">Moves: </span>
+                  <span className="text-green-400 font-bold text-xl">
+                    {gameState.state === GameState.WarriorOneTurn 
+                      ? gameState.warriors[0].moves 
+                      : gameState.warriors[1].moves}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Desktop: Original Vertical Layout */}
+            <div className="hidden lg:block text-center space-y-3">
               {/* Current Turn */}
               <div>
                 <div className="text-gray-400 text-sm mb-1">Current Turn</div>
@@ -123,8 +179,7 @@ export const RightSidebar: React.FC = () => {
                 </div>
               </div>
               
-              {/* Moves Remaining */}
-              {/* Only show in multiplayer OR in solo after dragon wakes */}
+              {/* Moves Remaining - Desktop */}
               {(gameState.numberOfWarriors === 2 || gameState.dragon.state === DragonState.Awake) && (
                 <div>
                   <div className="text-gray-400 text-sm mb-1">Moves Remaining</div>
@@ -139,8 +194,10 @@ export const RightSidebar: React.FC = () => {
           </div>
         )}
       </div>
+      )}
 
       {/* Sound Preview Panel */}
+      {!onlyControls && (
       <div className="bg-stone-900 border-2 border-amber-700 rounded-lg p-4">
         <button
           onClick={() => setShowSounds(!showSounds)}
@@ -178,6 +235,7 @@ export const RightSidebar: React.FC = () => {
           )}
         </AnimatePresence>
       </div>
+      )}
     </div>
   );
 };
