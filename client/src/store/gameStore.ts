@@ -254,25 +254,41 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!gameState || gameState.warriors[warriorNumber].lives <= 0) return;
     if (gameState.state === 5) return; // GameState.GameOver
 
+    // Store current help message to check if dragon attack happened
+    const messageBeforeFinish = get().helpMessage;
+
     gameEngine.finishWarriorTurn(warriorNumber);
     const state = gameEngine.getState();
     
     const currentWarrior = state.state === 3 ? 0 : 1;
     
-    // Only mention moves if tracking them (multiplayer or solo with dragon awake)
-    const shouldTrackMoves = state.numberOfWarriors === 2 || state.dragon.state === 1; // 1 = Awake
+    // Check if a dragon attack message was set during finishWarriorTurn
+    const messageAfterFinish = get().helpMessage;
+    const dragonAttackOccurred = messageAfterFinish.includes('Dragon attacks') || 
+                                  messageAfterFinish.includes('Dragon defeats');
     
-    let message;
-    if (shouldTrackMoves) {
-      message = `Warrior ${currentWarrior === 0 ? 'one' : 'two'}'s turn with ${state.warriors[currentWarrior].moves} moves`;
-    } else {
-      message = `Warrior ${currentWarrior === 0 ? 'one' : 'two'}'s turn. Explore and find the dragon!`;
-    }
+    // Only set turn message if no dragon attack occurred
+    if (!dragonAttackOccurred) {
+      // Only mention moves if tracking them (multiplayer or solo with dragon awake)
+      const shouldTrackMoves = state.numberOfWarriors === 2 || state.dragon.state === 1; // 1 = Awake
+      
+      let message;
+      if (shouldTrackMoves) {
+        message = `Warrior ${currentWarrior === 0 ? 'one' : 'two'}'s turn with ${state.warriors[currentWarrior].moves} moves`;
+      } else {
+        message = `Warrior ${currentWarrior === 0 ? 'one' : 'two'}'s turn. Explore and find the dragon!`;
+      }
 
-    set({
-      gameState: state,
-      helpMessage: message,
-    });
+      set({
+        gameState: state,
+        helpMessage: message,
+      });
+    } else {
+      // Dragon attack occurred, keep that message but update game state
+      set({
+        gameState: state,
+      });
+    }
 
     // Determine if dragon moved
     const isMultiplayer = state.numberOfWarriors === 2;
