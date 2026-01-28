@@ -75,9 +75,10 @@ dnd-labyrinth-v2/
 
 ### Installation
 
-1. **Clone or download the repository:**
+1. **Clone the repository:**
    ```bash
-   cd C:\xampp\htdocs\dnd-labyrinth-v2
+   git clone https://github.com/GRRRillaNinja/modern-dnd-labyrinth.git
+   cd modern-dnd-labyrinth
    ```
 
 2. **Install dependencies:**
