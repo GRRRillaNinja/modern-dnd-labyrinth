@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { GameMode } from '@shared/types';
+import { audioService } from '../services/AudioService';
 
 interface MenuProps {
   onStart: (mode: GameMode, players: number, level: number) => void;
@@ -9,6 +10,22 @@ interface MenuProps {
 export const Menu: React.FC<MenuProps> = ({ onStart }) => {
   const [players, setPlayers] = useState<number>(1);
   const [level, setLevel] = useState<number>(1);
+
+  // Play intro sound on mount
+  useEffect(() => {
+    audioService.play('intro');
+
+    // Cleanup: stop intro sound when component unmounts
+    return () => {
+      audioService.stopCurrent();
+    };
+  }, []);
+
+  const handleStartGame = () => {
+    // Stop intro sound before starting game
+    audioService.stopCurrent();
+    onStart('local', players, level);
+  };
 
   return (
     <div className="h-screen flex items-center justify-center bg-gradient-to-br from-black via-red-950 to-black p-4 overflow-hidden">
@@ -51,11 +68,11 @@ export const Menu: React.FC<MenuProps> = ({ onStart }) => {
             <label className="block text-gray-300 mb-2 text-center text-sm">
               Number of Warriors
             </label>
-            <div className="flex gap-3 justify-center">
+            <div className="flex gap-2 sm:gap-3 justify-center">
               <button
                 onClick={() => setPlayers(1)}
                 className={`
-                  px-6 py-3 rounded-lg border-2 transition-all font-medieval
+                  px-4 sm:px-6 py-3 rounded-lg border-2 transition-all font-medieval text-sm sm:text-base
                   ${
                     players === 1
                       ? 'bg-red-900 border-red-700 text-white shadow-lg shadow-red-900/50'
@@ -68,7 +85,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart }) => {
               <button
                 onClick={() => setPlayers(2)}
                 className={`
-                  px-6 py-3 rounded-lg border-2 transition-all font-medieval
+                  px-4 sm:px-6 py-3 rounded-lg border-2 transition-all font-medieval text-sm sm:text-base
                   ${
                     players === 2
                       ? 'bg-red-900 border-red-700 text-white shadow-lg shadow-red-900/50'
@@ -86,11 +103,11 @@ export const Menu: React.FC<MenuProps> = ({ onStart }) => {
             <label className="block text-gray-300 mb-2 text-center text-sm">
               Difficulty Level
             </label>
-            <div className="flex gap-3 justify-center">
+            <div className="flex gap-2 sm:gap-3 justify-center">
               <button
                 onClick={() => setLevel(1)}
                 className={`
-                  px-6 py-3 rounded-lg border-2 transition-all font-medieval
+                  px-4 sm:px-6 py-3 rounded-lg border-2 transition-all font-medieval text-sm sm:text-base flex-1 sm:flex-none
                   ${
                     level === 1
                       ? 'bg-amber-900 border-amber-700 text-white shadow-lg shadow-amber-900/50'
@@ -104,7 +121,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart }) => {
               <button
                 onClick={() => setLevel(2)}
                 className={`
-                  px-6 py-3 rounded-lg border-2 transition-all font-medieval
+                  px-4 sm:px-6 py-3 rounded-lg border-2 transition-all font-medieval text-sm sm:text-base flex-1 sm:flex-none
                   ${
                     level === 2
                       ? 'bg-amber-900 border-amber-700 text-white shadow-lg shadow-amber-900/50'
@@ -123,7 +140,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart }) => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => onStart('local', players, level)}
+              onClick={handleStartGame}
               className="px-10 py-3 bg-gradient-to-r from-red-900 to-red-700 hover:from-red-800 hover:to-red-600 text-white rounded-lg border-2 border-red-600 font-medieval text-lg shadow-lg shadow-red-900/50 transition-all"
             >
               ⚔️ Begin Adventure ⚔️

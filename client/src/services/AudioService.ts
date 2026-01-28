@@ -2,6 +2,7 @@ import { Howl } from 'howler';
 import { GameEvent } from '@shared/types';
 
 export type SoundType =
+  | 'intro'
   | 'on'
   | 'levelOne'
   | 'levelTwo'
@@ -33,6 +34,7 @@ export class AudioService {
    */
   private loadSounds(): void {
     const soundFiles: Record<SoundType, string> = {
+      intro: '/audio/intro.mp3',
       on: '/audio/on.mp3',
       levelOne: '/audio/levelOne.mp3',
       levelTwo: '/audio/levelTwo.mp3',
@@ -163,6 +165,16 @@ export class AudioService {
   public stopAll(): void {
     this.sounds.forEach((sound) => sound.stop());
     this.currentSound = null;
+  }
+
+  /**
+   * Stop current playing sound
+   */
+  public stopCurrent(): void {
+    if (this.currentSound) {
+      this.currentSound.stop();
+      this.currentSound = null;
+    }
   }
 }
 
