@@ -18,6 +18,7 @@ A modernized tribute to the 1980 Mattel Electronics Dungeons & Dragons Computer 
 - ✅ **Warrior battles** - Fight for treasure possession in two-player mode
 - ✅ **Lives system** - 3 lives per warrior with strategic respawn
 - ✅ **Move-based turns** - Tactical gameplay with limited moves per turn
+- ✅ **Leaderboards** - Top 10 Leaderboards to flex your skills
 
 ### Level 2 Advanced Features
 - 🚪 **Locking door system** - Doors randomly start locked (35%) or unlocked (65%)
