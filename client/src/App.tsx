@@ -1,15 +1,40 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu } from './components/Menu';
 import { Board } from './components/Board';
 import { HelpSidebar } from './components/HelpSidebar';
 import { RightSidebar } from './components/RightSidebar';
+import { Leaderboard } from './components/Leaderboard';
+import { PlayerNameModal } from './components/PlayerNameModal';
 import { useGameStore } from './store/gameStore';
 import { GameMode } from '@shared/types';
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
-  const { initGame, gameState, gameWon, showTreasureFlash, showDoorFlash, showDeathFlash, showBattleShake, showVictoryFireworks, gameStartTime, gameEndTime } = useGameStore();
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const { 
+    initGame, 
+    gameState, 
+    gameWon, 
+    showTreasureFlash, 
+    showDoorFlash, 
+    showDeathFlash, 
+    showBattleShake, 
+    showVictoryFireworks, 
+    gameStartTime, 
+    gameEndTime,
+    showPlayerNameModal,
+    showLeaderboardAfterGame,
+    submitScore,
+    skipScoreSubmission,
+    closeLeaderboard,
+  } = useGameStore();
+
+  // Calculate game time for display
+  const getGameTime = () => {
+    if (!gameStartTime || !gameEndTime) return 0;
+    return gameEndTime - gameStartTime;
+  };
 
   // Calculate elapsed time
   const getElapsedTime = () => {
@@ -35,7 +60,7 @@ function App() {
   };
 
   if (!gameStarted) {
-    return <Menu onStart={handleStartGame} />;
+    return <Menu onStart={handleStartGame} onShowLeaderboard={() => setShowLeaderboard(true)} />;
   }
 
   return (
@@ -88,35 +113,14 @@ function App() {
         </div>
       </div>
 
-      {/* Game Over Overlay */}
-      {gameState?.state === 5 && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-          <div className="bg-stone-900 border-4 border-red-900 rounded-lg p-8 text-center max-w-md mx-4">
-            <h2 className="text-4xl font-medieval text-amber-500 mb-4">
-              {gameWon ? '🏆 Victory! 🏆' : '💀 Defeat 💀'}
-            </h2>
-            <p className="text-gray-300 mb-6">
-              {gameWon
-                ? `You found the dragon's treasure and returned to The Waystone in ${getElapsedTime()}!`
-                : `After only ${getElapsedTime()}, the dragon has slain you and protected its treasure once again.`}
-            </p>
-            <div className="flex gap-4 justify-center">
-              <button
-                onClick={() => useGameStore.getState().resetGame()}
-                className="px-6 py-3 bg-red-900 hover:bg-red-800 text-white rounded border-2 border-red-700 transition-colors font-medieval"
-              >
-                Play Again
-              </button>
-              <button
-                onClick={handleExit}
-                className="px-6 py-3 bg-stone-800 hover:bg-stone-700 text-white rounded border-2 border-stone-700 transition-colors"
-              >
-                Exit to Menu
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Player Name Modal - shown after game ends */}
+      <PlayerNameModal
+        isVisible={showPlayerNameModal}
+        gameWon={gameWon}
+        gameTime={getGameTime()}
+        onSubmit={submitScore}
+        onSkip={skipScoreSubmission}
+      />
 
       {/* Treasure Found Flash Effect */}
       <AnimatePresence>
@@ -287,6 +291,24 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Leaderboard Modal - Manual View */}
+      {showLeaderboard && gameState && (
+        <Leaderboard
+          gameMode={gameState.numberOfWarriors === 1 ? 'solo' : 'multiplayer'}
+          difficultyLevel={gameState.level as 1 | 2}
+          onClose={() => setShowLeaderboard(false)}
+        />
+      )}
+
+      {/* Leaderboard Modal - After Game Completion */}
+      {showLeaderboardAfterGame && gameState && (
+        <Leaderboard
+          gameMode={gameState.numberOfWarriors === 1 ? 'solo' : 'multiplayer'}
+          difficultyLevel={gameState.level as 1 | 2}
+          onClose={closeLeaderboard}
+        />
+      )}
     </div>
   );
 }

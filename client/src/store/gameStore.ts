@@ -7,11 +7,11 @@ import {
   GameEvent,
   GameMode,
   DEFAULT_SETTINGS,
-  DiscoveredWalls,
 } from '@shared/types';
 import { GameEngine } from '../game/GameEngine';
 import { MazeGenerator } from '../game/MazeGenerator';
 import { audioService } from '../services/AudioService';
+import { supabaseService } from '../services/SupabaseService';
 
 // Dragon turn delay (milliseconds) - time to wait for dragon flying sound and movement animation
 const DRAGON_TURN_DELAY = 2500;
@@ -33,6 +33,8 @@ interface GameStore {
   gameStartTime: number | null; // Timestamp when first move was made
   gameEndTime: number | null; // Timestamp when game ended
   isDragonTurn: boolean; // Block player input during dragon's turn
+  showPlayerNameModal: boolean; // Show modal to collect player name
+  showLeaderboardAfterGame: boolean; // Show leaderboard after score submission
 
   // Actions
   initGame: (mode: GameMode, numberOfWarriors: number, level: number) => void;
@@ -45,6 +47,9 @@ interface GameStore {
   toggleHelp: () => void;
   setHelpMessage: (message: string, temporary?: boolean) => void;
   handleGameEvent: (event: GameEvent) => void;
+  submitScore: (playerName: string) => Promise<void>;
+  skipScoreSubmission: () => void;
+  closeLeaderboard: () => void;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -64,9 +69,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   gameStartTime: null,
   gameEndTime: null,
   isDragonTurn: false,
+  showPlayerNameModal: false,
+  showLeaderboardAfterGame: false,
 
   // Initialize game
-  initGame: (mode: GameMode, numberOfWarriors: number, level: number) => {
+  initGame: (_mode: GameMode, numberOfWarriors: number, level: number) => {
     const { settings } = get();
     
     // Create game engine
@@ -99,6 +106,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       gameWon: false, // Reset game result
       gameStartTime: null, // Reset timer
       gameEndTime: null,
+      showPlayerNameModal: false,
+      showLeaderboardAfterGame: false,
     });
 
     audioService.announceWarrior(0);
@@ -213,7 +222,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // Always announce warrior when turn resets, but only block for dragon if dragon moved
     if (turnResetWarrior >= 0) {
       const isMultiplayer = newState.numberOfWarriors === 2;
-      const justResetToPlayer2 = turnResetWarrior === 1;
       const justResetToPlayer1 = turnResetWarrior === 0;
       
       // In multiplayer, check if dragon actually moved
@@ -253,9 +261,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // Don't allow turn finish if warrior is dead or game is over
     if (!gameState || gameState.warriors[warriorNumber].lives <= 0) return;
     if (gameState.state === 5) return; // GameState.GameOver
-
-    // Store current help message to check if dragon attack happened
-    const messageBeforeFinish = get().helpMessage;
 
     gameEngine.finishWarriorTurn(warriorNumber);
     const state = gameEngine.getState();
@@ -355,7 +360,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   // Set help message
-  setHelpMessage: (message: string, temporary: boolean = false) => {
+  setHelpMessage: (message: string, _temporary: boolean = false) => {
     // Always set the message and keep it visible
     // Messages only disappear when replaced by another message
     set({ helpMessage: message });
@@ -367,7 +372,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!gameState) return;
 
     let message = '';
-    const currentWarrior = gameState.state === 3 ? 0 : 1;
 
     switch (event.type) {
       case 'WARRIOR_MOVED':
@@ -474,13 +478,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
         
         // Trigger victory fireworks
         set({ showVictoryFireworks: true, gameWon: true, gameEndTime: Date.now() });
-        // Keep fireworks for 5 seconds
-        setTimeout(() => set({ showVictoryFireworks: false }), 5000);
+        // Keep fireworks for 5 seconds, then show name modal if Supabase is enabled
+        setTimeout(() => {
+          set({ showVictoryFireworks: false });
+          // Show player name modal after fireworks if Supabase is configured
+          if (supabaseService.isEnabled()) {
+            setTimeout(() => set({ showPlayerNameModal: true }), 500);
+          }
+        }, 5000);
         break;
 
       case 'GAME_LOST':
         message = '💀 GAME OVER! All warriors have fallen to the dragon. The treasure remains lost forever...';
         set({ gameWon: false, gameEndTime: Date.now() });
+        // Show player name modal after 2 seconds if Supabase is enabled
+        if (supabaseService.isEnabled()) {
+          setTimeout(() => set({ showPlayerNameModal: true }), 2000);
+        }
         break;
 
       case 'WALL_HIT':
@@ -580,5 +594,50 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (event.type !== 'DOOR_CLOSED') {
       audioService.playForEvent(event);
     }
+  },
+
+  // Submit score to leaderboard
+  submitScore: async (playerName: string) => {
+    const { gameState, gameStartTime, gameEndTime, gameWon } = get();
+    
+    if (!gameState || !gameStartTime || !gameEndTime) {
+      console.error('Cannot submit score: missing game data');
+      return;
+    }
+
+    const gameTime = gameEndTime - gameStartTime;
+    const gameMode = gameState.numberOfWarriors === 1 ? 'solo' : 'multiplayer';
+    const gameResult = gameWon ? 'win' : 'loss';
+    const difficultyLevel = gameState.level as 1 | 2;
+
+    const success = await supabaseService.submitScore(
+      gameTime,
+      gameResult,
+      gameMode,
+      difficultyLevel,
+      playerName
+    );
+
+    if (success) {
+      // Hide modal and show leaderboard
+      set({
+        showPlayerNameModal: false,
+        showLeaderboardAfterGame: true,
+      });
+    } else {
+      // If submission failed, just close the modal
+      set({ showPlayerNameModal: false });
+      console.error('Failed to submit score to leaderboard');
+    }
+  },
+
+  // Skip score submission
+  skipScoreSubmission: () => {
+    set({ showPlayerNameModal: false });
+  },
+
+  // Close leaderboard
+  closeLeaderboard: () => {
+    set({ showLeaderboardAfterGame: false });
   },
 }));

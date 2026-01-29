@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { GameMode } from '@shared/types';
 import { audioService } from '../services/AudioService';
+import { Leaderboard } from './Leaderboard';
 
 interface MenuProps {
   onStart: (mode: GameMode, players: number, level: number) => void;
+  onShowLeaderboard: () => void;
 }
 
-export const Menu: React.FC<MenuProps> = ({ onStart }) => {
+export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard }) => {
   const [players, setPlayers] = useState<number>(1);
   const [level, setLevel] = useState<number>(1);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   // Play intro sound on mount
   useEffect(() => {
-    audioService.play('intro');
+    // Try to play intro (will work after user interaction)
+    audioService.play('intro').catch(() => {
+      console.log('Intro music will play after user interaction');
+    });
 
     // Cleanup: stop intro sound when component unmounts
     return () => {
@@ -24,7 +30,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart }) => {
   const handleStartGame = () => {
     // Stop intro sound before starting game
     audioService.stopCurrent();
-    onStart('local', players, level);
+    onStart(GameMode.LocalMultiplayer, players, level);
   };
 
   return (
@@ -136,7 +142,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart }) => {
           </div>
 
           {/* Start button */}
-          <div className="text-center mb-5">
+          <div className="text-center mb-3">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -145,6 +151,16 @@ export const Menu: React.FC<MenuProps> = ({ onStart }) => {
             >
               ⚔️ Begin Adventure ⚔️
             </motion.button>
+          </div>
+
+          {/* Leaderboard Button */}
+          <div className="text-center mb-5">
+            <button
+              onClick={() => setShowLeaderboard(true)}
+              className="px-6 py-2 bg-amber-900/50 hover:bg-amber-900 text-amber-400 hover:text-white rounded border-2 border-amber-700 transition-colors font-medieval text-sm"
+            >
+              🏆 View Leaderboards
+            </button>
           </div>
 
           {/* Instructions */}
@@ -181,6 +197,15 @@ export const Menu: React.FC<MenuProps> = ({ onStart }) => {
           </p>
         </motion.div>
       </motion.div>
+
+      {/* Leaderboard Modal */}
+      {showLeaderboard && (
+        <Leaderboard
+          gameMode={players === 1 ? 'solo' : 'multiplayer'}
+          difficultyLevel={level as 1 | 2}
+          onClose={() => setShowLeaderboard(false)}
+        />
+      )}
     </div>
   );
 };
