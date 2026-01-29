@@ -9,6 +9,7 @@
     "shared"
   ],
   "scripts": {
+    "prepush": "npm run build",
     "setup": "node setup-audio.js && npm install && cd client && npm install",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "npm run dev --workspace=client",
