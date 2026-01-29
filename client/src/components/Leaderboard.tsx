@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { supabaseService, LeaderboardEntry, SupabaseService } from '../services/SupabaseService';
 
 interface LeaderboardProps {
@@ -8,7 +8,7 @@ interface LeaderboardProps {
   onClose: () => void;
 }
 
-export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode, difficultyLevel, onClose }) => {
+export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, difficultyLevel: _difficultyLevel, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<'fastest-win' | 'slowest-win' | 'fastest-loss' | 'longest-loss'>('fastest-win');
   const [leaderboards, setLeaderboards] = useState<{
@@ -97,7 +97,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode, difficultyLe
     }
   };
 
-  const renderLeaderboardList = (entries: LeaderboardEntry[], mode: 'solo' | 'multiplayer') => {
+  const renderLeaderboardList = (entries: LeaderboardEntry[]) => {
     if (loading) {
       return (
         <div className="text-center text-gray-400 py-8">
@@ -249,7 +249,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode, difficultyLe
               <span>🗡️</span>
               <span>Solo Quest</span>
             </h4>
-            {renderLeaderboardList(currentBoards.solo, 'solo')}
+            {renderLeaderboardList(currentBoards.solo)}
           </div>
 
           {/* Multiplayer Leaderboard */}
@@ -258,7 +258,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode, difficultyLe
               <span>⚔️</span>
               <span>Two Warriors</span>
             </h4>
-            {renderLeaderboardList(currentBoards.multiplayer, 'multiplayer')}
+            {renderLeaderboardList(currentBoards.multiplayer)}
           </div>
         </div>
 

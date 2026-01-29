@@ -9,7 +9,7 @@ interface MenuProps {
   onShowLeaderboard: () => void;
 }
 
-export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard }) => {
+export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowLeaderboard }) => {
   const [players, setPlayers] = useState<number>(1);
   const [level, setLevel] = useState<number>(1);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
