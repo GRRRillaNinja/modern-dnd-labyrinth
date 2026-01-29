@@ -5,7 +5,6 @@ import { Board } from './components/Board';
 import { HelpSidebar } from './components/HelpSidebar';
 import { RightSidebar } from './components/RightSidebar';
 import { Leaderboard } from './components/Leaderboard';
-import { PlayerNameModal } from './components/PlayerNameModal';
 import { useGameStore } from './store/gameStore';
 import { GameMode } from '@shared/types';
 
@@ -22,32 +21,13 @@ function App() {
     showBattleShake, 
     showVictoryFireworks, 
     gameStartTime, 
-    gameEndTime,
-    showPlayerNameModal,
-    showLeaderboardAfterGame,
-    submitScore,
-    skipScoreSubmission,
-    closeLeaderboard,
+    gameEndTime
   } = useGameStore();
 
-  // Calculate game time for display
-  const getGameTime = () => {
+  // Calculate game time for display  
+  const _getGameTime = () => {
     if (!gameStartTime || !gameEndTime) return 0;
     return gameEndTime - gameStartTime;
-  };
-
-  // Calculate elapsed time
-  const getElapsedTime = () => {
-    if (!gameStartTime || !gameEndTime) return '';
-    const elapsedMs = gameEndTime - gameStartTime;
-    const seconds = Math.floor(elapsedMs / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    
-    if (minutes === 0) {
-      return `${seconds} second${seconds === 1 ? '' : 's'}`;
-    }
-    return `${minutes} minute${minutes === 1 ? '' : 's'} ${remainingSeconds} second${remainingSeconds === 1 ? '' : 's'}`;
   };
 
   const handleStartGame = (mode: GameMode, players: number, level: number) => {
@@ -112,15 +92,6 @@ function App() {
           </div>
         </div>
       </div>
-
-      {/* Player Name Modal - shown after game ends */}
-      <PlayerNameModal
-        isVisible={showPlayerNameModal}
-        gameWon={gameWon}
-        gameTime={getGameTime()}
-        onSubmit={submitScore}
-        onSkip={skipScoreSubmission}
-      />
 
       {/* Treasure Found Flash Effect */}
       <AnimatePresence>
@@ -298,15 +269,6 @@ function App() {
           gameMode={gameState.numberOfWarriors === 1 ? 'solo' : 'multiplayer'}
           difficultyLevel={gameState.level as 1 | 2}
           onClose={() => setShowLeaderboard(false)}
-        />
-      )}
-
-      {/* Leaderboard Modal - After Game Completion */}
-      {showLeaderboardAfterGame && gameState && (
-        <Leaderboard
-          gameMode={gameState.numberOfWarriors === 1 ? 'solo' : 'multiplayer'}
-          difficultyLevel={gameState.level as 1 | 2}
-          onClose={closeLeaderboard}
         />
       )}
     </div>
