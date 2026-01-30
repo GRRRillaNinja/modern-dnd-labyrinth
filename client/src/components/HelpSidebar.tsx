@@ -16,9 +16,6 @@ export const HelpSidebar: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const currentWarrior = gameState?.state === 3 ? 0 : 1;
-  const warrior = gameState?.warriors[currentWarrior];
-
   return (
     <div className="w-full lg:w-80 flex-shrink-0 h-full flex flex-col justify-between">
       {/* Help Toggle - Desktop Only */}

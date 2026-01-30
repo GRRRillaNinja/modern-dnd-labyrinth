@@ -26,8 +26,14 @@ export const Board: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
-      <div className="w-full h-full max-w-full max-h-full aspect-square">
+    <div className="relative flex items-center justify-center p-2 w-full" style={{ minHeight: '300px' }}>
+      <div 
+        className="relative"
+        style={{ 
+          width: 'min(100%, calc(100vh - 180px))',
+          aspectRatio: '1'
+        }}
+      >
         {/* Background board image */}
         <div className="absolute inset-0">
           <div className="w-full h-full bg-gradient-to-br from-stone-800 via-stone-900 to-black rounded-lg shadow-2xl border-4 border-red-900" />

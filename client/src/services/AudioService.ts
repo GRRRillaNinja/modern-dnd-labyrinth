@@ -1,4 +1,4 @@
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 import { GameEvent } from '@shared/types';
 
 export type SoundType =
@@ -24,9 +24,35 @@ export class AudioService {
   private sounds: Map<SoundType, Howl> = new Map();
   private enabled: boolean = true;
   private currentSound: Howl | null = null;
+  private audioUnlocked: boolean = false;
 
   constructor() {
     this.loadSounds();
+    this.setupAudioUnlock();
+  }
+
+  /**
+   * Setup audio unlock on user interaction
+   */
+  private setupAudioUnlock(): void {
+    const unlockAudio = () => {
+      if (this.audioUnlocked) return;
+
+      // Try to unlock Howler's audio context
+      const anySound = this.sounds.values().next().value;
+      if (anySound) {
+        // Play and immediately pause to unlock
+        const soundId = anySound.play();
+        anySound.pause(soundId);
+        this.audioUnlocked = true;
+      }
+    };
+
+    // Listen for user interaction
+    const events = ['click', 'touchstart', 'keydown'];
+    events.forEach(event => {
+      document.addEventListener(event, unlockAudio, { once: true });
+    });
   }
 
   /**
@@ -79,7 +105,19 @@ export class AudioService {
         this.currentSound = null;
         resolve();
       });
-      howl.play();
+      
+      // Ensure audio context is resumed before playing
+      const ctx = Howler.ctx;
+      if (ctx && ctx.state === 'suspended') {
+        ctx.resume().then(() => {
+          howl.play();
+        }).catch(() => {
+          // If resume fails, just try to play anyway
+          howl.play();
+        });
+      } else {
+        howl.play();
+      }
     });
   }
 

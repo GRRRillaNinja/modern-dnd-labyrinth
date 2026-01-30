@@ -7,13 +7,10 @@ import {
   GameStateData,
   GameSettings,
   GameEvent,
-  MoveAction,
   DEFAULT_SETTINGS,
   Warrior,
-  Dragon,
-  Treasure,
   ChamberPath,
-  DiscoveredWalls,
+  GameMode,
 } from '@shared/types';
 
 export class GameEngine {
@@ -51,7 +48,7 @@ export class GameEngine {
       },
       switchButtonOn: false,
       helpMessage: '',
-      mode: 'single',
+      mode: GameMode.SinglePlayer,
       discoveredWalls: {},
       lockedDoors: {},
     };

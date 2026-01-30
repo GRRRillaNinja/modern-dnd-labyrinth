@@ -16,7 +16,6 @@ export interface LeaderboardEntry {
 export interface LeaderboardFilters {
   game_result: 'win' | 'loss';
   game_mode: 'solo' | 'multiplayer';
-  difficulty_level: 1 | 2;
 }
 
 export class SupabaseService {
@@ -116,7 +115,7 @@ export class SupabaseService {
   }
 
   /**
-   * Get fastest wins
+   * Get fastest wins (or losses)
    */
   public async getFastestWins(
     filters: LeaderboardFilters,
@@ -130,7 +129,6 @@ export class SupabaseService {
         .select('*')
         .eq('game_result', filters.game_result)
         .eq('game_mode', filters.game_mode)
-        .eq('difficulty_level', filters.difficulty_level)
         .order('game_time', { ascending: true })
         .limit(limit);
 
@@ -147,7 +145,7 @@ export class SupabaseService {
   }
 
   /**
-   * Get slowest wins
+   * Get slowest wins (or losses)
    */
   public async getSlowestWins(
     filters: LeaderboardFilters,
@@ -161,7 +159,6 @@ export class SupabaseService {
         .select('*')
         .eq('game_result', filters.game_result)
         .eq('game_mode', filters.game_mode)
-        .eq('difficulty_level', filters.difficulty_level)
         .order('game_time', { ascending: false })
         .limit(limit);
 
@@ -178,11 +175,10 @@ export class SupabaseService {
   }
 
   /**
-   * Get all leaderboards at once
+   * Get all leaderboards at once (all difficulty levels)
    */
   public async getAllLeaderboards(
-    gameMode: 'solo' | 'multiplayer',
-    difficultyLevel: 1 | 2
+    gameMode: 'solo' | 'multiplayer'
   ): Promise<{
     fastestWins: LeaderboardEntry[];
     slowestWins: LeaderboardEntry[];
@@ -190,10 +186,10 @@ export class SupabaseService {
     longestLosses: LeaderboardEntry[];
   }> {
     const [fastestWins, slowestWins, fastestLosses, longestLosses] = await Promise.all([
-      this.getFastestWins({ game_result: 'win', game_mode: gameMode, difficulty_level: difficultyLevel }),
-      this.getSlowestWins({ game_result: 'win', game_mode: gameMode, difficulty_level: difficultyLevel }),
-      this.getFastestWins({ game_result: 'loss', game_mode: gameMode, difficulty_level: difficultyLevel }),
-      this.getSlowestWins({ game_result: 'loss', game_mode: gameMode, difficulty_level: difficultyLevel }),
+      this.getFastestWins({ game_result: 'win', game_mode: gameMode }),
+      this.getSlowestWins({ game_result: 'win', game_mode: gameMode }),
+      this.getFastestWins({ game_result: 'loss', game_mode: gameMode }),
+      this.getSlowestWins({ game_result: 'loss', game_mode: gameMode }),
     ]);
 
     return {

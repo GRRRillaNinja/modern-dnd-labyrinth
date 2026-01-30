@@ -6,7 +6,6 @@ import {
   PathType,
   Direction,
   GameStateData,
-  DiscoveredWalls,
 } from '@shared/types';
 import { ParticleCloud } from './ParticleCloud';
 import { HomeIcon } from './HomeIcon';

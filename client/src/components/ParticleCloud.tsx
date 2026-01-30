@@ -214,7 +214,7 @@ export const ParticleCloud: React.FC<ParticleCloudProps> = ({ color, warriorNumb
           particle.trail.pop();
         }
         // Fade trail
-        particle.trail.forEach((point, i) => {
+        particle.trail.forEach((point, _i) => {
           point.alpha *= 0.85;
         });
 

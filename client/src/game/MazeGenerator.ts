@@ -104,8 +104,8 @@ export class MazeGenerator {
    * Apply wall bias near edges to keep exterior walls solid
    */
   private applyEdgeWallBias(row: number, col: number): void {
-    const isEdgeCol = col === 0 || col === 7;
-    const isEdgeRow = row === 0 || row === 7;
+    const _isEdgeCol = col === 0 || col === 7;
+    const _isEdgeRow = row === 0 || row === 7;
 
     if (
       row > 0 &&
@@ -116,7 +116,7 @@ export class MazeGenerator {
         row,
         col,
         Direction.North,
-        this.wallOrNot(isEdgeCol ? 1 : this.settings.wallProb)
+        this.wallOrNot(_isEdgeCol ? 1 : this.settings.wallProb)
       );
     }
 
@@ -129,7 +129,7 @@ export class MazeGenerator {
         row,
         col,
         Direction.East,
-        this.wallOrNot(isEdgeRow ? 1 : this.settings.wallProb)
+        this.wallOrNot(_isEdgeRow ? 1 : this.settings.wallProb)
       );
     }
 
@@ -142,7 +142,7 @@ export class MazeGenerator {
         row,
         col,
         Direction.South,
-        this.wallOrNot(isEdgeCol ? 1 : this.settings.wallProb)
+        this.wallOrNot(_isEdgeCol ? 1 : this.settings.wallProb)
       );
     }
 
@@ -155,7 +155,7 @@ export class MazeGenerator {
         row,
         col,
         Direction.West,
-        this.wallOrNot(isEdgeRow ? 1 : this.settings.wallProb)
+        this.wallOrNot(_isEdgeRow ? 1 : this.settings.wallProb)
       );
     }
   }
@@ -166,8 +166,6 @@ export class MazeGenerator {
   private getAvailableDirections(row: number, col: number): Direction[] {
     const paths = this.chamberPaths[row][col];
     const opts: Direction[] = [];
-    const isEdgeCol = col === 0 || col === 7;
-    const isEdgeRow = row === 0 || row === 7;
 
     if (paths[Direction.North] === PathType.Undefined) {
       opts.push(Direction.North);
