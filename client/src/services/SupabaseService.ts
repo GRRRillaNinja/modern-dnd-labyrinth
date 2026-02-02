@@ -1,5 +1,4 @@
-// Supabase types (defined locally to avoid import errors when package not installed)
-type SupabaseClient = any;
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // Database types
 export interface LeaderboardEntry {
@@ -21,30 +20,23 @@ export interface LeaderboardFilters {
 export class SupabaseService {
   private client: SupabaseClient | null = null;
   private sessionId: string;
-  private supabaseAvailable: boolean = false;
 
   constructor() {
+    // 1. ADD THIS LINE HERE:
+    console.log("DEBUG: Vite Env Variables:", import.meta.env);
+
     // Generate or retrieve session ID
     this.sessionId = this.getOrCreateSessionId();
     
-    // Try to initialize Supabase client if env vars are present
+    // Initialize Supabase client if env vars are present
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
     
+    // 2. AND ADD THIS LINE TO SEE THE SPECIFIC VALUES:
+    console.log("DEBUG: URL:", supabaseUrl, "Key:", supabaseKey ? "Present" : "Missing");
+
     if (supabaseUrl && supabaseKey) {
-      try {
-        // Dynamically import Supabase only if package is installed
-        import('@supabase/supabase-js').then(({ createClient }) => {
-          this.client = createClient(supabaseUrl, supabaseKey);
-          this.supabaseAvailable = true;
-        }).catch(() => {
-          console.warn('Supabase package not installed. Leaderboard features will be disabled.');
-          this.supabaseAvailable = false;
-        });
-      } catch (error) {
-        console.warn('Supabase initialization failed. Leaderboard features will be disabled.');
-        this.supabaseAvailable = false;
-      }
+      this.client = createClient(supabaseUrl, supabaseKey);
     } else {
       console.warn('Supabase credentials not found. Leaderboard features will be disabled.');
     }
@@ -70,7 +62,7 @@ export class SupabaseService {
    * Check if Supabase is configured
    */
   public isEnabled(): boolean {
-    return this.client !== null && this.supabaseAvailable;
+    return this.client !== null;
   }
 
   /**
@@ -83,7 +75,7 @@ export class SupabaseService {
     difficultyLevel: 1 | 2,
     playerName?: string
   ): Promise<boolean> {
-    if (!this.client || !this.supabaseAvailable) {
+    if (!this.client) {
       console.warn('Cannot submit score: Supabase not configured');
       return false;
     }
@@ -121,7 +113,7 @@ export class SupabaseService {
     filters: LeaderboardFilters,
     limit: number = 10
   ): Promise<LeaderboardEntry[]> {
-    if (!this.client || !this.supabaseAvailable) return [];
+    if (!this.client) return [];
 
     try {
       const { data, error } = await this.client
@@ -151,7 +143,7 @@ export class SupabaseService {
     filters: LeaderboardFilters,
     limit: number = 10
   ): Promise<LeaderboardEntry[]> {
-    if (!this.client || !this.supabaseAvailable) return [];
+    if (!this.client) return [];
 
     try {
       const { data, error } = await this.client

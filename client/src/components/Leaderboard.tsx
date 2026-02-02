@@ -10,7 +10,7 @@ interface LeaderboardProps {
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, difficultyLevel: _difficultyLevel, onClose }) => {
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<'fastest-win' | 'slowest-win' | 'fastest-loss' | 'longest-loss'>('fastest-win');
+  const [selectedCategory, setSelectedCategory] = useState<'fastest-win' | 'slowest-win' | 'fastest-loss' | 'slowest-loss'>('fastest-win');
   const [leaderboards, setLeaderboards] = useState<{
     soloFastestWins: LeaderboardEntry[];
     soloSlowestWins: LeaderboardEntry[];
@@ -66,7 +66,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
         return { solo: leaderboards.soloSlowestWins, multiplayer: leaderboards.multiplayerSlowestWins };
       case 'fastest-loss':
         return { solo: leaderboards.soloFastestLosses, multiplayer: leaderboards.multiplayerFastestLosses };
-      case 'longest-loss':
+      case 'slowest-loss':
         return { solo: leaderboards.soloLongestLosses, multiplayer: leaderboards.multiplayerLongestLosses };
     }
   };
@@ -78,9 +78,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
       case 'slowest-win':
         return '🐌 Slowest Wins';
       case 'fastest-loss':
-        return '💀 Fastest Defeats';
-      case 'longest-loss':
-        return '⏳ Longest Defeats';
+        return '💀 Fastest Loss';
+      case 'slowest-loss':
+        return '⏳ Slowest Loss';
     }
   };
 
@@ -92,7 +92,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
         return '🐌';
       case 'fastest-loss':
         return '💀';
-      case 'longest-loss':
+      case 'slowest-loss':
         return '⏳';
     }
   };
@@ -216,7 +216,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
 
         {/* Category Tabs */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-4 sm:mb-6">
-          {(['fastest-win', 'slowest-win', 'fastest-loss', 'longest-loss'] as const).map((category) => (
+          {(['fastest-win', 'slowest-win', 'fastest-loss', 'slowest-loss'] as const).map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}

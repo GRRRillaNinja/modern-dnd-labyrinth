@@ -34,13 +34,33 @@ export const Board: React.FC = () => {
           aspectRatio: '1'
         }}
       >
-        {/* Background board image */}
+        {/* Background board with ornate frame */}
         <div className="absolute inset-0">
-          <div className="w-full h-full bg-gradient-to-br from-stone-800 via-stone-900 to-black rounded-lg shadow-2xl border-4 border-red-900" />
+          {/* Board frame image */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: 'url(/textures/board-frame.png)',
+              backgroundSize: '100% 100%',
+              backgroundRepeat: 'no-repeat',
+            }}
+          />
+          {/* Inner board area - dark background for grid */}
+          <div
+            className="absolute rounded"
+            style={{
+              top: '5%',
+              left: '5%',
+              right: '5%',
+              bottom: '5%',
+              background: 'linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 100%)',
+              boxShadow: 'inset 0 0 20px rgba(0,0,0,0.8)',
+            }}
+          />
         </div>
 
         {/* Grid */}
-        <div className="relative w-full h-full p-4 grid grid-cols-8 grid-rows-8 gap-1">
+        <div className="relative w-full h-full p-[6%] grid grid-cols-8 grid-rows-8 gap-1">
           {Array.from({ length: 8 }).map((_, row) =>
             Array.from({ length: 8 }).map((_, col) => {
               const position: Position = [row, col];

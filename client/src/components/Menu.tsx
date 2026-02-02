@@ -34,7 +34,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-black via-red-950 to-black p-4 overflow-hidden">
+    <div className="h-screen flex items-center justify-center p-4 overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -54,8 +54,18 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
             Computer Labyrinth Game
           </h2>
           <div className="mt-2 text-gray-400 text-xs">
-            A modernized tribute to the 1980 Mattel Electronics classic
+            A modernized tribute to the 1980 Mattel Electronics classic, heavily inspired by <a href="https://github.com/bobwhitley/dndlabyrinth" className="text-amber-500 hover:text-amber-400 text-xs underline transition-colors">Bob Whitley's port</a> to a modern computer game.
           </div>
+<div className="mt-1">
+  
+    <a href="https://tinyurl.com/dndlab-manual"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-amber-500 hover:text-amber-400 text-xs underline transition-colors"
+  >
+    View Game Manual
+  </a>
+</div>
         </motion.div>
 
         {/* Game modes */}
@@ -63,11 +73,12 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-stone-900 border-4 border-red-900 rounded-lg p-6 shadow-2xl"
+          className="dungeon-panel shadow-2xl flex justify-center max-w-lg mx-auto"
         >
-          <h3 className="text-xl font-medieval text-center text-amber-500 mb-4">
-            Choose Your Quest
-          </h3>
+          <div className="dungeon-content w-auto px-8 py-6 rounded-lg">
+            <h3 className="text-xl font-medieval text-center text-amber-500 mb-4">
+              Choose Your Quest
+            </h3>
 
           {/* Player count */}
           <div className="mb-4">
@@ -144,10 +155,15 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           {/* Start button */}
           <div className="text-center mb-3">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={handleStartGame}
-              className="px-10 py-3 bg-gradient-to-r from-red-900 to-red-700 hover:from-red-800 hover:to-red-600 text-white rounded-lg border-2 border-red-600 font-medieval text-lg shadow-lg shadow-red-900/50 transition-all"
+              className="px-10 py-3 text-white rounded-lg font-medieval text-lg transition-all"
+              style={{
+                background: 'linear-gradient(180deg, #7a1f1f 0%, #5c1818 50%, #3d1010 100%)',
+                border: '3px solid #8f2828',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -2px 0 rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.5), 0 0 15px rgba(127, 29, 29, 0.4)',
+              }}
             >
               ⚔️ Begin Adventure ⚔️
             </motion.button>
@@ -157,7 +173,12 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           <div className="text-center mb-5">
             <button
               onClick={() => setShowLeaderboard(true)}
-              className="px-6 py-2 bg-amber-900/50 hover:bg-amber-900 text-amber-400 hover:text-white rounded border-2 border-amber-700 transition-colors font-medieval text-sm"
+              className="px-6 py-2 text-amber-300 hover:text-white rounded font-medieval text-sm transition-all"
+              style={{
+                background: 'linear-gradient(180deg, #5c4a32 0%, #3d2e1f 50%, #2a1f14 100%)',
+                border: '2px solid #c9a24d',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+              }}
             >
               🏆 View Leaderboards
             </button>
@@ -181,6 +202,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
                 </>
               )}
             </ul>
+          </div>
           </div>
         </motion.div>
 

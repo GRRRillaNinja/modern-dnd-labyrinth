@@ -40,5 +40,10 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+PENDING_CHANGES.md
+newcss.png
+screenshot.png
+TODO_Next_Session.txt
+github-workflow.bat
 
 .vercel

@@ -19,19 +19,21 @@ export const HelpSidebar: React.FC = () => {
   return (
     <div className="w-full lg:w-80 flex-shrink-0 h-full flex flex-col justify-between">
       {/* Help Toggle - Desktop Only */}
-      <div className="hidden lg:block bg-stone-900 border-2 border-amber-700 rounded-lg p-3">
-        <label className="flex items-center justify-between cursor-pointer">
-          <span className="text-amber-400 font-medieval text-lg">Help Tips</span>
-          <div className="relative">
-            <input
-              type="checkbox"
-              checked={showHelp}
-              onChange={toggleHelp}
-              className="sr-only peer"
-            />
-            <div className="w-11 h-6 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-600"></div>
-          </div>
-        </label>
+      <div className="hidden lg:block dungeon-panel">
+        <div className="dungeon-content">
+          <label className="flex items-center justify-between cursor-pointer">
+            <span className="text-amber-400 font-medieval text-lg">Help Tips</span>
+            <div className="relative">
+              <input
+                type="checkbox"
+                checked={showHelp}
+                onChange={toggleHelp}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-stone-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-600"></div>
+            </div>
+          </label>
+        </div>
       </div>
 
       {/* Help Content - Always visible on mobile */}
@@ -42,9 +44,9 @@ export const HelpSidebar: React.FC = () => {
             animate={{ opacity: 1, scaleY: 1 }}
             exit={{ opacity: 0, scaleY: 0 }}
             transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
-            className="bg-stone-900 border-2 border-amber-700 rounded-lg overflow-hidden"
+            className="dungeon-panel flex-1 min-h-0"
           >
-            <div className="p-4 space-y-4">
+            <div className="dungeon-content space-y-4 h-full overflow-y-auto">
             {/* Current Message */}
             {helpMessage && (
               <motion.div
@@ -180,16 +182,17 @@ export const HelpSidebar: React.FC = () => {
       {/* Quick Legend */}
       <motion.div
         animate={{
-          y: (showHelp || isMobile) ? 0 : '-58vh'
+          y: (showHelp || isMobile) ? 0 : '-45vh'
         }}
         transition={{
           duration: 0.3,
           ease: [0.4, 0.0, 0.2, 1]
         }}
-        className="bg-stone-900 border-2 border-stone-700 rounded-lg p-3"
+        className="dungeon-panel"
       >
-        <h3 className="text-stone-400 font-medieval text-sm mb-2">Legend</h3>
-        <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="dungeon-content">
+          <h3 className="text-stone-400 font-medieval text-sm mb-2">Legend</h3>
+          <div className="grid grid-cols-2 gap-2 text-xs">
           {/* Solo Mode Layout */}
           {gameState?.numberOfWarriors === 1 && (
             <>
@@ -285,6 +288,7 @@ export const HelpSidebar: React.FC = () => {
               )}
             </>
           )}
+          </div>
         </div>
       </motion.div>
     </div>

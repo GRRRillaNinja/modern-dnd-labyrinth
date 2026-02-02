@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "WebSearch",
+      "WebFetch(domain:www.textures4photoshop.com)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}

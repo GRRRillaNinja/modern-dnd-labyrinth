@@ -49,23 +49,30 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-stone-900 to-black">
+    <div className="min-h-screen">
       {/* Header */}
-      <div className="border-b border-stone-800 bg-black/50">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-          <button
-            onClick={handleExit}
-            className="px-4 py-2 text-gray-400 hover:text-white transition-colors flex items-center gap-2"
-          >
-            <span>←</span>
-            <span className="hidden sm:inline">Exit to Menu</span>
-          </button>
-          <h1 className="text-xl sm:text-2xl font-medieval text-red-500">
-            D&D Computer Labyrinth
-          </h1>
-          <div className="w-20 sm:w-32" /> {/* Spacer */}
-        </div>
-      </div>
+<div className="border-b border-stone-800 bg-black/50">
+  <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <button
+      onClick={handleExit}
+      className="px-4 py-2 text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+    >
+      <span>←</span>
+      <span className="hidden sm:inline">Exit to Menu</span>
+    </button>
+    <h1 className="text-xl sm:text-2xl font-medieval text-red-500">
+      D&D Computer Labyrinth
+    </h1>
+    
+      <a href="https://tinyurl.com/dndlab-manual"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="px-4 py-2 text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+    >
+      <span className="hidden sm:inline">Game Manual</span>
+    </a>
+  </div>
+</div>
 
       {/* Main Content Area */}
       <div className="max-w-[1600px] mx-auto px-2 sm:px-4 py-2 overflow-y-auto" style={{ height: 'calc(100vh - 68px)' }}>

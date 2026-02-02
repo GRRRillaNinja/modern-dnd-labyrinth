@@ -89,16 +89,20 @@ export const Chamber: React.FC<ChamberProps> = ({
 
   return (
     <div className="relative w-full h-full">
-      {/* Chamber cell */}
+      {/* Chamber cell - Stone floor tile */}
       <motion.div
         className={`
           w-full h-full rounded-sm
           transition-all duration-200
-          ${!isWarrior0Secret && !isWarrior1Secret ? 'bg-stone-800/40 hover:bg-stone-700/50' : ''}
           ${isDragonTurn ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}
         `}
-        whileHover={isDragonTurn ? {} : { scale: 1.05 }}
-        whileTap={isDragonTurn ? {} : { scale: 0.95 }}
+        style={{
+          background: `url('/textures/floor-tile.png')`,
+          backgroundSize: 'cover',
+          boxShadow: 'inset 2px 2px 4px rgba(80,80,80,0.3), inset -2px -2px 4px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3)',
+        }}
+        whileHover={isDragonTurn ? {} : { scale: 1.02, filter: 'brightness(1.15)' }}
+        whileTap={isDragonTurn ? {} : { scale: 0.98 }}
         onClick={isDragonTurn ? undefined : onClick}
       >
         {/* Secret room background with gradient fade */}
@@ -193,6 +197,9 @@ export const Chamber: React.FC<ChamberProps> = ({
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               className="text-3xl relative"
+              style={{
+                filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 16px rgba(255, 180, 0, 0.5))',
+              }}
             >
               {/* Pulsing ring behind treasure */}
               <div className="absolute inset-0 flex items-center justify-center">
@@ -209,6 +216,9 @@ export const Chamber: React.FC<ChamberProps> = ({
               initial={{ scale: 0, y: -20 }}
               animate={{ scale: 1, y: 0 }}
               className="text-4xl absolute z-30"
+              style={{
+                filter: 'drop-shadow(0 0 10px rgba(255, 100, 0, 0.7)) drop-shadow(0 0 20px rgba(255, 50, 0, 0.4))',
+              }}
             >
               🐉
             </motion.div>
@@ -220,6 +230,9 @@ export const Chamber: React.FC<ChamberProps> = ({
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               className={`relative text-3xl z-20 ${hasWarrior1 ? '-translate-x-2' : ''}`}
+              style={{
+                filter: 'drop-shadow(0 0 6px rgba(100, 150, 255, 0.7)) drop-shadow(0 0 12px rgba(50, 100, 255, 0.4))',
+              }}
             >
               🗡️
               {/* Treasure icon layered on top if carrying */}
@@ -228,6 +241,9 @@ export const Chamber: React.FC<ChamberProps> = ({
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   className="absolute -top-1 -right-1 text-sm"
+                  style={{
+                    filter: 'drop-shadow(0 0 4px rgba(255, 215, 0, 0.8))',
+                  }}
                 >
                   🏆
                 </motion.div>
@@ -239,6 +255,9 @@ export const Chamber: React.FC<ChamberProps> = ({
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               className={`relative text-3xl z-20 ${hasWarrior0 ? 'translate-x-2' : ''}`}
+              style={{
+                filter: 'drop-shadow(0 0 6px rgba(200, 100, 255, 0.7)) drop-shadow(0 0 12px rgba(150, 50, 255, 0.4))',
+              }}
             >
               ⚔️
               {/* Treasure icon layered on top if carrying */}
@@ -247,6 +266,9 @@ export const Chamber: React.FC<ChamberProps> = ({
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   className="absolute -top-1 -right-1 text-sm"
+                  style={{
+                    filter: 'drop-shadow(0 0 4px rgba(255, 215, 0, 0.8))',
+                  }}
                 >
                   🏆
                 </motion.div>
@@ -256,121 +278,152 @@ export const Chamber: React.FC<ChamberProps> = ({
         </div>
       </motion.div>
 
-      {/* Walls - Only show if discovered */}
+      {/* Walls - Brick texture */}
       {/* North wall */}
-      {paths[Direction.North] === PathType.Wall && row > 0 && isWallDiscovered(Direction.North) && (
-        <motion.div
-          initial={{ opacity: 0, scaleY: 0 }}
-          animate={{ opacity: 1, scaleY: 1 }}
-          className="absolute -top-0.5 left-0 right-0 h-1 bg-red-900 shadow-lg"
-        />
-      )}
-
-      {/* East wall */}
-      {paths[Direction.East] === PathType.Wall && col < 7 && isWallDiscovered(Direction.East) && (
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          className="absolute -right-0.5 top-0 bottom-0 w-1 bg-red-900 shadow-lg"
-        />
-      )}
-
-      {/* South wall */}
+      {/* South wall - horizontal, tiles repeat-x */}
       {paths[Direction.South] === PathType.Wall && row < 7 && isWallDiscovered(Direction.South) && (
         <motion.div
           initial={{ opacity: 0, scaleY: 0 }}
           animate={{ opacity: 1, scaleY: 1 }}
-          className="absolute -bottom-0.5 left-0 right-0 h-1 bg-red-900 shadow-lg"
+          className="absolute -bottom-1 left-0 right-0 h-2 rounded-sm"
+          style={{
+            backgroundImage: 'url(/textures/brick-wall.png)',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'repeat-x',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.6)',
+          }}
         />
       )}
 
-      {/* West wall */}
-      {paths[Direction.West] === PathType.Wall && col > 0 && isWallDiscovered(Direction.West) && (
+      {/* East wall - vertical */}
+      {paths[Direction.East] === PathType.Wall && col < 7 && isWallDiscovered(Direction.East) && (
         <motion.div
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
-          className="absolute -left-0.5 top-0 bottom-0 w-1 bg-red-900 shadow-lg"
+          className="absolute -right-1 top-0 bottom-0 w-2 rounded-sm"
+          style={{
+            backgroundImage: 'url(/textures/brick-wall-v.png)',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'repeat-y',
+            boxShadow: '2px 0 4px rgba(0,0,0,0.6)',
+          }}
         />
       )}
 
       {/* Doors (level 2) - Locked doors are solid, unlocked doors have gap */}
-      {/* Wall 30% | Door 40% (solid if locked, split if unlocked) | Wall 30% */}
+      {/* Only render South and East doors to avoid duplicates with adjacent chambers */}
       {gameState.level === 2 && (
         <>
-          {/* South Door */}
+          {/* South Door - horizontal */}
           {paths[Direction.South] === PathType.Door && row < 7 && (
             <>
               {/* Left wall segment (30%) */}
-              <div className="absolute -bottom-0.5 left-0 h-1 bg-red-900 shadow-lg" style={{ width: '30%' }} />
+              <div
+                className="absolute -bottom-1 left-0 h-2 rounded-sm"
+                style={{
+                  width: '30%',
+                  backgroundImage: 'url(/textures/brick-wall.png)',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'repeat-x',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.6)',
+                }}
+              />
               {isDoorLocked(Direction.South) ? (
                 /* Locked door: solid 40% bar */
-                <div className="absolute -bottom-0.5 left-[30%] h-1 bg-amber-700 rounded shadow" style={{ width: '40%' }} />
+                <div
+                  className="absolute -bottom-1 left-[30%] h-2 rounded-sm"
+                  style={{
+                    width: '40%',
+                    background: 'linear-gradient(0deg, #b8860b 0%, #8B6914 50%, #6B4f0a 100%)',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(200,180,100,0.3)',
+                  }}
+                />
               ) : (
                 /* Unlocked door: two 8% bars with 24% gap */
                 <>
-                  <div className="absolute -bottom-0.5 left-[30%] h-1 bg-amber-700 rounded shadow" style={{ width: '8%' }} />
-                  <div className="absolute -bottom-0.5 left-[62%] h-1 bg-amber-700 rounded shadow" style={{ width: '8%' }} />
+                  <div
+                    className="absolute -bottom-1 left-[30%] h-2 rounded-sm"
+                    style={{
+                      width: '8%',
+                      background: 'linear-gradient(0deg, #b8860b 0%, #8B6914 100%)',
+                    }}
+                  />
+                  <div
+                    className="absolute -bottom-1 left-[62%] h-2 rounded-sm"
+                    style={{
+                      width: '8%',
+                      background: 'linear-gradient(0deg, #b8860b 0%, #8B6914 100%)',
+                    }}
+                  />
                 </>
               )}
               {/* Right wall segment (30%) */}
-              <div className="absolute -bottom-0.5 right-0 h-1 bg-red-900 shadow-lg" style={{ width: '30%' }} />
+              <div
+                className="absolute -bottom-1 right-0 h-2 rounded-sm"
+                style={{
+                  width: '30%',
+                  backgroundImage: 'url(/textures/brick-wall.png)',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'repeat-x',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.6)',
+                }}
+              />
             </>
           )}
-          {/* East Door */}
+          {/* East Door - vertical */}
           {paths[Direction.East] === PathType.Door && col < 7 && (
             <>
               {/* Top wall segment (30%) */}
-              <div className="absolute -right-0.5 top-0 w-1 bg-red-900 shadow-lg" style={{ height: '30%' }} />
+              <div
+                className="absolute -right-1 top-0 w-2 rounded-sm"
+                style={{
+                  height: '30%',
+                  backgroundImage: 'url(/textures/brick-wall-v.png)',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'repeat-y',
+                  boxShadow: '2px 0 4px rgba(0,0,0,0.6)',
+                }}
+              />
               {isDoorLocked(Direction.East) ? (
                 /* Locked door: solid 40% bar */
-                <div className="absolute -right-0.5 top-[30%] w-1 bg-amber-700 rounded shadow" style={{ height: '40%' }} />
+                <div
+                  className="absolute -right-1 top-[30%] w-2 rounded-sm"
+                  style={{
+                    height: '40%',
+                    background: 'linear-gradient(270deg, #b8860b 0%, #8B6914 50%, #6B4f0a 100%)',
+                    boxShadow: '2px 0 4px rgba(0,0,0,0.5), inset -1px 0 0 rgba(200,180,100,0.3)',
+                  }}
+                />
               ) : (
                 /* Unlocked door: two 8% bars with 24% gap */
                 <>
-                  <div className="absolute -right-0.5 top-[30%] w-1 bg-amber-700 rounded shadow" style={{ height: '8%' }} />
-                  <div className="absolute -right-0.5 top-[62%] w-1 bg-amber-700 rounded shadow" style={{ height: '8%' }} />
+                  <div
+                    className="absolute -right-1 top-[30%] w-2 rounded-sm"
+                    style={{
+                      height: '8%',
+                      background: 'linear-gradient(270deg, #b8860b 0%, #8B6914 100%)',
+                    }}
+                  />
+                  <div
+                    className="absolute -right-1 top-[62%] w-2 rounded-sm"
+                    style={{
+                      height: '8%',
+                      background: 'linear-gradient(270deg, #b8860b 0%, #8B6914 100%)',
+                    }}
+                  />
                 </>
               )}
               {/* Bottom wall segment (30%) */}
-              <div className="absolute -right-0.5 bottom-0 w-1 bg-red-900 shadow-lg" style={{ height: '30%' }} />
-            </>
-          )}
-          {/* North Door */}
-          {paths[Direction.North] === PathType.Door && row > 0 && (
-            <>
-              {/* Left wall segment (30%) */}
-              <div className="absolute -top-0.5 left-0 h-1 bg-red-900 shadow-lg" style={{ width: '30%' }} />
-              {isDoorLocked(Direction.North) ? (
-                /* Locked door: solid 40% bar */
-                <div className="absolute -top-0.5 left-[30%] h-1 bg-amber-700 rounded shadow" style={{ width: '40%' }} />
-              ) : (
-                /* Unlocked door: two 8% bars with 24% gap */
-                <>
-                  <div className="absolute -top-0.5 left-[30%] h-1 bg-amber-700 rounded shadow" style={{ width: '8%' }} />
-                  <div className="absolute -top-0.5 left-[62%] h-1 bg-amber-700 rounded shadow" style={{ width: '8%' }} />
-                </>
-              )}
-              {/* Right wall segment (30%) */}
-              <div className="absolute -top-0.5 right-0 h-1 bg-red-900 shadow-lg" style={{ width: '30%' }} />
-            </>
-          )}
-          {/* West Door */}
-          {paths[Direction.West] === PathType.Door && col > 0 && (
-            <>
-              {/* Top wall segment (30%) */}
-              <div className="absolute -left-0.5 top-0 w-1 bg-red-900 shadow-lg" style={{ height: '30%' }} />
-              {isDoorLocked(Direction.West) ? (
-                /* Locked door: solid 40% bar */
-                <div className="absolute -left-0.5 top-[30%] w-1 bg-amber-700 rounded shadow" style={{ height: '40%' }} />
-              ) : (
-                /* Unlocked door: two 8% bars with 24% gap */
-                <>
-                  <div className="absolute -left-0.5 top-[30%] w-1 bg-amber-700 rounded shadow" style={{ height: '8%' }} />
-                  <div className="absolute -left-0.5 top-[62%] w-1 bg-amber-700 rounded shadow" style={{ height: '8%' }} />
-                </>
-              )}
-              {/* Bottom wall segment (30%) */}
-              <div className="absolute -left-0.5 bottom-0 w-1 bg-red-900 shadow-lg" style={{ height: '30%' }} />
+              <div
+                className="absolute -right-1 bottom-0 w-2 rounded-sm"
+                style={{
+                  height: '30%',
+                  backgroundImage: 'url(/textures/brick-wall-v.png)',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'repeat-y',
+                  boxShadow: '2px 0 4px rgba(0,0,0,0.6)',
+                }}
+              />
             </>
           )}
         </>

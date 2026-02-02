@@ -62,27 +62,38 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
     <div className="w-full lg:w-80 flex-shrink-0 flex flex-col gap-4">
       {/* Controls Panel */}
       {!onlySounds && (
-      <div className="bg-stone-900 border-2 border-amber-700 rounded-lg p-4">
-        <h3 className="text-amber-500 font-medieval text-lg mb-4 text-center">
-          Game Controls
-        </h3>
-        
-        {/* Mobile: Single row with smaller buttons */}
-        <div className="flex lg:flex-col gap-2">
-          {/* Next Turn Button */}
+      <div className="dungeon-panel">
+        <div className="dungeon-content">
+          <h3 className="text-amber-500 font-medieval text-lg mb-4 text-center">
+            Game Controls
+          </h3>
+
+          {/* Mobile: Single row with smaller buttons */}
+          <div className="flex lg:flex-col gap-2">
+          {/* Next Turn Button - Beveled green */}
           <button
             onClick={handleNextTurn}
             disabled={isNextTurnDisabled}
-            className="flex-1 lg:w-full px-3 lg:px-6 py-2 lg:py-3 bg-green-900 hover:bg-green-800 text-white rounded border-2 border-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medieval text-sm lg:text-lg"
+            className="flex-1 lg:w-full px-3 lg:px-6 py-2 lg:py-3 text-white rounded font-medieval text-sm lg:text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed active:translate-y-0.5"
+            style={{
+              background: 'linear-gradient(180deg, #2f7d4a 0%, #246b3a 50%, #1a5a2e 100%)',
+              border: '2px solid #3d9960',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+            }}
           >
             <span className="hidden sm:inline">{getNextTurnLabel()}</span>
             <span className="sm:hidden">Next</span>
           </button>
 
-          {/* Reset Game Button */}
+          {/* Reset Game Button - Beveled dark red */}
           <button
             onClick={resetGame}
-            className="flex-1 lg:w-full px-3 lg:px-6 py-2 lg:py-3 bg-red-900 hover:bg-red-800 text-white rounded border-2 border-red-700 transition-colors font-medieval text-sm lg:text-lg"
+            className="flex-1 lg:w-full px-3 lg:px-6 py-2 lg:py-3 text-white rounded font-medieval text-sm lg:text-lg transition-all active:translate-y-0.5"
+            style={{
+              background: 'linear-gradient(180deg, #7a1f1f 0%, #5c1818 50%, #3d1010 100%)',
+              border: '2px solid #8f2828',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+            }}
           >
             <span className="hidden sm:inline">Reset Game</span>
             <span className="sm:hidden">Reset</span>
@@ -193,13 +204,15 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
             </div>
           </div>
         )}
+        </div>
       </div>
       )}
 
       {/* Sound Preview Panel */}
       {!onlyControls && (
-      <div className="bg-stone-900 border-2 border-amber-700 rounded-lg p-4">
-        <button
+      <div className="dungeon-panel">
+        <div className="dungeon-content">
+          <button
           onClick={() => setShowSounds(!showSounds)}
           className="w-full flex items-center justify-between text-amber-500 font-medieval text-lg mb-3 hover:text-amber-400 transition-colors"
         >
@@ -219,7 +232,7 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
               <div className="text-xs text-gray-400 mb-3">
                 Click to preview each game sound:
               </div>
-              <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
                 {sounds.map((sound) => (
                   <button
                     key={sound.id}
@@ -234,6 +247,7 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
             </motion.div>
           )}
         </AnimatePresence>
+        </div>
       </div>
       )}
     </div>

@@ -23,6 +23,17 @@ export default {
           900: '#7f1d1d',
           950: '#450a0a',
         },
+        'dungeon-gold': {
+          DEFAULT: '#c9a24d',
+          light: '#e0b865',
+        },
+        'dungeon-red': '#7a1f1f',
+        'dungeon-green': '#2f7d4a',
+        'dungeon-dark': {
+          DEFAULT: '#0e0e0e',
+          lighter: '#141414',
+          panel: '#1b1b1b',
+        },
       },
     },
   },
