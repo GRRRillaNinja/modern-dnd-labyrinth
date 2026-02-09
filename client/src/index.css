@@ -154,11 +154,12 @@
   #app-tablet-sidebar {
     display: flex !important;
     order: 2 !important;
-    width: 140px !important;
-    max-width: 140px;
+    width: 160px !important;
+    max-width: 160px;
     flex-shrink: 0;
     padding-top: 4px;
     gap: 4px;
+    overflow-y: auto !important;
   }
 
   /* Hide mobile controls in favor of tablet sidebar */
@@ -216,12 +217,6 @@
     gap: 2px;
   }
 
-  /* Hide sound preview section in landscape (too much) */
-  #right-sidebar-desktop-sounds,
-  #right-sidebar-mobile-sounds-sounds {
-    display: none !important;
-  }
-
   /* Compact dungeon panel borders */
   .dungeon-panel {
     border-width: 10px;
@@ -230,6 +225,52 @@
 
   .dungeon-content {
     padding: 6px;
+  }
+
+  /* Menu/landing page landscape adjustments */
+  #menu-root {
+    padding: 8px !important;
+  }
+
+  #menu-container {
+    max-width: 100% !important;
+  }
+
+  #menu-title-main {
+    font-size: 1.5rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  #menu-title-subtitle {
+    font-size: 1rem !important;
+  }
+
+  #menu-quest-panel {
+    padding: 12px !important;
+  }
+
+  #menu-quest-title {
+    font-size: 1.25rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  #menu-mode-grid {
+    gap: 8px !important;
+  }
+
+  #menu-mode-grid > button {
+    padding: 8px !important;
+  }
+
+  #menu-settings-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  #menu-start-btn,
+  #menu-leaderboard-btn {
+    padding: 8px 16px !important;
+    font-size: 0.875rem !important;
   }
 }
 
