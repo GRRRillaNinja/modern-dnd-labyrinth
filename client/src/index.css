@@ -30,18 +30,48 @@
 }
 
 /* Dungeon panel frame styling using border-image for proper scaling */
+/* Mobile portrait (<768px): compact borders */
 .dungeon-panel {
   background: transparent;
-  border: 40px solid transparent;
-  border-image: url('/textures/panel-frame.png') 80 fill / 40px / 0 stretch;
+  border: 20px solid transparent;
+  border-image: url('/textures/panel-frame.png') 80 fill / 20px / 0 stretch;
   border-radius: 0;
+}
+
+/* Tablet/landscape (768px+): compact borders for narrow sidebar */
+@media (min-width: 768px) {
+  .dungeon-panel {
+    border-width: 14px;
+    border-image-width: 14px;
+  }
+}
+
+/* Desktop (1024px+): full ornate borders */
+@media (min-width: 1024px) {
+  .dungeon-panel {
+    border-width: 40px;
+    border-image-width: 40px;
+  }
 }
 
 /* Semi-transparent content background for readability */
 .dungeon-content {
   background: rgba(10, 8, 6, 0.6);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+@media (min-width: 768px) {
+  .dungeon-content {
+    padding: 10px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dungeon-content {
+    border-radius: 12px;
+    padding: 20px;
+  }
 }
 
 /* Scrollbar styling */

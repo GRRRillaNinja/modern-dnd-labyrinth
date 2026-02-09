@@ -70,7 +70,7 @@ export const Chamber: React.FC<ChamberProps> = ({
     gameState.dragon.position[0] === row &&
     gameState.dragon.position[1] === col;
 
-  // Check treasure
+  // Check treasure - only show on ground if no warrior has it (warrior === -1)
   const hasTreasure =
     gameState.treasure.visible &&
     gameState.treasure.warrior < 0 &&
@@ -78,19 +78,20 @@ export const Chamber: React.FC<ChamberProps> = ({
     gameState.treasure.room[0] === row &&
     gameState.treasure.room[1] === col;
 
-  // Treasure hint marker (single player only - where dragon was first spotted)
+  // Treasure hint marker (where dragon was first spotted)
   // Only show if treasure hasn't been found yet
   const showTreasureHint =
-    gameState.numberOfWarriors === 1 &&
     gameState.treasure.warrior < 0 &&
     gameState.dragon.treasureHintPosition &&
     gameState.dragon.treasureHintPosition[0] === row &&
     gameState.dragon.treasureHintPosition[1] === col;
 
   return (
-    <div className="relative w-full h-full">
+    /* Root wrapper div */
+    <div id={`chamber-${row}-${col}-root`} className="relative w-full h-full">
       {/* Chamber cell - Stone floor tile */}
       <motion.div
+        id={`chamber-${row}-${col}-floor`}
         className={`
           w-full h-full rounded-sm
           transition-all duration-200
@@ -105,10 +106,12 @@ export const Chamber: React.FC<ChamberProps> = ({
         whileTap={isDragonTurn ? {} : { scale: 0.98 }}
         onClick={isDragonTurn ? undefined : onClick}
       >
-        {/* Secret room background with gradient fade */}
+        {/* Secret room background for warrior 0 */}
         {isWarrior0Secret && (
-          <div className="absolute inset-0 rounded-sm overflow-hidden">
-            <div 
+          <div id={`chamber-${row}-${col}-secret-bg-w0`} className="absolute inset-0 rounded-sm overflow-hidden">
+            {/* Secret room gradient for warrior 0 */}
+            <div
+              id={`chamber-${row}-${col}-secret-bg-w0-gradient`}
               className="absolute inset-0"
               style={{
                 background: `radial-gradient(circle at center, rgba(30, 58, 138, 0.35) 0%, rgba(30, 58, 138, 0.15) 40%, rgba(30, 58, 138, 0.05) 70%, rgba(30, 58, 138, 0) 100%)`
@@ -116,9 +119,12 @@ export const Chamber: React.FC<ChamberProps> = ({
             />
           </div>
         )}
+        {/* Secret room background for warrior 1 */}
         {isWarrior1Secret && (
-          <div className="absolute inset-0 rounded-sm overflow-hidden">
-            <div 
+          <div id={`chamber-${row}-${col}-secret-bg-w1`} className="absolute inset-0 rounded-sm overflow-hidden">
+            {/* Secret room gradient for warrior 1 */}
+            <div
+              id={`chamber-${row}-${col}-secret-bg-w1-gradient`}
               className="absolute inset-0"
               style={{
                 background: `radial-gradient(circle at center, rgba(88, 28, 135, 0.35) 0%, rgba(88, 28, 135, 0.15) 40%, rgba(88, 28, 135, 0.05) 70%, rgba(88, 28, 135, 0) 100%)`
@@ -126,10 +132,11 @@ export const Chamber: React.FC<ChamberProps> = ({
             />
           </div>
         )}
-        
-        {/* Secret room markers - obelisk icons */}
+
+        {/* Secret room marker wrapper for warrior 0 */}
         {isWarrior0Secret && (
-          <motion.div 
+          <motion.div
+            id={`chamber-${row}-${col}-secret-marker-w0`}
             className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
             animate={{
               scale: [1, 1.15, 1],
@@ -144,8 +151,10 @@ export const Chamber: React.FC<ChamberProps> = ({
             <HomeIcon size={32} warriorNumber={0} />
           </motion.div>
         )}
+        {/* Secret room marker wrapper for warrior 1 */}
         {isWarrior1Secret && (
-          <motion.div 
+          <motion.div
+            id={`chamber-${row}-${col}-secret-marker-w1`}
             className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
             animate={{
               scale: [1, 1.15, 1],
@@ -160,7 +169,7 @@ export const Chamber: React.FC<ChamberProps> = ({
             <HomeIcon size={32} warriorNumber={1} />
           </motion.div>
         )}
-        
+
         {/* Secret room particle clouds */}
         {isWarrior0Secret && <ParticleCloud color="blue" warriorNumber={0} />}
         {isWarrior1Secret && <ParticleCloud color="purple" warriorNumber={1} />}
@@ -168,8 +177,10 @@ export const Chamber: React.FC<ChamberProps> = ({
         {/* Treasure hint marker (where dragon was first spotted - single player) */}
         {/* Only show BEFORE treasure is found */}
         <AnimatePresence mode="wait">
+          {/* Treasure hint wrapper */}
           {showTreasureHint && !hasDragon && gameState.treasure.warrior < 0 && (
             <motion.div
+              id={`chamber-${row}-${col}-treasure-hint`}
               key={`treasure-hint-${gameState.treasure.warrior}`}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 0.25 }}
@@ -177,11 +188,12 @@ export const Chamber: React.FC<ChamberProps> = ({
               transition={{ duration: 0.3 }}
               className="absolute inset-0 flex items-center justify-center pointer-events-none"
             >
-              <div className="relative">
-                {/* Pulsing ring */}
-                <div className="absolute inset-0 rounded-full border-2 border-yellow-500 animate-ping opacity-75" />
-                {/* Static marker */}
-                <div className="w-8 h-8 rounded-full border-2 border-yellow-500 bg-yellow-500/20 flex items-center justify-center">
+              {/* Treasure hint inner relative div */}
+              <div id={`chamber-${row}-${col}-treasure-hint-inner`} className="relative">
+                {/* Treasure hint pulsing ring */}
+                <div id={`chamber-${row}-${col}-treasure-hint-ping`} className="absolute inset-0 rounded-full border-2 border-yellow-500 animate-ping opacity-75" />
+                {/* Treasure hint static marker */}
+                <div id={`chamber-${row}-${col}-treasure-hint-marker`} className="w-8 h-8 rounded-full border-2 border-yellow-500 bg-yellow-500/20 flex items-center justify-center">
                   <span className="text-lg">✨</span>
                 </div>
               </div>
@@ -189,11 +201,12 @@ export const Chamber: React.FC<ChamberProps> = ({
           )}
         </AnimatePresence>
 
-        {/* Game pieces */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          {/* Treasure */}
+        {/* Game pieces container */}
+        <div id={`chamber-${row}-${col}-pieces`} className="absolute inset-0 flex items-center justify-center">
+          {/* Treasure piece */}
           {hasTreasure && (
             <motion.div
+              id={`chamber-${row}-${col}-treasure`}
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               className="text-3xl relative"
@@ -201,18 +214,19 @@ export const Chamber: React.FC<ChamberProps> = ({
                 filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 16px rgba(255, 180, 0, 0.5))',
               }}
             >
-              {/* Pulsing ring behind treasure */}
-              <div className="absolute inset-0 flex items-center justify-center">
+              {/* Treasure pulsing ring */}
+              <div id={`chamber-${row}-${col}-treasure-ping`} className="absolute inset-0 flex items-center justify-center">
                 <div className="absolute w-12 h-12 rounded-full border-2 border-yellow-400 animate-ping opacity-50" />
               </div>
               {/* Treasure icon */}
-              <span className="relative z-10">🏆</span>
+              <span id={`chamber-${row}-${col}-treasure-icon`} className="relative z-10">🏆</span>
             </motion.div>
           )}
 
-          {/* Dragon */}
+          {/* Dragon piece */}
           {hasDragon && (
             <motion.div
+              id={`chamber-${row}-${col}-dragon`}
               initial={{ scale: 0, y: -20 }}
               animate={{ scale: 1, y: 0 }}
               className="text-4xl absolute z-30"
@@ -224,9 +238,10 @@ export const Chamber: React.FC<ChamberProps> = ({
             </motion.div>
           )}
 
-          {/* Warriors */}
+          {/* Warrior 0 piece */}
           {hasWarrior0 && (
             <motion.div
+              id={`chamber-${row}-${col}-warrior-0`}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               className={`relative text-3xl z-20 ${hasWarrior1 ? '-translate-x-2' : ''}`}
@@ -235,9 +250,10 @@ export const Chamber: React.FC<ChamberProps> = ({
               }}
             >
               🗡️
-              {/* Treasure icon layered on top if carrying */}
+              {/* Warrior 0 carrying treasure */}
               {gameState.treasure.warrior === 0 && (
                 <motion.div
+                  id={`chamber-${row}-${col}-warrior-0-treasure`}
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   className="absolute -top-1 -right-1 text-sm"
@@ -250,8 +266,10 @@ export const Chamber: React.FC<ChamberProps> = ({
               )}
             </motion.div>
           )}
+          {/* Warrior 1 piece */}
           {hasWarrior1 && (
             <motion.div
+              id={`chamber-${row}-${col}-warrior-1`}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               className={`relative text-3xl z-20 ${hasWarrior0 ? 'translate-x-2' : ''}`}
@@ -260,9 +278,10 @@ export const Chamber: React.FC<ChamberProps> = ({
               }}
             >
               ⚔️
-              {/* Treasure icon layered on top if carrying */}
+              {/* Warrior 1 carrying treasure */}
               {gameState.treasure.warrior === 1 && (
                 <motion.div
+                  id={`chamber-${row}-${col}-warrior-1-treasure`}
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   className="absolute -top-1 -right-1 text-sm"
@@ -279,10 +298,10 @@ export const Chamber: React.FC<ChamberProps> = ({
       </motion.div>
 
       {/* Walls - Brick texture */}
-      {/* North wall */}
-      {/* South wall - horizontal, tiles repeat-x */}
+      {/* South wall */}
       {paths[Direction.South] === PathType.Wall && row < 7 && isWallDiscovered(Direction.South) && (
         <motion.div
+          id={`chamber-${row}-${col}-wall-south`}
           initial={{ opacity: 0, scaleY: 0 }}
           animate={{ opacity: 1, scaleY: 1 }}
           className="absolute -bottom-1 left-0 right-0 h-2 rounded-sm"
@@ -295,9 +314,10 @@ export const Chamber: React.FC<ChamberProps> = ({
         />
       )}
 
-      {/* East wall - vertical */}
+      {/* East wall */}
       {paths[Direction.East] === PathType.Wall && col < 7 && isWallDiscovered(Direction.East) && (
         <motion.div
+          id={`chamber-${row}-${col}-wall-east`}
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
           className="absolute -right-1 top-0 bottom-0 w-2 rounded-sm"
@@ -317,8 +337,9 @@ export const Chamber: React.FC<ChamberProps> = ({
           {/* South Door - horizontal */}
           {paths[Direction.South] === PathType.Door && row < 7 && (
             <>
-              {/* Left wall segment (30%) */}
+              {/* South door left wall segment */}
               <div
+                id={`chamber-${row}-${col}-door-south-wall-left`}
                 className="absolute -bottom-1 left-0 h-2 rounded-sm"
                 style={{
                   width: '30%',
@@ -329,8 +350,9 @@ export const Chamber: React.FC<ChamberProps> = ({
                 }}
               />
               {isDoorLocked(Direction.South) ? (
-                /* Locked door: solid 40% bar */
+                /* South door locked bar */
                 <div
+                  id={`chamber-${row}-${col}-door-south-locked`}
                   className="absolute -bottom-1 left-[30%] h-2 rounded-sm"
                   style={{
                     width: '40%',
@@ -341,14 +363,18 @@ export const Chamber: React.FC<ChamberProps> = ({
               ) : (
                 /* Unlocked door: two 8% bars with 24% gap */
                 <>
+                  {/* South door unlocked left bar */}
                   <div
+                    id={`chamber-${row}-${col}-door-south-open-left`}
                     className="absolute -bottom-1 left-[30%] h-2 rounded-sm"
                     style={{
                       width: '8%',
                       background: 'linear-gradient(0deg, #b8860b 0%, #8B6914 100%)',
                     }}
                   />
+                  {/* South door unlocked right bar */}
                   <div
+                    id={`chamber-${row}-${col}-door-south-open-right`}
                     className="absolute -bottom-1 left-[62%] h-2 rounded-sm"
                     style={{
                       width: '8%',
@@ -357,8 +383,9 @@ export const Chamber: React.FC<ChamberProps> = ({
                   />
                 </>
               )}
-              {/* Right wall segment (30%) */}
+              {/* South door right wall segment */}
               <div
+                id={`chamber-${row}-${col}-door-south-wall-right`}
                 className="absolute -bottom-1 right-0 h-2 rounded-sm"
                 style={{
                   width: '30%',
@@ -373,8 +400,9 @@ export const Chamber: React.FC<ChamberProps> = ({
           {/* East Door - vertical */}
           {paths[Direction.East] === PathType.Door && col < 7 && (
             <>
-              {/* Top wall segment (30%) */}
+              {/* East door top wall segment */}
               <div
+                id={`chamber-${row}-${col}-door-east-wall-top`}
                 className="absolute -right-1 top-0 w-2 rounded-sm"
                 style={{
                   height: '30%',
@@ -385,8 +413,9 @@ export const Chamber: React.FC<ChamberProps> = ({
                 }}
               />
               {isDoorLocked(Direction.East) ? (
-                /* Locked door: solid 40% bar */
+                /* East door locked bar */
                 <div
+                  id={`chamber-${row}-${col}-door-east-locked`}
                   className="absolute -right-1 top-[30%] w-2 rounded-sm"
                   style={{
                     height: '40%',
@@ -397,14 +426,18 @@ export const Chamber: React.FC<ChamberProps> = ({
               ) : (
                 /* Unlocked door: two 8% bars with 24% gap */
                 <>
+                  {/* East door unlocked top bar */}
                   <div
+                    id={`chamber-${row}-${col}-door-east-open-top`}
                     className="absolute -right-1 top-[30%] w-2 rounded-sm"
                     style={{
                       height: '8%',
                       background: 'linear-gradient(270deg, #b8860b 0%, #8B6914 100%)',
                     }}
                   />
+                  {/* East door unlocked bottom bar */}
                   <div
+                    id={`chamber-${row}-${col}-door-east-open-bottom`}
                     className="absolute -right-1 top-[62%] w-2 rounded-sm"
                     style={{
                       height: '8%',
@@ -413,8 +446,9 @@ export const Chamber: React.FC<ChamberProps> = ({
                   />
                 </>
               )}
-              {/* Bottom wall segment (30%) */}
+              {/* East door bottom wall segment */}
               <div
+                id={`chamber-${row}-${col}-door-east-wall-bottom`}
                 className="absolute -right-1 bottom-0 w-2 rounded-sm"
                 style={{
                   height: '30%',

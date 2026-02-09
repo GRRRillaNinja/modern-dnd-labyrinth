@@ -47,3 +47,4 @@ TODO_Next_Session.txt
 github-workflow.bat
 
 .vercel
+.env*.local

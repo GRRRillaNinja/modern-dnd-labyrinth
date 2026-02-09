@@ -18,10 +18,26 @@ export class GameEngine {
   private gameState: GameStateData;
   private chamberPaths: ChamberPath[][] = [];
   private eventListeners: Array<(event: GameEvent) => void> = [];
+  private preDragonState: GameStateData | null = null;
 
   constructor(settings: Partial<GameSettings> = {}) {
     this.settings = { ...DEFAULT_SETTINGS, ...settings };
     this.gameState = this.createInitialState();
+  }
+
+  /** Structured one-line action log for debugging turn flow */
+  private logAction(actor: string, action: string, extra?: string): void {
+    const p = (pos: Position | null) => pos ? `[${pos[0]},${pos[1]}]` : '---';
+    const w0 = this.gameState.warriors[0];
+    const w1 = this.gameState.warriors[1];
+    const d = this.gameState.dragon;
+    const turn = ['Wait','W1Select','W2Select','W1Turn','W2Turn','Over'][this.gameState.state];
+    const suffix = extra ? ` | ${extra}` : '';
+    console.log(
+      `%c[${actor}]%c ${action} | W0${p(w0.position)}(${w0.lives}hp,${w0.moves}mv) W1${p(w1.position)}(${w1.lives}hp,${w1.moves}mv) Dragon${p(d.position)} | ${turn}${suffix}`,
+      actor === 'Dragon' ? 'color:#ff6b6b;font-weight:bold' : 'color:#4caf50;font-weight:bold',
+      'color:inherit'
+    );
   }
 
   /**
@@ -60,6 +76,7 @@ export class GameEngine {
       secretRoom: null,
       position: null,
       moves: 0,
+      skipNextTurn: false,
     };
   }
 
@@ -357,12 +374,13 @@ export class GameEngine {
     this.emitEvent({ type: 'WARRIOR_MOVED', warriorNumber, position });
 
     // Check if warrior moved ONTO dragon's tile (suicide move)
-    if (this.gameState.dragon.position && 
+    if (this.gameState.dragon.position &&
         this.getDistance(position, this.gameState.dragon.position) === 0 &&
         !this.isWarriorSafe(warriorNumber)) {
       // Warrior walked right into the dragon!
       this.dragonAttack(warriorNumber);
-      // Don't end turn - warrior respawned, can use remaining moves
+      // Dragon attack ends turn immediately - forfeit all remaining moves
+      this.finishWarriorTurn(warriorNumber);
       return true;
     }
 
@@ -405,6 +423,7 @@ export class GameEngine {
    * Finish warrior's turn
    */
   public finishWarriorTurn(currentWarrior: number): void {
+    this.logAction(currentWarrior === 0 ? 'W0' : 'W1', 'finishWarriorTurn');
     if (this.gameState.state === GameState.GameOver) return;
     
     // Don't continue if current warrior is dead
@@ -434,7 +453,12 @@ export class GameEngine {
     }
 
     if (shouldMoveDragon) {
+      // Snapshot state AFTER warrior actions but BEFORE dragon moves.
+      // The store uses this to show warrior moves immediately during dragon chime.
+      this.preDragonState = JSON.parse(JSON.stringify(this.gameState));
       this.moveDragon();
+    } else {
+      this.preDragonState = null;
     }
 
     // Determine next turn
@@ -540,14 +564,15 @@ export class GameEngine {
         this.gameState.dragon.state = DragonState.Awake;
         this.gameState.dragon.visible = true;
         this.gameState.dragon.hasBeenVisible = true;
-        
-        // Single player only: mark position as treasure hint
+
+        // Mark dragon's position as treasure hint (treasure is within 2 tiles)
+        this.gameState.dragon.treasureHintPosition = this.gameState.dragon.position;
+
+        // Single player only: reset moves when dragon wakes (moves now matter!)
         if (this.gameState.numberOfWarriors === 1) {
-          this.gameState.dragon.treasureHintPosition = this.gameState.dragon.position;
-          // Reset warrior's moves to full when dragon wakes (moves now matter!)
           this.resetWarriorMoves(warriorNumber);
         }
-        
+
         this.emitEvent({ type: 'DRAGON_AWAKE' });
       }
     }
@@ -564,6 +589,8 @@ export class GameEngine {
    */
   private moveDragon(): void {
     if (this.gameState.dragon.state !== DragonState.Awake) return;
+
+    const dragonFrom = this.gameState.dragon.position ? [...this.gameState.dragon.position] as Position : null;
 
     let targetPos: Position | null = null;
     let followWarrior = -1;
@@ -623,10 +650,10 @@ export class GameEngine {
 
     if (targetPos && this.gameState.dragon.position) {
       const currentPos = this.gameState.dragon.position;
-      
+
       // Check if target is a secret room - don't move onto it
       const isTargetSecretRoom = this.isAnySecretRoom(targetPos);
-      
+
       if (!isTargetSecretRoom || this.getDistance(currentPos, targetPos) > 1) {
         const moveY = Math.sign(targetPos[0] - currentPos[0]);
         const moveX = Math.sign(targetPos[1] - currentPos[1]);
@@ -638,6 +665,7 @@ export class GameEngine {
         
         if (!isNewPosSecretRoom) {
           this.gameState.dragon.position = newPos;
+          this.logAction('Dragon', `moved [${dragonFrom}]→[${newPos}]`, `target=W${followWarrior}`);
 
           // Once dragon has been visible, it stays visible permanently
           if (this.gameState.dragon.hasBeenVisible) {
@@ -646,6 +674,8 @@ export class GameEngine {
 
           this.emitEvent({ type: 'DRAGON_MOVED', position: newPos });
           this.checkDragonAttacks();
+        } else {
+          this.logAction('Dragon', 'blocked (secret room)', `tried=[${newPos}]`);
         }
         // If newPos is a secret room, don't move (stay in place)
       }
@@ -657,6 +687,8 @@ export class GameEngine {
    */
   private checkDragonAttacks(): boolean {
     const unsafeWarriors = this.getUnsafeWarriors();
+
+
     const threatenedWarriors = unsafeWarriors.filter(
       (w) =>
         this.getDistance(
@@ -665,7 +697,9 @@ export class GameEngine {
         ) === 0
     );
 
-    if (threatenedWarriors.length === 0) return false;
+    if (threatenedWarriors.length === 0) {
+      return false;
+    }
 
     let attackWarrior =
       threatenedWarriors.length === 1 ? threatenedWarriors[0] : -1;
@@ -689,6 +723,7 @@ export class GameEngine {
    * Dragon attacks warrior
    */
   private dragonAttack(warriorNumber: number): void {
+    this.logAction('Dragon', `attacks W${warriorNumber}`, `lives=${this.gameState.warriors[warriorNumber].lives}→${this.gameState.warriors[warriorNumber].lives - 1}`);
     this.emitEvent({ type: 'DRAGON_ATTACK', warriorNumber });
     this.gameState.dragon.visible = true;
 
@@ -751,20 +786,29 @@ export class GameEngine {
       this.emitEvent({ type: 'WARRIOR_KILLED', warriorNumber });
 
       // Check game over
-      if (
-        this.gameState.warriors[0].lives < 1 &&
-        (this.gameState.numberOfWarriors === 1 ||
-          this.gameState.warriors[1].lives < 1)
-      ) {
+      const allDead = this.gameState.warriors[0].lives < 1 &&
+        (this.gameState.numberOfWarriors === 1 || this.gameState.warriors[1].lives < 1);
+      // In VS CPU mode, if the human player (warrior 0) dies, CPU wins
+      const playerDeadInCPUMode = this.gameState.mode === GameMode.VsCPU &&
+        warriorNumber === 0 && this.gameState.warriors[0].lives < 1;
+
+      if (allDead || playerDeadInCPUMode) {
         // Delay game over state to allow dragon movement animation to complete
         setTimeout(() => {
           this.gameState.state = GameState.GameOver;
-          this.emitEvent({ type: 'GAME_LOST' });
+          if (playerDeadInCPUMode && !allDead) {
+            // CPU wins by default — player lost all lives
+            this.emitEvent({ type: 'GAME_WON', warriorNumber: 1 });
+          } else {
+            this.emitEvent({ type: 'GAME_LOST' });
+          }
         }, 1500); // 1.5 second delay
       }
     } else {
       // Respawn at random position (not secret room, not treasure, not dragon)
+      const oldPosition = warrior.position;
       warrior.position = this.getRandomRespawnPosition();
+      this.logAction('Dragon', `W${warriorNumber} respawned [${oldPosition}]→[${warrior.position}]`);
     }
   }
 
@@ -940,6 +984,14 @@ export class GameEngine {
    */
   public getState(): GameStateData {
     return this.gameState;
+  }
+
+  /**
+   * Get the state snapshot from right before the dragon moved (after warrior actions).
+   * Used by the store to show warrior moves immediately while hiding dragon changes during chime.
+   */
+  public getPreDragonState(): GameStateData | null {
+    return this.preDragonState;
   }
 
   /**

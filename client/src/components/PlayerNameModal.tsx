@@ -5,6 +5,9 @@ interface PlayerNameModalProps {
   isVisible: boolean;
   gameWon: boolean;
   gameTime: number; // in milliseconds
+  totalMoves: number;
+  totalDeaths: number;
+  wallsDiscoveredPct: number;
   onSubmit: (playerName: string) => void;
   onSkip: () => void;
 }
@@ -15,6 +18,9 @@ export const PlayerNameModal: React.FC<PlayerNameModalProps> = ({
   isVisible,
   gameWon,
   gameTime,
+  totalMoves,
+  totalDeaths,
+  wallsDiscoveredPct,
   onSubmit,
   onSkip,
 }) => {
@@ -63,84 +69,131 @@ export const PlayerNameModal: React.FC<PlayerNameModalProps> = ({
 
   if (!isVisible) return null;
 
+  // Overlay backdrop
   return (
-    <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+    <div id="player-name-modal-overlay" className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+      {/* Modal container */}
       <motion.div
+        id="player-name-modal-container"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-stone-900 border-4 border-red-900 rounded-lg p-8 max-w-md w-full"
+        className="dungeon-panel max-w-md w-full"
       >
-        {/* Game Result Header */}
-        <div className="text-center mb-6">
-          <div className="text-6xl mb-4">
-            {gameWon ? '🏆' : '💀'}
+        {/* Inner dungeon content */}
+        <div id="player-name-modal-content" className="dungeon-content">
+          {/* Game Result Header */}
+          <div id="player-name-modal-result-header" className="text-center mb-6">
+            {/* Result icon (trophy or skull) */}
+            <div id="player-name-modal-result-icon" className="text-6xl mb-4">
+              {gameWon ? '🏆' : '💀'}
+            </div>
+            {/* Victory/Defeat title */}
+            <h2 id="player-name-modal-result-title" className="text-3xl font-medieval text-amber-500 mb-2">
+              {gameWon ? 'Victory!' : 'Defeat'}
+            </h2>
+            {/* Time display */}
+            <p id="player-name-modal-result-time" className="text-gray-400 text-lg">
+              Time: {/* Time value */}<span id="player-name-modal-result-time-value" className="text-amber-400 font-bold">{formatTime(gameTime)}</span>
+            </p>
+            {/* Game stats row */}
+            <div id="player-name-modal-stats" className="grid grid-cols-3 gap-3 mt-4">
+              {/* Moves stat */}
+              <div id="player-name-modal-stat-moves" className="text-center p-2 rounded bg-stone-800/60 border border-stone-700">
+                <div className="text-gray-500 text-xs mb-1">Moves</div>
+                <div className="text-amber-400 font-bold text-lg">{totalMoves}</div>
+              </div>
+              {/* Deaths stat */}
+              <div id="player-name-modal-stat-deaths" className="text-center p-2 rounded bg-stone-800/60 border border-stone-700">
+                <div className="text-gray-500 text-xs mb-1">Deaths</div>
+                <div className="text-red-400 font-bold text-lg">{totalDeaths}</div>
+              </div>
+              {/* Walls discovered stat */}
+              <div id="player-name-modal-stat-walls" className="text-center p-2 rounded bg-stone-800/60 border border-stone-700">
+                <div className="text-gray-500 text-xs mb-1">Walls Found</div>
+                <div className="text-blue-400 font-bold text-lg">{wallsDiscoveredPct}%</div>
+              </div>
+            </div>
           </div>
-          <h2 className="text-3xl font-medieval text-amber-500 mb-2">
-            {gameWon ? 'Victory!' : 'Defeat'}
-          </h2>
-          <p className="text-gray-400 text-lg">
-            Time: <span className="text-amber-400 font-bold">{formatTime(gameTime)}</span>
+
+          {/* Name Input Form */}
+          <form id="player-name-modal-form" onSubmit={handleSubmit} className="space-y-4">
+            {/* Field wrapper */}
+            <div id="player-name-modal-field">
+              <label htmlFor="player-name-modal-input" className="block text-gray-300 mb-2 font-medieval">
+                Enter Your Name for the Leaderboard:
+              </label>
+              {/* Input wrapper */}
+              <div id="player-name-modal-input-wrapper" className="relative">
+                {/* Name input */}
+                <input
+                  id="player-name-modal-input"
+                  type="text"
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
+                  placeholder="Brave Warrior"
+                  maxLength={30}
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 bg-stone-800 border-2 border-stone-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-amber-600 disabled:opacity-50"
+                  autoFocus
+                />
+                {playerName && (
+                  /* Clear button */
+                  <button
+                    id="player-name-modal-clear-btn"
+                    type="button"
+                    onClick={() => setPlayerName('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 text-sm"
+                    disabled={isSubmitting}
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+              {/* Character count */}
+              <p id="player-name-modal-char-count" className="text-gray-500 text-sm mt-1">
+                {playerName.length}/30 characters
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div id="player-name-modal-buttons" className="flex gap-3">
+              {/* Submit button */}
+              <button
+                id="player-name-modal-submit-btn"
+                type="submit"
+                disabled={isSubmitting}
+                className="flex-1 px-6 py-3 text-white rounded font-medieval transition-all active:translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  background: 'linear-gradient(180deg, #2f7d4a 0%, #246b3a 50%, #1a5a2e 100%)',
+                  border: '3px solid #3a9d5c',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -2px 0 rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.5)',
+                }}
+              >
+                {isSubmitting ? 'Submitting...' : (playerName.trim() ? 'Submit Score' : 'Submit Anonymously')}
+              </button>
+              {/* Skip button */}
+              <button
+                id="player-name-modal-skip-btn"
+                type="button"
+                onClick={handleSkip}
+                disabled={isSubmitting}
+                className="flex-1 px-6 py-3 text-white rounded font-medieval transition-all active:translate-y-0.5 disabled:opacity-50"
+                style={{
+                  background: 'linear-gradient(180deg, #3d3529 0%, #2a241c 50%, #1a1610 100%)',
+                  border: '3px solid #4a4035',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -2px 0 rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.5)',
+                }}
+              >
+                Skip
+              </button>
+            </div>
+          </form>
+
+          {/* Privacy Notice */}
+          <p id="player-name-modal-privacy-notice" className="text-gray-500 text-xs text-center mt-4">
+            Your score and name will be publicly visible on the leaderboard
           </p>
         </div>
-
-        {/* Name Input Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="playerName" className="block text-gray-300 mb-2 font-medieval">
-              Enter Your Name for the Leaderboard:
-            </label>
-            <div className="relative">
-              <input
-                id="playerName"
-                type="text"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="Brave Warrior"
-                maxLength={30}
-                disabled={isSubmitting}
-                className="w-full px-4 py-3 bg-stone-800 border-2 border-stone-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-amber-600 disabled:opacity-50"
-                autoFocus
-              />
-              {playerName && (
-                <button
-                  type="button"
-                  onClick={() => setPlayerName('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 text-sm"
-                  disabled={isSubmitting}
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-            <p className="text-gray-500 text-sm mt-1">
-              {playerName.length}/30 characters
-            </p>
-          </div>
-
-          {/* Buttons */}
-          <div className="flex gap-3">
-            <button
-            type="submit"
-            disabled={isSubmitting}
-            className="flex-1 px-6 py-3 bg-green-900 hover:bg-green-800 text-white rounded border-2 border-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medieval"
-            >
-            {isSubmitting ? 'Submitting...' : (playerName.trim() ? 'Submit Score' : 'Submit Anonymously')}
-            </button>
-            <button
-              type="button"
-              onClick={handleSkip}
-              disabled={isSubmitting}
-              className="flex-1 px-6 py-3 bg-stone-700 hover:bg-stone-600 text-white rounded border-2 border-stone-600 transition-colors disabled:opacity-50 font-medieval"
-            >
-              Skip
-            </button>
-          </div>
-        </form>
-
-        {/* Privacy Notice */}
-        <p className="text-gray-500 text-xs text-center mt-4">
-          Your score and name will be publicly visible on the leaderboard
-        </p>
       </motion.div>
     </div>
   );

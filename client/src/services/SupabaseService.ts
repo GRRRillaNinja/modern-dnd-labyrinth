@@ -9,6 +9,10 @@ export interface LeaderboardEntry {
   game_result: 'win' | 'loss';
   game_mode: 'solo' | 'multiplayer';
   difficulty_level: 1 | 2;
+  total_moves?: number | null;
+  total_deaths?: number | null;
+  walls_discovered_pct?: number | null;
+  vs_cpu?: boolean | null;
   created_at?: string;
 }
 
@@ -73,7 +77,11 @@ export class SupabaseService {
     gameResult: 'win' | 'loss',
     gameMode: 'solo' | 'multiplayer',
     difficultyLevel: 1 | 2,
-    playerName?: string
+    playerName?: string,
+    totalMoves?: number,
+    totalDeaths?: number,
+    wallsDiscoveredPct?: number,
+    vsCpu?: boolean
   ): Promise<boolean> {
     if (!this.client) {
       console.warn('Cannot submit score: Supabase not configured');
@@ -88,6 +96,10 @@ export class SupabaseService {
         game_result: gameResult,
         game_mode: gameMode,
         difficulty_level: difficultyLevel,
+        total_moves: totalMoves ?? null,
+        total_deaths: totalDeaths ?? null,
+        walls_discovered_pct: wallsDiscoveredPct ?? null,
+        vs_cpu: vsCpu ?? null,
       };
 
       const { error } = await this.client
@@ -111,7 +123,7 @@ export class SupabaseService {
    */
   public async getFastestWins(
     filters: LeaderboardFilters,
-    limit: number = 10
+    limit: number = 100
   ): Promise<LeaderboardEntry[]> {
     if (!this.client) return [];
 
@@ -141,7 +153,7 @@ export class SupabaseService {
    */
   public async getSlowestWins(
     filters: LeaderboardFilters,
-    limit: number = 10
+    limit: number = 100
   ): Promise<LeaderboardEntry[]> {
     if (!this.client) return [];
 
@@ -190,6 +202,54 @@ export class SupabaseService {
       fastestLosses,
       longestLosses,
     };
+  }
+
+  /**
+   * Get the rank of a score among all scores
+   * Returns the rank (1-based) and whether it's in the top 100
+   */
+  public async getScoreRank(
+    gameTime: number,
+    gameResult: 'win' | 'loss',
+    gameMode: 'solo' | 'multiplayer',
+    category: 'fastest' | 'slowest'
+  ): Promise<{ rank: number; isTop100: boolean }> {
+    if (!this.client) {
+      return { rank: 0, isTop100: false };
+    }
+
+    try {
+      // Count how many scores are better than this one
+      let query = this.client
+        .from('leaderboard')
+        .select('id', { count: 'exact', head: true })
+        .eq('game_result', gameResult)
+        .eq('game_mode', gameMode);
+
+      if (category === 'fastest') {
+        // For fastest, count scores with lower (better) times
+        query = query.lt('game_time', gameTime);
+      } else {
+        // For slowest, count scores with higher (better) times
+        query = query.gt('game_time', gameTime);
+      }
+
+      const { count, error } = await query;
+
+      if (error) {
+        console.error('Error getting score rank:', error);
+        return { rank: 0, isTop100: false };
+      }
+
+      // Rank is the number of better scores + 1
+      const rank = (count || 0) + 1;
+      const isTop100 = rank <= 100;
+
+      return { rank, isTop100 };
+    } catch (error) {
+      console.error('Exception getting score rank:', error);
+      return { rank: 0, isTop100: false };
+    }
   }
 
   /**

@@ -6,6 +6,7 @@ export type SoundType =
   | 'on'
   | 'levelOne'
   | 'levelTwo'
+  | 'dragonChime'
   | 'dragonFlying'
   | 'defeat'
   | 'dragonAttacks'
@@ -64,6 +65,7 @@ export class AudioService {
       on: '/audio/on.mp3',
       levelOne: '/audio/levelOne.mp3',
       levelTwo: '/audio/levelTwo.mp3',
+      dragonChime: '/audio/dragonchime.mp3',
       dragonFlying: '/audio/dragonFlying.mp3',
       defeat: '/audio/defeat.mp3',
       dragonAttacks: '/audio/dragonAttacks.mp3',

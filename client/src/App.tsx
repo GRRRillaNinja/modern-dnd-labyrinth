@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu } from './components/Menu';
 import { Board } from './components/Board';
@@ -6,7 +6,7 @@ import { HelpSidebar } from './components/HelpSidebar';
 import { RightSidebar } from './components/RightSidebar';
 import { Leaderboard } from './components/Leaderboard';
 import { PlayerNameModal } from './components/PlayerNameModal';
-import { useGameStore } from './store/gameStore';
+import { useGameStore, calculateWallsDiscoveredPct } from './store/gameStore';
 import { GameMode } from '@shared/types';
 
 function App() {
@@ -27,12 +27,50 @@ function App() {
     submitScore,
     skipScoreSubmission,
     closeLeaderboard,
+    submissionResult,
   } = useGameStore();
 
   // Calculate game time for display
   const getGameTime = () => {
     if (!gameStartTime || !gameEndTime) return 0;
     return gameEndTime - gameStartTime;
+  };
+
+  // Calculate walls discovered percentage for display
+  const getWallsDiscoveredPct = () => {
+    const state = useGameStore.getState();
+    if (!state.gameState) return 0;
+    return calculateWallsDiscoveredPct(state.chamberPaths, state.gameState.discoveredWalls);
+  };
+
+  // Live game timer
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (gameStartTime && !gameEndTime) {
+      // Game is active — tick every second
+      setElapsedTime(Date.now() - gameStartTime);
+      timerRef.current = setInterval(() => {
+        setElapsedTime(Date.now() - gameStartTime);
+      }, 1000);
+    } else if (gameStartTime && gameEndTime) {
+      // Game ended — show final time
+      setElapsedTime(gameEndTime - gameStartTime);
+    } else {
+      // Not started yet
+      setElapsedTime(0);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [gameStartTime, gameEndTime]);
+
+  const formatElapsedTime = (ms: number): string => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const handleStartGame = (mode: GameMode, players: number, level: number) => {
@@ -49,57 +87,76 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div id="app-root" className="min-h-screen">
       {/* Header */}
-<div className="border-b border-stone-800 bg-black/50">
-  <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-    <button
-      onClick={handleExit}
-      className="px-4 py-2 text-gray-400 hover:text-white transition-colors flex items-center gap-2"
-    >
-      <span>←</span>
-      <span className="hidden sm:inline">Exit to Menu</span>
-    </button>
-    <h1 className="text-xl sm:text-2xl font-medieval text-red-500">
-      D&D Computer Labyrinth
-    </h1>
-    
-      <a href="https://tinyurl.com/dndlab-manual"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="px-4 py-2 text-gray-400 hover:text-white transition-colors flex items-center gap-2"
-    >
-      <span className="hidden sm:inline">Game Manual</span>
-    </a>
-  </div>
-</div>
+      <div id="app-header" className="border-b border-stone-800 bg-black/50">
+        <div id="app-header-content" className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+          {/* Exit to Menu Button */}
+          <button
+            id="app-header-exit-btn"
+            onClick={handleExit}
+            className="w-32 sm:w-40 px-4 py-2 text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+          >
+            {/* Exit arrow icon */}
+            <span id="app-header-exit-arrow">←</span>
+            {/* Exit label */}
+            <span id="app-header-exit-label" className="hidden sm:inline">Exit to Menu</span>
+          </button>
+          {/* Game Title */}
+          <h1 id="app-header-title" className="text-xl sm:text-2xl font-medieval text-red-500">
+            D&D Computer Labyrinth
+          </h1>
+          {/* Live Game Timer */}
+          <div
+            id="app-header-timer"
+            className="w-32 sm:w-40 px-4 py-2 text-gray-400 flex items-center justify-end gap-2 font-medieval"
+          >
+            <span id="app-header-timer-label" className="hidden sm:inline text-sm">Time</span>
+            <span id="app-header-timer-value" className={`text-lg tabular-nums ${gameStartTime ? 'text-amber-400' : 'text-gray-600'}`}>
+              {formatElapsedTime(elapsedTime)}
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* Main Content Area */}
-      <div className="max-w-[1600px] mx-auto px-2 sm:px-4 py-2 overflow-y-auto" style={{ height: 'calc(100vh - 68px)' }}>
-        <div className="flex flex-col lg:flex-row gap-2 sm:gap-4 lg:h-full">
-          
-          {/* Game Controls - First on Mobile, part of Right Sidebar on Desktop */}
-          <div className="lg:hidden order-1">
+      <div id="app-main-content" className="max-w-[1600px] mx-auto px-2 sm:px-4 py-2 overflow-y-auto" style={{ height: 'calc(100vh - 68px)' }}>
+        {/* Layout Container */}
+        <div id="app-layout" className="flex flex-col md:flex-row gap-2 sm:gap-4 md:h-full">
+
+          {/* Mobile portrait: Controls above board */}
+          <div id="app-mobile-controls" className="md:hidden order-1">
             <RightSidebar onlyControls />
           </div>
 
-          {/* Help Sidebar - Left (Desktop) / Third on Mobile */}
-          <div className="lg:w-80 lg:flex-shrink-0 lg:overflow-y-auto order-3 lg:order-1">
+          {/* Desktop: Help Sidebar (left column) */}
+          <div id="app-help-sidebar-wrapper" className="hidden lg:block lg:w-80 lg:flex-shrink-0 lg:overflow-y-auto lg:order-1">
             <HelpSidebar />
           </div>
 
-          {/* Game Board - Center */}
-          <div className="flex-1 order-2 flex items-center justify-center" style={{ minHeight: '300px' }}>
+          {/* Board (always visible) */}
+          <div id="app-board-wrapper" className="flex-1 order-2 md:order-1 lg:order-2 flex items-center justify-center" style={{ minHeight: '300px' }}>
             <Board />
           </div>
 
-          {/* Right Sidebar - Desktop only / Controls moved to top on mobile */}
-          <div className="hidden lg:block lg:w-80 lg:flex-shrink-0 lg:order-3">
+          {/* Tablet landscape: Combined sidebar (Controls + Help) */}
+          <div id="app-tablet-sidebar" className="hidden md:flex lg:hidden md:flex-col md:w-56 md:flex-shrink-0 md:order-2 md:h-full md:overflow-y-auto">
+            <RightSidebar onlyControls />
+            <HelpSidebar />
+          </div>
+
+          {/* Desktop: Right Sidebar (right column) */}
+          <div id="app-right-sidebar-wrapper" className="hidden lg:block lg:w-80 lg:flex-shrink-0 lg:order-3 lg:h-full lg:overflow-hidden">
             <RightSidebar />
           </div>
-          
-          {/* Sound Preview - Last on Mobile */}
-          <div className="lg:hidden order-4">
+
+          {/* Mobile portrait: Help below board */}
+          <div id="app-mobile-help" className="md:hidden order-3">
+            <HelpSidebar />
+          </div>
+
+          {/* Mobile portrait: Sound preview */}
+          <div id="app-mobile-sounds" className="md:hidden order-4">
             <RightSidebar onlySounds />
           </div>
         </div>
@@ -110,6 +167,9 @@ function App() {
         isVisible={showPlayerNameModal}
         gameWon={useGameStore.getState().gameWon}
         gameTime={getGameTime()}
+        totalMoves={useGameStore.getState().totalMoves}
+        totalDeaths={useGameStore.getState().totalDeaths}
+        wallsDiscoveredPct={getWallsDiscoveredPct()}
         onSubmit={submitScore}
         onSkip={skipScoreSubmission}
       />
@@ -118,13 +178,14 @@ function App() {
       <AnimatePresence>
         {showTreasureFlash && (
           <motion.div
+            id="app-effect-treasure-flash"
             initial={{ opacity: 0 }}
-            animate={{ 
+            animate={{
               opacity: [0, 0.6, 0.4, 0.6, 0],
               scale: [1, 1.02, 1.01, 1.02, 1]
             }}
             exit={{ opacity: 0 }}
-            transition={{ 
+            transition={{
               duration: 1,
               times: [0, 0.2, 0.5, 0.8, 1]
             }}
@@ -140,13 +201,14 @@ function App() {
       <AnimatePresence>
         {showDoorFlash && (
           <motion.div
+            id="app-effect-door-flash"
             initial={{ opacity: 0 }}
-            animate={{ 
+            animate={{
               opacity: [0, 0.5, 0.3, 0.5, 0],
               scale: [1, 1.01, 1, 1.01, 1]
             }}
             exit={{ opacity: 0 }}
-            transition={{ 
+            transition={{
               duration: 0.8,
               times: [0, 0.2, 0.5, 0.8, 1]
             }}
@@ -162,12 +224,13 @@ function App() {
       <AnimatePresence>
         {showDeathFlash && (
           <motion.div
+            id="app-effect-death-flash"
             initial={{ opacity: 0 }}
-            animate={{ 
+            animate={{
               opacity: [0, 0.8, 0],
             }}
             exit={{ opacity: 0 }}
-            transition={{ 
+            transition={{
               duration: 1,
               times: [0, 0.3, 1]
             }}
@@ -183,6 +246,7 @@ function App() {
       <AnimatePresence>
         {showBattleShake && (
           <motion.div
+            id="app-effect-battle-shake"
             className="fixed inset-0 pointer-events-none z-40"
             animate={{
               x: [0, -10, 10, -10, 10, -5, 5, 0],
@@ -196,11 +260,12 @@ function App() {
           >
             {/* Orange flash overlay for impact */}
             <motion.div
+              id="app-effect-battle-flash"
               initial={{ opacity: 0 }}
-              animate={{ 
+              animate={{
                 opacity: [0, 0.4, 0.2, 0.4, 0],
               }}
-              transition={{ 
+              transition={{
                 duration: 0.6,
                 times: [0, 0.15, 0.3, 0.5, 1]
               }}
@@ -217,6 +282,7 @@ function App() {
       <AnimatePresence>
         {showVictoryFireworks && (
           <motion.div
+            id="app-effect-victory-fireworks"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -227,6 +293,7 @@ function App() {
             {[...Array(12)].map((_, i) => (
               <motion.div
                 key={i}
+                id={`app-effect-firework-burst-${i}`}
                 className="absolute"
                 style={{
                   left: `${10 + Math.random() * 80}%`,
@@ -244,6 +311,7 @@ function App() {
                   ease: "easeOut"
                 }}
               >
+                {/* Firework glow */}
                 <div
                   className="w-32 h-32 rounded-full"
                   style={{
@@ -258,6 +326,7 @@ function App() {
             {[...Array(30)].map((_, i) => (
               <motion.div
                 key={`sparkle-${i}`}
+                id={`app-effect-sparkle-${i}`}
                 className="absolute text-2xl"
                 style={{
                   left: `${Math.random() * 100}%`,
@@ -299,6 +368,7 @@ function App() {
           gameMode={gameState.numberOfWarriors === 1 ? 'solo' : 'multiplayer'}
           difficultyLevel={gameState.level as 1 | 2}
           onClose={closeLeaderboard}
+          submissionResult={submissionResult}
         />
       )}
     </div>

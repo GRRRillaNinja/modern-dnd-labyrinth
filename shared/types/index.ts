@@ -31,6 +31,7 @@ export enum GameMode {
   SinglePlayer = 'single',
   LocalMultiplayer = 'local',
   OnlineMultiplayer = 'online',
+  VsCPU = 'cpu',
 }
 
 // Position type
@@ -65,6 +66,7 @@ export interface Warrior {
   secretRoom: Position | null;
   position: Position | null;
   moves: number;
+  skipNextTurn: boolean;
 }
 
 // Dragon state

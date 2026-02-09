@@ -4,12 +4,17 @@ import { useGameStore } from '../store/gameStore';
 import { Position, GameState } from '@shared/types';
 
 export const Board: React.FC = () => {
-  const { gameState, chamberPaths, moveWarrior, setWarriorRoom, isDragonTurn } = useGameStore();
+  const { gameState, chamberPaths, moveWarrior, setWarriorRoom, isDragonTurn, isCPUMode } = useGameStore();
 
   if (!gameState) return null;
 
   const handleChamberClick = (position: Position) => {
     const state = gameState.state;
+
+    // Block clicks during AI turn in CPU mode
+    if (isCPUMode && (state === GameState.WarriorTwoTurn || state === GameState.WarriorTwoSelectRoom)) {
+      return;
+    }
 
     // Selecting secret rooms
     if (state === GameState.WarriorOneSelectRoom) {
@@ -26,18 +31,21 @@ export const Board: React.FC = () => {
   };
 
   return (
-    <div className="relative flex items-center justify-center p-2 w-full" style={{ minHeight: '300px' }}>
-      <div 
+    <div id="board-container" className="relative flex items-center justify-center p-2 w-full" style={{ minHeight: '300px' }}>
+      {/* Board Frame Wrapper */}
+      <div
+        id="board-frame-wrapper"
         className="relative"
-        style={{ 
+        style={{
           width: 'min(100%, calc(100vh - 180px))',
           aspectRatio: '1'
         }}
       >
         {/* Background board with ornate frame */}
-        <div className="absolute inset-0">
+        <div id="board-background" className="absolute inset-0">
           {/* Board frame image */}
           <div
+            id="board-frame-image"
             className="absolute inset-0"
             style={{
               backgroundImage: 'url(/textures/board-frame.png)',
@@ -47,6 +55,7 @@ export const Board: React.FC = () => {
           />
           {/* Inner board area - dark background for grid */}
           <div
+            id="board-inner-area"
             className="absolute rounded"
             style={{
               top: '5%',
@@ -59,8 +68,8 @@ export const Board: React.FC = () => {
           />
         </div>
 
-        {/* Grid */}
-        <div className="relative w-full h-full p-[6%] grid grid-cols-8 grid-rows-8 gap-1">
+        {/* 8x8 Chamber Grid */}
+        <div id="board-grid" className="relative w-full h-full p-[6%] grid grid-cols-8 grid-rows-8 gap-1">
           {Array.from({ length: 8 }).map((_, row) =>
             Array.from({ length: 8 }).map((_, col) => {
               const position: Position = [row, col];
