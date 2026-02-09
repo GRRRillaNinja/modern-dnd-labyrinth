@@ -1,0 +1,678 @@
+[vite] connecting... client:495:9
+[vite] connected. client:618:15
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools chunk-6GSFWH52.js:21551:25
+An AudioContext was prevented from starting automatically. It must be created or resumed after a user gesture on the page. 2 howler.js:1770:27
+DEBUG: Vite Env Variables: 
+Object { BASE_URL: "/", DEV: true, MODE: "development", PROD: false, SSR: false, VITE_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsZXppYnZma2pseGpxa3FhYWl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3MDg2ODIsImV4cCI6MjA4NTI4NDY4Mn0.LHCN39fkKLwyDOCHUb_Vlx926Se26XjTt3JN-KJLCf4", VITE_SUPABASE_URL: "https://wlezibvfkjlxjqkqaaiy.supabase.co" }
+SupabaseService.ts:6:13
+DEBUG: URL: https://wlezibvfkjlxjqkqaaiy.supabase.co Key: Present SupabaseService.ts:10:13
+TypeError: can't access property "then", a.default.detectStore(...) is undefined h1-check.js:1:1301
+An AudioContext was prevented from starting automatically. It must be created or resumed after a user gesture on the page. 2 AudioService.ts:75:13
+[AI] selectRoom: chose 
+Array [ 7, 6 ]
+ from top5: 
+Array(5) [ "[7,7] score=32.0", "[6,7] score=27.5", "[7,6] score=27.5", "[5,7] score=25.0", "[7,5] score=25.0" ]
+AIController.ts:58:25
+[W0] finishWarriorTurn | W0[3,0](3hp,0mv) W1[7,6](3hp,0mv) Dragon[4,7] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[7,6] | moves=8 | lives=3 | visited=1 | knownPassable=0 | recent=[7,6] AIController.ts:58:25
+[AI] Phase: EXPLORE (dragon not visible, treasure.visible= false , no hint ) AIController.ts:58:25
+[AI] explore: Current tile has 3 unknown edges, probing directly: [6,6] visited=false frontier=3 hintBonus=0 evade=false deadEnd=0 | [7,5] visited=false frontier=2 hintBonus=0 evade=false deadEnd=0 | [7,7] visited=false frontier=1 hintBonus=0 evade=false deadEnd=0 → chose [6,6] AIController.ts:58:25
+[AI] Moving to [6,6] AIController.ts:58:25
+[Store] dragon wakes — pausing for sound gameStore.ts:197:15
+[AI] ✓ Move succeeded: [7,6] → [6,6] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon wake done isDragonTurn=false gameStore.ts:200:17
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[6,6] | moves=7 | lives=3 | visited=2 | knownPassable=2 | recent=[7,6 → 6,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 4, 7 ]
+ dist= 3 ) AIController.ts:58:25
+[AI] moveToward [4,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [4,7]: candidates: [5,6] dist=2 recent=0 deadEnd=0 UNKNOWN | [6,7] dist=2 recent=0 deadEnd=0 UNKNOWN | [6,5] dist=4 recent=0 deadEnd=0 UNKNOWN | [7,6] dist=4 recent=1 deadEnd=0 known → chose [5,6] AIController.ts:58:25
+[AI] Moving to [5,6] AIController.ts:58:25
+[AI] ✓ Move succeeded: [6,6] → [5,6] AIController.ts:58:25
+[AI] --- Move step | pos=[5,6] | moves=6 | lives=3 | visited=3 | knownPassable=4 | recent=[7,6 → 6,6 → 5,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 4, 7 ]
+ dist= 2 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 8 unvisited hint-area tiles: [4,6] dist=1 unreachable | [5,7] dist=1 unreachable | [3,6] dist=2 unreachable | [4,5] dist=2 unreachable | [4,7] dist=2 unreachable | [6,7] dist=2 unreachable | [3,7] dist=3 unreachable | [2,7] dist=4 unreachable → chose [4,6] AIController.ts:58:25
+[AI] moveToward [4,6]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [4,6]: candidates: [4,6] dist=0 recent=0 deadEnd=0 UNKNOWN | [5,7] dist=2 recent=0 deadEnd=0 UNKNOWN | [5,5] dist=2 recent=0 deadEnd=0 UNKNOWN | [6,6] dist=2 recent=1 deadEnd=0 known → chose [4,6] AIController.ts:58:25
+[AI] Moving to [4,6] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,6] → [4,6] AIController.ts:58:25
+[AI] --- Move step | pos=[4,6] | moves=5 | lives=3 | visited=4 | knownPassable=6 | recent=[7,6 → 6,6 → 5,6 → 4,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 4, 7 ]
+ dist= 1 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 7 unvisited hint-area tiles: [3,6] dist=1 unreachable | [4,5] dist=1 unreachable | [4,7] dist=1 unreachable | [3,7] dist=2 unreachable | [5,7] dist=2 unreachable | [2,7] dist=3 unreachable | [6,7] dist=3 unreachable → chose [3,6] AIController.ts:58:25
+[AI] moveToward [3,6]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [3,6]: candidates: [3,6] dist=0 recent=0 deadEnd=0 UNKNOWN | [4,7] dist=2 recent=0 deadEnd=0 UNKNOWN | [4,5] dist=2 recent=0 deadEnd=0 UNKNOWN | [5,6] dist=2 recent=1 deadEnd=0 known → chose [3,6] AIController.ts:58:25
+[AI] Moving to [3,6] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [4,6] → tried [3,6], still at [4,6] AIController.ts:58:25
+[AI] --- Move step | pos=[4,6] | moves=4 | lives=3 | visited=4 | knownPassable=6 | recent=[7,6 → 6,6 → 5,6 → 4,6 → 4,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 4, 7 ]
+ dist= 1 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 7 unvisited hint-area tiles: [3,6] dist=1 unreachable | [4,5] dist=1 unreachable | [4,7] dist=1 unreachable | [3,7] dist=2 unreachable | [5,7] dist=2 unreachable | [2,7] dist=3 unreachable | [6,7] dist=3 unreachable → chose [3,6] AIController.ts:58:25
+[AI] moveToward [3,6]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [3,6]: candidates: [4,7] dist=2 recent=0 deadEnd=0 UNKNOWN | [4,5] dist=2 recent=0 deadEnd=0 UNKNOWN | [5,6] dist=2 recent=1 deadEnd=0 known → chose [4,7] AIController.ts:58:25
+[AI] seekHint: moveToward [3,6] would land on dragon at [4,7], finding alternative AIController.ts:58:25
+[AI] seekHint: using alternative [5,6] (dist=2 to target) AIController.ts:58:25
+[AI] Moving to [5,6] AIController.ts:58:25
+[AI] ✓ Move succeeded: [4,6] → [5,6] AIController.ts:58:25
+[AI] --- Move step | pos=[5,6] | moves=3 | lives=3 | visited=4 | knownPassable=6 | recent=[7,6 → 6,6 → 5,6 → 4,6 → 4,6 → 5,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 4, 7 ]
+ dist= 2 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 7 unvisited hint-area tiles: [5,7] dist=1 unreachable | [3,6] dist=2 unreachable | [4,5] dist=2 unreachable | [4,7] dist=2 unreachable | [6,7] dist=2 unreachable | [3,7] dist=3 unreachable | [2,7] dist=4 unreachable → chose [5,7] AIController.ts:58:25
+[AI] moveToward [5,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [5,7]: candidates: [5,7] dist=0 recent=0 deadEnd=0 UNKNOWN | [5,5] dist=2 recent=0 deadEnd=0 UNKNOWN | [6,6] dist=2 recent=1 deadEnd=0 known | [4,6] dist=2 recent=2 deadEnd=0 known → chose [5,7] AIController.ts:58:25
+[AI] Moving to [5,7] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [5,6] → tried [5,7], still at [5,6] AIController.ts:58:25
+[AI] --- Move step | pos=[5,6] | moves=2 | lives=3 | visited=4 | knownPassable=6 | recent=[7,6 → 6,6 → 5,6 → 4,6 → 4,6 → 5,6 → 5,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 4, 7 ]
+ dist= 2 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 7 unvisited hint-area tiles: [5,7] dist=1 unreachable | [3,6] dist=2 unreachable | [4,5] dist=2 unreachable | [4,7] dist=2 unreachable | [6,7] dist=2 unreachable | [3,7] dist=3 unreachable | [2,7] dist=4 unreachable → chose [5,7] AIController.ts:58:25
+[AI] moveToward [5,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [5,7]: candidates: [5,5] dist=2 recent=0 deadEnd=0 UNKNOWN | [6,6] dist=2 recent=1 deadEnd=0 known | [4,6] dist=2 recent=2 deadEnd=0 known → chose [5,5] AIController.ts:58:25
+[AI] Moving to [5,5] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [5,6] → tried [5,5], still at [5,6] AIController.ts:58:25
+[AI] --- Move step | pos=[5,6] | moves=1 | lives=3 | visited=4 | knownPassable=6 | recent=[7,6 → 6,6 → 5,6 → 4,6 → 4,6 → 5,6 → 5,6 → 5,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 4, 7 ]
+ dist= 2 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 7 unvisited hint-area tiles: [5,7] dist=1 unreachable | [3,6] dist=2 unreachable | [4,5] dist=2 unreachable | [4,7] dist=2 unreachable | [6,7] dist=2 unreachable | [3,7] dist=3 unreachable | [2,7] dist=4 unreachable → chose [5,7] AIController.ts:58:25
+[AI] moveToward [5,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [5,7]: candidates: [6,6] dist=2 recent=1 deadEnd=0 known | [4,6] dist=2 recent=2 deadEnd=0 known → chose [6,6] AIController.ts:58:25
+[AI] Moving to [6,6] AIController.ts:58:25
+[W1] finishWarriorTurn | W0[3,0](3hp,0mv) W1[6,6](3hp,0mv) Dragon[4,7] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [4,7]→[5,6] | W0[3,0](3hp,0mv) W1[6,6](3hp,0mv) Dragon[5,6] | W2Turn | target=W1 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✓ Move succeeded: [5,6] → [6,6] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23
+[W0] finishWarriorTurn | W0[1,2](3hp,0mv) W1[6,6](3hp,0mv) Dragon[5,6] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[6,6] | moves=8 | lives=3 | visited=4 | knownPassable=6 | recent=[7,6 → 6,6 → 5,6 → 4,6 → 4,6 → 5,6 → 5,6 → 5,6 → 6,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 4, 7 ]
+ dist= 3 ) AIController.ts:58:25
+[AI] moveToward [4,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [4,7]: candidates: [6,7] dist=2 recent=0 deadEnd=0 UNKNOWN | [6,5] dist=4 recent=0 deadEnd=0 UNKNOWN | [7,6] dist=4 recent=1 deadEnd=0 known | [5,6] dist=2 recent=4 deadEnd=0 known → chose [6,7] AIController.ts:58:25
+[AI] Moving to [6,7] AIController.ts:58:25
+[AI] ✓ Move succeeded: [6,6] → [6,7] AIController.ts:58:25
+[AI] --- Move step | pos=[6,7] | moves=4 | lives=3 | visited=5 | knownPassable=8 | recent=[7,6 → 6,6 → 5,6 → 4,6 → 4,6 → 5,6 → 5,6 → 5,6 → 6,6 → 6,7] AIController.ts:58:25
+[AI] Phase: RETURN_TO_BASE (AI has treasure, heading to Waystone 
+Array [ 7, 6 ]
+ ) AIController.ts:58:25
+[AI] returnToBase: Risky path found (2 steps, passes near dragon) AIController.ts:58:25
+[AI] Moving to [6,6] AIController.ts:58:25
+[AI] ✓ Move succeeded: [6,7] → [6,6] AIController.ts:58:25
+[AI] --- Move step | pos=[6,6] | moves=3 | lives=3 | visited=5 | knownPassable=8 | recent=[7,6 → 6,6 → 5,6 → 4,6 → 4,6 → 5,6 → 5,6 → 5,6 → 6,6 → 6,7 → 6,6] AIController.ts:58:25
+[AI] Phase: RETURN_TO_BASE (AI has treasure, heading to Waystone 
+Array [ 7, 6 ]
+ ) AIController.ts:58:25
+[AI] returnToBase: Safe path found (1 steps, avoids dragon Chebyshev > 1) AIController.ts:58:25
+[AI] Moving to [7,6] AIController.ts:58:25
+[AI] ✓ Move succeeded: [6,6] → [7,6] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[AI] selectRoom: chose 
+Array [ 7, 7 ]
+ from top5: 
+Array(5) [ "[7,7] score=32.0", "[6,7] score=27.5", "[7,6] score=27.5", "[5,7] score=25.0", "[7,5] score=25.0" ]
+AIController.ts:58:25
+[Store] dragon wakes — pausing for sound gameStore.ts:197:15
+[Store] dragon wake done isDragonTurn=false gameStore.ts:200:17
+[W0] finishWarriorTurn | W0[0,5](3hp,0mv) W1[7,7](3hp,0mv) Dragon[1,7] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[7,7] | moves=8 | lives=3 | visited=1 | knownPassable=0 | recent=[7,7] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 6 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [6,7] dist=5 recent=0 deadEnd=0 UNKNOWN | [7,6] dist=7 recent=0 deadEnd=0 UNKNOWN → chose [6,7] AIController.ts:58:25
+[AI] Moving to [6,7] AIController.ts:58:25
+[AI] ✓ Move succeeded: [7,7] → [6,7] AIController.ts:58:25
+[AI] --- Move step | pos=[6,7] | moves=7 | lives=3 | visited=2 | knownPassable=2 | recent=[7,7 → 6,7] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 5 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [5,7] dist=4 recent=0 deadEnd=0 UNKNOWN | [6,6] dist=6 recent=0 deadEnd=0 UNKNOWN | [7,7] dist=6 recent=1 deadEnd=0 known → chose [5,7] AIController.ts:58:25
+[AI] Moving to [5,7] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [6,7] → tried [5,7], still at [6,7] AIController.ts:58:25
+[AI] --- Move step | pos=[6,7] | moves=6 | lives=3 | visited=2 | knownPassable=2 | recent=[7,7 → 6,7 → 6,7] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 5 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [6,6] dist=6 recent=0 deadEnd=0 UNKNOWN | [7,7] dist=6 recent=1 deadEnd=0 known → chose [6,6] AIController.ts:58:25
+[AI] Moving to [6,6] AIController.ts:58:25
+[AI] ✓ Move succeeded: [6,7] → [6,6] AIController.ts:58:25
+[AI] --- Move step | pos=[6,6] | moves=5 | lives=3 | visited=3 | knownPassable=4 | recent=[7,7 → 6,7 → 6,7 → 6,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 6 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [5,6] dist=5 recent=0 deadEnd=0 UNKNOWN | [7,6] dist=7 recent=0 deadEnd=0 UNKNOWN | [6,5] dist=7 recent=0 deadEnd=0 UNKNOWN | [6,7] dist=5 recent=2 deadEnd=0 known → chose [5,6] AIController.ts:58:25
+[AI] Moving to [5,6] AIController.ts:58:25
+[AI] ✓ Move succeeded: [6,6] → [5,6] AIController.ts:58:25
+[AI] --- Move step | pos=[5,6] | moves=4 | lives=3 | visited=4 | knownPassable=6 | recent=[7,7 → 6,7 → 6,7 → 6,6 → 5,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 5 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [4,6] dist=4 recent=0 deadEnd=0 UNKNOWN | [5,7] dist=4 recent=0 deadEnd=0 UNKNOWN | [5,5] dist=6 recent=0 deadEnd=0 UNKNOWN | [6,6] dist=6 recent=1 deadEnd=0 known → chose [4,6] AIController.ts:58:25
+[AI] Moving to [4,6] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [5,6] → tried [4,6], still at [5,6] AIController.ts:58:25
+[AI] --- Move step | pos=[5,6] | moves=3 | lives=3 | visited=4 | knownPassable=6 | recent=[7,7 → 6,7 → 6,7 → 6,6 → 5,6 → 5,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 5 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [5,7] dist=4 recent=0 deadEnd=0 UNKNOWN | [5,5] dist=6 recent=0 deadEnd=0 UNKNOWN | [6,6] dist=6 recent=1 deadEnd=0 known → chose [5,7] AIController.ts:58:25
+[AI] Moving to [5,7] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [5,6] → tried [5,7], still at [5,6] AIController.ts:58:25
+[AI] --- Move step | pos=[5,6] | moves=2 | lives=3 | visited=4 | knownPassable=6 | recent=[7,7 → 6,7 → 6,7 → 6,6 → 5,6 → 5,6 → 5,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 5 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [5,5] dist=6 recent=0 deadEnd=0 UNKNOWN | [6,6] dist=6 recent=1 deadEnd=0 known → chose [5,5] AIController.ts:58:25
+[AI] Moving to [5,5] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,6] → [5,5] AIController.ts:58:25
+[AI] --- Move step | pos=[5,5] | moves=1 | lives=3 | visited=5 | knownPassable=8 | recent=[7,7 → 6,7 → 6,7 → 6,6 → 5,6 → 5,6 → 5,6 → 5,5] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 6 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [4,5] dist=5 recent=0 deadEnd=0 UNKNOWN | [6,5] dist=7 recent=0 deadEnd=0 UNKNOWN | [5,4] dist=7 recent=0 deadEnd=0 UNKNOWN | [5,6] dist=5 recent=3 deadEnd=0 known → chose [4,5] AIController.ts:58:25
+[AI] Moving to [4,5] AIController.ts:58:25
+[W1] finishWarriorTurn | W0[0,5](3hp,0mv) W1[4,5](3hp,0mv) Dragon[1,7] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [1,7]→[0,6] | W0[0,5](3hp,0mv) W1[4,5](3hp,0mv) Dragon[0,6] | W2Turn | target=W0 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✓ Move succeeded: [5,5] → [4,5] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23
+[W0] finishWarriorTurn | W0[3,5](3hp,0mv) W1[4,5](3hp,0mv) Dragon[0,6] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[4,5] | moves=8 | lives=3 | visited=6 | knownPassable=10 | recent=[7,7 → 6,7 → 6,7 → 6,6 → 5,6 → 5,6 → 5,6 → 5,5 → 4,5] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 5 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [4,6] dist=4 recent=0 deadEnd=0 UNKNOWN | [4,4] dist=6 recent=0 deadEnd=0 UNKNOWN | [5,5] dist=6 recent=1 deadEnd=0 known → chose [4,6] AIController.ts:58:25
+[AI] Moving to [4,6] AIController.ts:58:25
+[AI] ✓ Move succeeded: [4,5] → [4,6] AIController.ts:58:25
+[AI] --- Move step | pos=[4,6] | moves=7 | lives=3 | visited=7 | knownPassable=12 | recent=[7,7 → 6,7 → 6,7 → 6,6 → 5,6 → 5,6 → 5,6 → 5,5 → 4,5 → 4,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 4 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [3,6] dist=3 recent=0 deadEnd=0 UNKNOWN | [4,7] dist=3 recent=0 deadEnd=0 UNKNOWN | [4,5] dist=5 recent=1 deadEnd=0 known → chose [3,6] AIController.ts:58:25
+[AI] Moving to [3,6] AIController.ts:58:25
+[AI] ✓ Move succeeded: [4,6] → [3,6] AIController.ts:58:25
+[AI] --- Move step | pos=[3,6] | moves=6 | lives=3 | visited=8 | knownPassable=14 | recent=[7,7 → 6,7 → 6,7 → 6,6 → 5,6 → 5,6 → 5,6 → 5,5 → 4,5 → 4,6 → 3,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 3 ) AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [2,6] dist=2 recent=0 deadEnd=0 UNKNOWN | [3,7] dist=2 recent=0 deadEnd=0 UNKNOWN | [4,6] dist=4 recent=1 deadEnd=0 known → chose [2,6] AIController.ts:58:25
+[AI] Moving to [2,6] AIController.ts:58:25
+[AI] ✓ Move succeeded: [3,6] → [2,6] AIController.ts:58:25
+[AI] --- Move step | pos=[2,6] | moves=5 | lives=3 | visited=9 | knownPassable=16 | recent=[7,7 → 6,7 → 6,7 → 6,6 → 5,6 → 5,6 → 5,6 → 5,5 → 4,5 → 4,6 → 3,6 → 2,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 2 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 7 unvisited hint-area tiles: [1,6] dist=1 unreachable | [2,7] dist=1 unreachable | [0,6] dist=2 unreachable | [1,5] dist=2 unreachable | [1,7] dist=2 unreachable | [3,7] dist=2 unreachable | [0,7] dist=3 unreachable → chose [1,6] AIController.ts:58:25
+[AI] moveToward [1,6]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,6]: candidates: [1,6] dist=0 recent=0 deadEnd=0 UNKNOWN | [2,7] dist=2 recent=0 deadEnd=0 UNKNOWN | [3,6] dist=2 recent=1 deadEnd=0 known → chose [1,6] AIController.ts:58:25
+[AI] Moving to [1,6] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [2,6] → tried [1,6], still at [2,6] AIController.ts:58:25
+[AI] --- Move step | pos=[2,6] | moves=4 | lives=3 | visited=9 | knownPassable=16 | recent=[6,7 → 6,7 → 6,6 → 5,6 → 5,6 → 5,6 → 5,5 → 4,5 → 4,6 → 3,6 → 2,6 → 2,6] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 2 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 7 unvisited hint-area tiles: [1,6] dist=1 unreachable | [2,7] dist=1 unreachable | [0,6] dist=2 unreachable | [1,5] dist=2 unreachable | [1,7] dist=2 unreachable | [3,7] dist=2 unreachable | [0,7] dist=3 unreachable → chose [1,6] AIController.ts:58:25
+[AI] moveToward [1,6]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,6]: candidates: [2,7] dist=2 recent=0 deadEnd=0 UNKNOWN | [3,6] dist=2 recent=1 deadEnd=0 known → chose [2,7] AIController.ts:58:25
+[AI] Moving to [2,7] AIController.ts:58:25
+[AI] ✓ Move succeeded: [2,6] → [2,7] AIController.ts:58:25
+[AI] --- Move step | pos=[2,7] | moves=3 | lives=3 | visited=10 | knownPassable=18 | recent=[6,7 → 6,6 → 5,6 → 5,6 → 5,6 → 5,5 → 4,5 → 4,6 → 3,6 → 2,6 → 2,6 → 2,7] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 1 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 6 unvisited hint-area tiles: [1,7] dist=1 unreachable | [3,7] dist=1 unreachable | [0,7] dist=2 unreachable | [1,6] dist=2 unreachable | [0,6] dist=3 unreachable | [1,5] dist=3 unreachable → chose [1,7] AIController.ts:58:25
+[AI] moveToward [1,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [1,7]: candidates: [1,7] dist=0 recent=0 deadEnd=0 UNKNOWN | [3,7] dist=2 recent=0 deadEnd=0 UNKNOWN | [2,6] dist=2 recent=2 deadEnd=0 known → chose [1,7] AIController.ts:58:25
+[AI] Moving to [1,7] AIController.ts:58:25
+[AI] ✓ Move succeeded: [2,7] → [1,7] AIController.ts:58:25
+[AI] --- Move step | pos=[1,7] | moves=2 | lives=3 | visited=11 | knownPassable=20 | recent=[6,6 → 5,6 → 5,6 → 5,6 → 5,5 → 4,5 → 4,6 → 3,6 → 2,6 → 2,6 → 2,7 → 1,7] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 0 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 5 unvisited hint-area tiles: [0,7] dist=1 unreachable | [1,6] dist=1 unreachable | [0,6] dist=2 unreachable | [1,5] dist=2 unreachable | [3,7] dist=2 unreachable → chose [0,7] AIController.ts:58:25
+[AI] moveToward [0,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [0,7]: candidates: [0,7] dist=0 recent=0 deadEnd=0 UNKNOWN | [1,6] dist=2 recent=0 deadEnd=0 UNKNOWN | [2,7] dist=2 recent=1 deadEnd=0 known → chose [0,7] AIController.ts:58:25
+[AI] Moving to [0,7] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [1,7] → tried [0,7], still at [1,7] AIController.ts:58:25
+[AI] --- Move step | pos=[1,7] | moves=1 | lives=3 | visited=11 | knownPassable=20 | recent=[5,6 → 5,6 → 5,6 → 5,5 → 4,5 → 4,6 → 3,6 → 2,6 → 2,6 → 2,7 → 1,7 → 1,7] AIController.ts:58:25
+[AI] Phase: SEEK_HINT (treasure hint at 
+Array [ 1, 7 ]
+ dist= 0 ) AIController.ts:58:25
+[AI] findHintAreaTarget: 5 unvisited hint-area tiles: [0,7] dist=1 unreachable | [1,6] dist=1 unreachable | [0,6] dist=2 unreachable | [1,5] dist=2 unreachable | [3,7] dist=2 unreachable → chose [0,7] AIController.ts:58:25
+[AI] moveToward [0,7]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [0,7]: candidates: [1,6] dist=2 recent=0 deadEnd=0 UNKNOWN | [2,7] dist=2 recent=1 deadEnd=0 known → chose [1,6] AIController.ts:58:25
+[AI] Last-move safety: target [1,6] is Chebyshev dist 1 from dragon [0,6] - DANGEROUS! AIController.ts:58:25
+[AI] Last-move safety: found 1 safe alternatives: [2,7] cheby=2 deadEnd=0 door=false known → chose [2,7] AIController.ts:58:25
+[AI] Moving to [2,7] AIController.ts:58:25
+[W1] finishWarriorTurn | W0[3,5](3hp,0mv) W1[2,7](3hp,0mv) Dragon[0,6] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [0,6]→[1,7] | W0[3,5](3hp,0mv) W1[2,7](3hp,0mv) Dragon[1,7] | W2Turn | target=W1 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✓ Move succeeded: [1,7] → [2,7] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23
+[W0] finishWarriorTurn | W0[2,5](3hp,0mv) W1[2,7](3hp,0mv) Dragon[1,7] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[2,7] | moves=8 | lives=3 | visited=11 | knownPassable=20 | recent=[5,6 → 5,6 → 5,5 → 4,5 → 4,6 → 3,6 → 2,6 → 2,6 → 2,7 → 1,7 → 1,7 → 2,7] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER (Player 1 has treasure at 
+Array [ 2, 5 ]
+ dist= 2 playerToWin= 7 ) AIController.ts:58:25
+[AI] probeToward [2,5]: candidates: [3,7] dist=3 recent=0 deadEnd=0 UNKNOWN | [2,6] dist=1 recent=2 deadEnd=0 known | [1,7] dist=3 recent=2 deadEnd=0 known → chose [3,7] AIController.ts:58:25
+[AI] huntPlayer: Probe [3,7] doesn't get closer (dist 2 → 3), exploring to find new routes AIController.ts:58:25
+[AI] moveToward [1,7]: BFS path found (2 steps): [2,7]→[1,7] AIController.ts:58:25
+[AI] exploreToward [2,5]: Heading to tile [1,7] which has unknown edges toward target AIController.ts:58:25
+[AI] Moving to [1,7] AIController.ts:58:25
+[Dragon] attacks W1 | W0[2,5](3hp,0mv) W1[1,7](3hp,7mv) Dragon[1,7] | W2Turn | lives=3→2 GameEngine.ts:27:13
+[Dragon] W1 respawned [1,7]→[4,3] | W0[2,5](3hp,0mv) W1[4,3](2hp,7mv) Dragon[1,7] | W2Turn GameEngine.ts:27:13
+[W1] finishWarriorTurn | W0[2,5](3hp,0mv) W1[4,3](2hp,7mv) Dragon[1,7] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [1,7]→[2,6] | W0[2,5](3hp,0mv) W1[4,3](2hp,7mv) Dragon[2,6] | W2Turn | target=W0 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✓ Move succeeded: [2,7] → [4,3] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23
+[W0] finishWarriorTurn | W0[2,1](3hp,0mv) W1[4,3](2hp,7mv) Dragon[2,6] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[4,3] | moves=6 | lives=2 | visited=12 | knownPassable=20 | recent=[5,6 → 5,5 → 4,5 → 4,6 → 3,6 → 2,6 → 2,6 → 2,7 → 1,7 → 1,7 → 2,7 → 4,3] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 2, 1 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [2,1]: candidates: [3,3] dist=3 recent=0 deadEnd=0 UNKNOWN | [4,2] dist=3 recent=0 deadEnd=0 UNKNOWN | [4,4] dist=5 recent=0 deadEnd=0 UNKNOWN | [5,3] dist=5 recent=0 deadEnd=0 UNKNOWN → chose [3,3] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 4 → 3) AIController.ts:58:25
+[AI] Moving to [3,3] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [4,3] → tried [3,3], still at [4,3] AIController.ts:58:25
+[AI] --- Move step | pos=[4,3] | moves=5 | lives=2 | visited=12 | knownPassable=20 | recent=[5,5 → 4,5 → 4,6 → 3,6 → 2,6 → 2,6 → 2,7 → 1,7 → 1,7 → 2,7 → 4,3 → 4,3] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 2, 1 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [2,1]: candidates: [4,2] dist=3 recent=0 deadEnd=0 UNKNOWN | [4,4] dist=5 recent=0 deadEnd=0 UNKNOWN | [5,3] dist=5 recent=0 deadEnd=0 UNKNOWN → chose [4,2] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 4 → 3) AIController.ts:58:25
+[AI] Moving to [4,2] AIController.ts:58:25
+[AI] ✓ Move succeeded: [4,3] → [4,2] AIController.ts:58:25
+[AI] --- Move step | pos=[4,2] | moves=4 | lives=2 | visited=13 | knownPassable=22 | recent=[4,5 → 4,6 → 3,6 → 2,6 → 2,6 → 2,7 → 1,7 → 1,7 → 2,7 → 4,3 → 4,3 → 4,2] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 2, 1 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [2,1]: candidates: [3,2] dist=2 recent=0 deadEnd=0 UNKNOWN | [4,1] dist=2 recent=0 deadEnd=0 UNKNOWN | [5,2] dist=4 recent=0 deadEnd=0 UNKNOWN | [4,3] dist=4 recent=2 deadEnd=0 known → chose [3,2] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 3 → 2) AIController.ts:58:25
+[AI] Moving to [3,2] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [4,2] → tried [3,2], still at [4,2] AIController.ts:58:25
+[AI] --- Move step | pos=[4,2] | moves=3 | lives=2 | visited=13 | knownPassable=22 | recent=[4,6 → 3,6 → 2,6 → 2,6 → 2,7 → 1,7 → 1,7 → 2,7 → 4,3 → 4,3 → 4,2 → 4,2] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 2, 1 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [2,1]: candidates: [4,1] dist=2 recent=0 deadEnd=0 UNKNOWN | [5,2] dist=4 recent=0 deadEnd=0 UNKNOWN | [4,3] dist=4 recent=2 deadEnd=0 known → chose [4,1] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 3 → 2) AIController.ts:58:25
+[AI] Moving to [4,1] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [4,2] → tried [4,1], still at [4,2] AIController.ts:58:25
+[AI] --- Move step | pos=[4,2] | moves=2 | lives=2 | visited=13 | knownPassable=22 | recent=[3,6 → 2,6 → 2,6 → 2,7 → 1,7 → 1,7 → 2,7 → 4,3 → 4,3 → 4,2 → 4,2 → 4,2] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 2, 1 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [2,1]: candidates: [5,2] dist=4 recent=0 deadEnd=0 UNKNOWN | [4,3] dist=4 recent=2 deadEnd=0 known → chose [5,2] AIController.ts:58:25
+[AI] huntPlayer: Probe [5,2] doesn't get closer (dist 3 → 4), exploring to find new routes AIController.ts:58:25
+[AI] exploreToward [2,1]: No edges toward target, trying lateral unknown [5,2] AIController.ts:58:25
+[AI] Moving to [5,2] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [4,2] → tried [5,2], still at [4,2] AIController.ts:58:25
+[AI] Dead end marked: [4,2] (1 exit, total mapped: 1) AIController.ts:58:25
+[AI] --- Move step | pos=[4,2] | moves=1 | lives=2 | visited=13 | knownPassable=22 | recent=[2,6 → 2,6 → 2,7 → 1,7 → 1,7 → 2,7 → 4,3 → 4,3 → 4,2 → 4,2 → 4,2 → 4,2] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 2, 1 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [2,1]: candidates: [4,3] dist=4 recent=2 deadEnd=0 known → chose [4,3] AIController.ts:58:25
+[AI] huntPlayer: Probe [4,3] doesn't get closer (dist 3 → 4), exploring to find new routes AIController.ts:58:25
+[AI] exploreToward [2,1]: No unknown edges found, falling back to general explore AIController.ts:58:25
+[AI] explore: No hint, dragon visible & far (dist=6), heading toward dragon at [2,6] AIController.ts:58:25
+[AI] moveToward [2,6]: No BFS path, probing... AIController.ts:58:25
+[AI] probeToward [2,6]: candidates: [4,3] dist=5 recent=2 deadEnd=0 known → chose [4,3] AIController.ts:58:25
+[AI] Moving to [4,3] AIController.ts:58:25
+[W1] finishWarriorTurn | W0[2,1](3hp,0mv) W1[4,3](2hp,0mv) Dragon[2,6] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [2,6]→[2,5] | W0[2,1](3hp,0mv) W1[4,3](2hp,0mv) Dragon[2,5] | W2Turn | target=W0 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✓ Move succeeded: [4,2] → [4,3] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23
+[W0] finishWarriorTurn | W0[3,0](3hp,0mv) W1[4,3](2hp,0mv) Dragon[2,5] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[4,3] | moves=6 | lives=2 | visited=13 | knownPassable=22 | recent=[2,6 → 2,7 → 1,7 → 1,7 → 2,7 → 4,3 → 4,3 → 4,2 → 4,2 → 4,2 → 4,2 → 4,3] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 3, 0 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [3,0]: candidates: [4,4] dist=5 recent=0 deadEnd=0 UNKNOWN | [5,3] dist=5 recent=0 deadEnd=0 UNKNOWN | [4,2] dist=3 recent=4 deadEnd=99 known → chose [4,4] AIController.ts:58:25
+[AI] huntPlayer: Probe [4,4] doesn't get closer (dist 4 → 5), exploring to find new routes AIController.ts:58:25
+[AI] exploreToward [3,0]: No edges toward target, trying lateral unknown [4,4] AIController.ts:58:25
+[AI] Moving to [4,4] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [4,3] → tried [4,4], still at [4,3] AIController.ts:58:25
+[AI] --- Move step | pos=[4,3] | moves=5 | lives=2 | visited=13 | knownPassable=22 | recent=[2,7 → 1,7 → 1,7 → 2,7 → 4,3 → 4,3 → 4,2 → 4,2 → 4,2 → 4,2 → 4,3 → 4,3] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 3, 0 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [3,0]: candidates: [5,3] dist=5 recent=0 deadEnd=0 UNKNOWN | [4,2] dist=3 recent=4 deadEnd=99 known → chose [5,3] AIController.ts:58:25
+[AI] huntPlayer: Probe [5,3] doesn't get closer (dist 4 → 5), exploring to find new routes AIController.ts:58:25
+[AI] exploreToward [3,0]: No edges toward target, trying lateral unknown [5,3] AIController.ts:58:25
+[AI] Moving to [5,3] AIController.ts:58:25
+[AI] ✓ Move succeeded: [4,3] → [5,3] AIController.ts:58:25
+[AI] Dead end marked: [4,3] (1 exit, total mapped: 2) AIController.ts:58:25
+[AI] --- Move step | pos=[5,3] | moves=4 | lives=2 | visited=14 | knownPassable=24 | recent=[1,7 → 1,7 → 2,7 → 4,3 → 4,3 → 4,2 → 4,2 → 4,2 → 4,2 → 4,3 → 4,3 → 5,3] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 3, 0 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [3,0]: candidates: [5,2] dist=4 recent=0 deadEnd=0 UNKNOWN | [5,4] dist=6 recent=0 deadEnd=0 UNKNOWN | [6,3] dist=6 recent=0 deadEnd=0 UNKNOWN | [4,3] dist=4 recent=4 deadEnd=99 known → chose [5,2] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 5 → 4) AIController.ts:58:25
+[AI] Moving to [5,2] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [5,3] → tried [5,2], still at [5,3] AIController.ts:58:25
+[AI] --- Move step | pos=[5,3] | moves=3 | lives=2 | visited=14 | knownPassable=24 | recent=[1,7 → 2,7 → 4,3 → 4,3 → 4,2 → 4,2 → 4,2 → 4,2 → 4,3 → 4,3 → 5,3 → 5,3] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 3, 0 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [3,0]: candidates: [5,4] dist=6 recent=0 deadEnd=0 UNKNOWN | [6,3] dist=6 recent=0 deadEnd=0 UNKNOWN | [4,3] dist=4 recent=4 deadEnd=99 known → chose [5,4] AIController.ts:58:25
+[AI] huntPlayer: Probe [5,4] doesn't get closer (dist 5 → 6), exploring to find new routes AIController.ts:58:25
+[AI] exploreToward [3,0]: No edges toward target, trying lateral unknown [5,4] AIController.ts:58:25
+[AI] Moving to [5,4] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,3] → [5,4] AIController.ts:58:25
+[AI] --- Move step | pos=[5,4] | moves=2 | lives=2 | visited=15 | knownPassable=26 | recent=[2,7 → 4,3 → 4,3 → 4,2 → 4,2 → 4,2 → 4,2 → 4,3 → 4,3 → 5,3 → 5,3 → 5,4] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 3, 0 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [3,0]: candidates: [4,4] dist=5 recent=0 deadEnd=0 UNKNOWN | [5,5] dist=7 recent=0 deadEnd=0 UNKNOWN | [6,4] dist=7 recent=0 deadEnd=0 UNKNOWN | [5,3] dist=5 recent=2 deadEnd=0 known → chose [4,4] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 6 → 5) AIController.ts:58:25
+[AI] Moving to [4,4] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,4] → [4,4] AIController.ts:58:25
+[AI] --- Move step | pos=[4,4] | moves=1 | lives=2 | visited=16 | knownPassable=28 | recent=[4,3 → 4,3 → 4,2 → 4,2 → 4,2 → 4,2 → 4,3 → 4,3 → 5,3 → 5,3 → 5,4 → 4,4] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 3, 0 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [3,0]: candidates: [3,4] dist=4 recent=0 deadEnd=0 UNKNOWN | [4,5] dist=6 recent=0 deadEnd=0 UNKNOWN | [5,4] dist=6 recent=1 deadEnd=0 known → chose [3,4] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 5 → 4) AIController.ts:58:25
+[AI] Last-move safety: target [3,4] is Chebyshev dist 1 from dragon [2,5] - DANGEROUS! AIController.ts:58:25
+[AI] Last-move safety: found 2 safe alternatives: [5,4] cheby=3 deadEnd=0 door=false known | [4,5] cheby=2 deadEnd=0 door=false unknown → chose [5,4] AIController.ts:58:25
+[AI] Moving to [5,4] AIController.ts:58:25
+[W1] finishWarriorTurn | W0[3,0](3hp,0mv) W1[5,4](2hp,0mv) Dragon[2,5] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [2,5]→[3,4] | W0[3,0](3hp,0mv) W1[5,4](2hp,0mv) Dragon[3,4] | W2Turn | target=W0 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✓ Move succeeded: [4,4] → [5,4] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23
+[W0] finishWarriorTurn | W0[2,2](3hp,0mv) W1[5,4](2hp,0mv) Dragon[3,4] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[5,4] | moves=6 | lives=2 | visited=16 | knownPassable=28 | recent=[4,3 → 4,2 → 4,2 → 4,2 → 4,2 → 4,3 → 4,3 → 5,3 → 5,3 → 5,4 → 4,4 → 5,4] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER (Player 1 has treasure at 
+Array [ 2, 2 ]
+ dist= 5 playerToWin= 4 ) AIController.ts:58:25
+[AI] probeToward [2,2]: candidates: [5,5] dist=6 recent=0 deadEnd=0 UNKNOWN | [6,4] dist=6 recent=0 deadEnd=0 UNKNOWN | [4,4] dist=4 recent=1 deadEnd=0 known | [5,3] dist=4 recent=2 deadEnd=0 known → chose [5,5] AIController.ts:58:25
+[AI] huntPlayer: Probe [5,5] doesn't get closer (dist 5 → 6), exploring to find new routes AIController.ts:58:25
+[AI] moveToward [4,4]: BFS path found (2 steps): [5,4]→[4,4] AIController.ts:58:25
+[AI] exploreToward [2,2]: Heading to tile [4,4] which has unknown edges toward target AIController.ts:58:25
+[AI] Moving to [4,4] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,4] → [4,4] AIController.ts:58:25
+[AI] --- Move step | pos=[4,4] | moves=5 | lives=2 | visited=16 | knownPassable=28 | recent=[4,2 → 4,2 → 4,2 → 4,2 → 4,3 → 4,3 → 5,3 → 5,3 → 5,4 → 4,4 → 5,4 → 4,4] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER (Player 1 has treasure at 
+Array [ 2, 2 ]
+ dist= 4 playerToWin= 4 ) AIController.ts:58:25
+[AI] OSCILLATION DETECTED! Forcing anti-oscillation move AIController.ts:58:25
+[AI] getAntiOscillationMove: candidates: [3,4] deadEnd=0 recent=0 UNKNOWN | [4,5] deadEnd=0 recent=0 UNKNOWN | [5,4] deadEnd=0 recent=2 known → chose [3,4] AIController.ts:58:25
+[AI] Anti-oscillation target: 
+Array [ 3, 4 ]
+AIController.ts:58:25
+[AI] Moving to [3,4] AIController.ts:58:25
+[Dragon] attacks W1 | W0[2,2](3hp,0mv) W1[3,4](2hp,4mv) Dragon[3,4] | W2Turn | lives=2→1 GameEngine.ts:27:13
+[Dragon] W1 respawned [3,4]→[6,3] | W0[2,2](3hp,0mv) W1[6,3](1hp,4mv) Dragon[3,4] | W2Turn GameEngine.ts:27:13
+[W1] finishWarriorTurn | W0[2,2](3hp,0mv) W1[6,3](1hp,4mv) Dragon[3,4] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [3,4]→[2,3] | W0[2,2](3hp,0mv) W1[6,3](1hp,4mv) Dragon[2,3] | W2Turn | target=W0 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✓ Move succeeded: [4,4] → [6,3] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23
+[W0] finishWarriorTurn | W0[2,1](3hp,0mv) W1[6,3](1hp,4mv) Dragon[2,3] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[6,3] | moves=4 | lives=1 | visited=17 | knownPassable=28 | recent=[4,2 → 4,2 → 4,2 → 4,3 → 4,3 → 5,3 → 5,3 → 5,4 → 4,4 → 5,4 → 4,4 → 6,3] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 2, 1 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [2,1]: candidates: [6,2] dist=5 recent=0 deadEnd=0 UNKNOWN | [6,4] dist=7 recent=0 deadEnd=0 UNKNOWN | [7,3] dist=7 recent=0 deadEnd=0 UNKNOWN | [5,3] dist=5 recent=2 deadEnd=0 UNKNOWN → chose [6,2] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 6 → 5) AIController.ts:58:25
+[AI] Moving to [6,2] AIController.ts:58:25
+[AI] ✓ Move succeeded: [6,3] → [6,2] AIController.ts:58:25
+[AI] --- Move step | pos=[6,2] | moves=3 | lives=1 | visited=18 | knownPassable=30 | recent=[4,2 → 4,2 → 4,3 → 4,3 → 5,3 → 5,3 → 5,4 → 4,4 → 5,4 → 4,4 → 6,3 → 6,2] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 2, 1 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [2,1]: candidates: [5,2] dist=4 recent=0 deadEnd=0 UNKNOWN | [6,1] dist=4 recent=0 deadEnd=0 UNKNOWN | [7,2] dist=6 recent=0 deadEnd=0 UNKNOWN | [6,3] dist=6 recent=1 deadEnd=0 known → chose [5,2] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 5 → 4) AIController.ts:58:25
+[AI] Moving to [5,2] AIController.ts:58:25
+[AI] ✓ Move succeeded: [6,2] → [5,2] AIController.ts:58:25
+[AI] --- Move step | pos=[5,2] | moves=2 | lives=1 | visited=19 | knownPassable=32 | recent=[4,2 → 4,3 → 4,3 → 5,3 → 5,3 → 5,4 → 4,4 → 5,4 → 4,4 → 6,3 → 6,2 → 5,2] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 2, 1 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [2,1]: candidates: [5,1] dist=3 recent=0 deadEnd=0 UNKNOWN | [6,2] dist=5 recent=1 deadEnd=0 known → chose [5,1] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 4 → 3) AIController.ts:58:25
+[AI] Moving to [5,1] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,2] → [5,1] AIController.ts:58:25
+[AI] --- Move step | pos=[5,1] | moves=1 | lives=1 | visited=20 | knownPassable=34 | recent=[4,3 → 4,3 → 5,3 → 5,3 → 5,4 → 4,4 → 5,4 → 4,4 → 6,3 → 6,2 → 5,2 → 5,1] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 3 steps from winning! At 
+Array [ 2, 1 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [2,1]: candidates: [4,1] dist=2 recent=0 deadEnd=0 UNKNOWN | [6,1] dist=4 recent=0 deadEnd=0 UNKNOWN | [5,0] dist=4 recent=0 deadEnd=0 UNKNOWN | [5,2] dist=4 recent=1 deadEnd=0 known → chose [4,1] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 3 → 2) AIController.ts:58:25
+[AI] Moving to [4,1] AIController.ts:58:25
+[W1] finishWarriorTurn | W0[2,1](3hp,0mv) W1[5,1](1hp,0mv) Dragon[2,3] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [2,3]→[2,2] | W0[2,1](3hp,0mv) W1[5,1](1hp,0mv) Dragon[2,2] | W2Turn | target=W0 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✗ Move BLOCKED (wall/door): [5,1] → tried [4,1], still at [5,1] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23
+[W0] finishWarriorTurn | W0[1,0](3hp,0mv) W1[5,1](1hp,0mv) Dragon[2,2] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[5,1] | moves=4 | lives=1 | visited=20 | knownPassable=34 | recent=[4,3 → 5,3 → 5,3 → 5,4 → 4,4 → 5,4 → 4,4 → 6,3 → 6,2 → 5,2 → 5,1 → 5,1] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 1 steps from winning! At 
+Array [ 1, 0 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [1,0]: candidates: [5,0] dist=4 recent=0 deadEnd=0 UNKNOWN | [6,1] dist=6 recent=0 deadEnd=0 UNKNOWN | [5,2] dist=6 recent=1 deadEnd=0 known → chose [5,0] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 5 → 4) AIController.ts:58:25
+[AI] Moving to [5,0] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,1] → [5,0] AIController.ts:58:25
+[AI] --- Move step | pos=[5,0] | moves=3 | lives=1 | visited=21 | knownPassable=36 | recent=[5,3 → 5,3 → 5,4 → 4,4 → 5,4 → 4,4 → 6,3 → 6,2 → 5,2 → 5,1 → 5,1 → 5,0] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 1 steps from winning! At 
+Array [ 1, 0 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [1,0]: candidates: [4,0] dist=3 recent=0 deadEnd=0 UNKNOWN | [6,0] dist=5 recent=0 deadEnd=0 UNKNOWN | [5,1] dist=5 recent=2 deadEnd=0 known → chose [4,0] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 4 → 3) AIController.ts:58:25
+[AI] Moving to [4,0] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,0] → [4,0] AIController.ts:58:25
+[AI] --- Move step | pos=[4,0] | moves=2 | lives=1 | visited=22 | knownPassable=38 | recent=[5,3 → 5,4 → 4,4 → 5,4 → 4,4 → 6,3 → 6,2 → 5,2 → 5,1 → 5,1 → 5,0 → 4,0] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 1 steps from winning! At 
+Array [ 1, 0 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [1,0]: candidates: [4,1] dist=4 recent=0 deadEnd=0 UNKNOWN | [5,0] dist=4 recent=1 deadEnd=0 known → chose [4,1] AIController.ts:58:25
+[AI] huntPlayer: Probe [4,1] doesn't get closer (dist 3 → 4), exploring to find new routes AIController.ts:58:25
+[AI] moveToward [6,2]: BFS path found (5 steps): [4,0]→[5,0]→[5,1]→[5,2]→[6,2] AIController.ts:58:25
+[AI] exploreToward [1,0]: Heading to tile [6,2] which has unknown edges toward target AIController.ts:58:25
+[AI] Moving to [5,0] AIController.ts:58:25
+[AI] ✓ Move succeeded: [4,0] → [5,0] AIController.ts:58:25
+[AI] --- Move step | pos=[5,0] | moves=1 | lives=1 | visited=22 | knownPassable=38 | recent=[5,4 → 4,4 → 5,4 → 4,4 → 6,3 → 6,2 → 5,2 → 5,1 → 5,1 → 5,0 → 4,0 → 5,0] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER [URGENT] (Player 1 steps from winning! At 
+Array [ 1, 0 ]
+ waystone at 
+Array [ 0, 0 ]
+ ) AIController.ts:58:25
+[AI] probeToward [1,0]: candidates: [6,0] dist=5 recent=0 deadEnd=0 UNKNOWN | [4,0] dist=3 recent=1 deadEnd=0 known | [5,1] dist=5 recent=2 deadEnd=0 known → chose [6,0] AIController.ts:58:25
+[AI] huntPlayer: Probe [6,0] doesn't get closer (dist 4 → 5), exploring to find new routes AIController.ts:58:25
+[AI] moveToward [6,2]: BFS path found (4 steps): [5,0]→[5,1]→[5,2]→[6,2] AIController.ts:58:25
+[AI] exploreToward [1,0]: Heading to tile [6,2] which has unknown edges toward target AIController.ts:58:25
+[AI] Moving to [5,1] AIController.ts:58:25
+[W1] finishWarriorTurn | W0[1,0](3hp,0mv) W1[5,1](1hp,0mv) Dragon[2,2] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [2,2]→[1,1] | W0[1,0](3hp,0mv) W1[5,1](1hp,0mv) Dragon[1,1] | W2Turn | target=W0 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✓ Move succeeded: [5,0] → [5,1] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23
+[W0] finishWarriorTurn | W0[2,3](3hp,0mv) W1[5,1](1hp,0mv) Dragon[1,1] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[5,1] | moves=4 | lives=1 | visited=22 | knownPassable=38 | recent=[4,4 → 5,4 → 4,4 → 6,3 → 6,2 → 5,2 → 5,1 → 5,1 → 5,0 → 4,0 → 5,0 → 5,1] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER (Player 1 has treasure at 
+Array [ 2, 3 ]
+ dist= 5 playerToWin= 5 ) AIController.ts:58:25
+[AI] probeToward [2,3]: candidates: [6,1] dist=6 recent=0 deadEnd=0 UNKNOWN | [5,2] dist=4 recent=1 deadEnd=0 known | [5,0] dist=6 recent=2 deadEnd=0 known → chose [6,1] AIController.ts:58:25
+[AI] huntPlayer: Probe [6,1] doesn't get closer (dist 5 → 6), exploring to find new routes AIController.ts:58:25
+[AI] moveToward [6,3]: BFS path found (4 steps): [5,1]→[5,2]→[6,2]→[6,3] AIController.ts:58:25
+[AI] exploreToward [2,3]: Heading to tile [6,3] which has unknown edges toward target AIController.ts:58:25
+[AI] Moving to [5,2] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,1] → [5,2] AIController.ts:58:25
+[AI] --- Move step | pos=[5,2] | moves=3 | lives=1 | visited=22 | knownPassable=38 | recent=[5,4 → 4,4 → 6,3 → 6,2 → 5,2 → 5,1 → 5,1 → 5,0 → 4,0 → 5,0 → 5,1 → 5,2] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER (Player 1 has treasure at 
+Array [ 2, 3 ]
+ dist= 4 playerToWin= 5 ) AIController.ts:58:25
+[AI] probeToward [2,3]: candidates: [6,2] dist=5 recent=1 deadEnd=0 known | [5,1] dist=5 recent=3 deadEnd=0 known → chose [6,2] AIController.ts:58:25
+[AI] huntPlayer: Probe [6,2] doesn't get closer (dist 4 → 5), exploring to find new routes AIController.ts:58:25
+[AI] moveToward [6,3]: BFS path found (3 steps): [5,2]→[6,2]→[6,3] AIController.ts:58:25
+[AI] exploreToward [2,3]: Heading to tile [6,3] which has unknown edges toward target AIController.ts:58:25
+[AI] Moving to [6,2] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,2] → [6,2] AIController.ts:58:25
+[AI] --- Move step | pos=[6,2] | moves=2 | lives=1 | visited=22 | knownPassable=38 | recent=[4,4 → 6,3 → 6,2 → 5,2 → 5,1 → 5,1 → 5,0 → 4,0 → 5,0 → 5,1 → 5,2 → 6,2] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER (Player 1 has treasure at 
+Array [ 2, 3 ]
+ dist= 5 playerToWin= 5 ) AIController.ts:58:25
+[AI] probeToward [2,3]: candidates: [7,2] dist=6 recent=0 deadEnd=0 UNKNOWN | [6,1] dist=6 recent=0 deadEnd=0 UNKNOWN | [6,3] dist=4 recent=1 deadEnd=0 known | [5,2] dist=4 recent=2 deadEnd=0 known → chose [7,2] AIController.ts:58:25
+[AI] huntPlayer: Probe [7,2] doesn't get closer (dist 5 → 6), exploring to find new routes AIController.ts:58:25
+[AI] moveToward [6,3]: BFS path found (2 steps): [6,2]→[6,3] AIController.ts:58:25
+[AI] exploreToward [2,3]: Heading to tile [6,3] which has unknown edges toward target AIController.ts:58:25
+[AI] Moving to [6,3] AIController.ts:58:25
+[AI] ✓ Move succeeded: [6,2] → [6,3] AIController.ts:58:25
+[AI] --- Move step | pos=[6,3] | moves=1 | lives=1 | visited=22 | knownPassable=38 | recent=[6,3 → 6,2 → 5,2 → 5,1 → 5,1 → 5,0 → 4,0 → 5,0 → 5,1 → 5,2 → 6,2 → 6,3] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER (Player 1 has treasure at 
+Array [ 2, 3 ]
+ dist= 4 playerToWin= 5 ) AIController.ts:58:25
+[AI] probeToward [2,3]: candidates: [5,3] dist=3 recent=0 deadEnd=0 UNKNOWN | [6,4] dist=5 recent=0 deadEnd=0 UNKNOWN | [7,3] dist=5 recent=0 deadEnd=0 UNKNOWN | [6,2] dist=5 recent=2 deadEnd=0 known → chose [5,3] AIController.ts:58:25
+[AI] huntPlayer: Probe makes progress toward player (dist 4 → 3) AIController.ts:58:25
+[AI] Moving to [5,3] AIController.ts:58:25
+[W1] finishWarriorTurn | W0[2,3](3hp,0mv) W1[5,3](1hp,0mv) Dragon[1,1] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [1,1]→[2,2] | W0[2,3](3hp,0mv) W1[5,3](1hp,0mv) Dragon[2,2] | W2Turn | target=W0 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✓ Move succeeded: [6,3] → [5,3] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23
+[W0] finishWarriorTurn | W0[4,4](3hp,0mv) W1[5,3](1hp,0mv) Dragon[2,2] | W1Turn GameEngine.ts:27:13
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[5,3] | moves=4 | lives=1 | visited=22 | knownPassable=40 | recent=[6,2 → 5,2 → 5,1 → 5,1 → 5,0 → 4,0 → 5,0 → 5,1 → 5,2 → 6,2 → 6,3 → 5,3] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER (Player 1 has treasure at 
+Array [ 4, 4 ]
+ dist= 2 playerToWin= 8 ) AIController.ts:58:25
+[AI] huntPlayer: Safe path found (2 steps) AIController.ts:58:25
+[AI] Moving to [5,4] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,3] → [5,4] AIController.ts:58:25
+[AI] --- Move step | pos=[5,4] | moves=3 | lives=1 | visited=22 | knownPassable=40 | recent=[5,2 → 5,1 → 5,1 → 5,0 → 4,0 → 5,0 → 5,1 → 5,2 → 6,2 → 6,3 → 5,3 → 5,4] AIController.ts:58:25
+[AI] Phase: HUNT_PLAYER (Player 1 has treasure at 
+Array [ 4, 4 ]
+ dist= 1 playerToWin= 8 ) AIController.ts:58:25
+[AI] huntPlayer: Safe path found (1 steps) AIController.ts:58:25
+[AI] Moving to [4,4] AIController.ts:58:25
+[AI] ✓ Move succeeded: [5,4] → [4,4] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[AI] === AI TURN START === AIController.ts:58:25
+[AI] --- Move step | pos=[4,4] | moves=2 | lives=1 | visited=22 | knownPassable=40 | recent=[5,1 → 5,1 → 5,0 → 4,0 → 5,0 → 5,1 → 5,2 → 6,2 → 6,3 → 5,3 → 5,4 → 4,4] AIController.ts:58:25
+[AI] Phase: RETURN_TO_BASE (AI has treasure, heading to Waystone 
+Array [ 7, 7 ]
+ ) AIController.ts:58:25
+[AI] returnToBase: No known path, probing toward Waystone AIController.ts:58:25
+[AI] probeToward [7,7]: candidates: [4,5] dist=5 recent=0 deadEnd=0 UNKNOWN | [3,4] dist=7 recent=0 deadEnd=0 UNKNOWN | [5,4] dist=5 recent=1 deadEnd=0 known → chose [4,5] AIController.ts:58:25
+[AI] Moving to [4,5] AIController.ts:58:25
+[AI] ✗ Move BLOCKED (wall/door): [4,4] → tried [4,5], still at [4,4] AIController.ts:58:25
+[AI] --- Move step | pos=[4,4] | moves=1 | lives=1 | visited=22 | knownPassable=40 | recent=[5,1 → 5,0 → 4,0 → 5,0 → 5,1 → 5,2 → 6,2 → 6,3 → 5,3 → 5,4 → 4,4 → 4,4] AIController.ts:58:25
+[AI] Phase: RETURN_TO_BASE (AI has treasure, heading to Waystone 
+Array [ 7, 7 ]
+ ) AIController.ts:58:25
+[AI] returnToBase: No known path, probing toward Waystone AIController.ts:58:25
+[AI] probeToward [7,7]: candidates: [3,4] dist=7 recent=0 deadEnd=0 UNKNOWN | [5,4] dist=5 recent=1 deadEnd=0 known → chose [3,4] AIController.ts:58:25
+[AI] returnToBase: Probe doesn't get closer (dist 6 → 7), exploring toward Waystone AIController.ts:58:25
+[AI] moveToward [5,4]: BFS path found (2 steps): [4,4]→[5,4] AIController.ts:58:25
+[AI] exploreToward [7,7]: Heading to tile [5,4] which has unknown edges toward target AIController.ts:58:25
+[AI] Moving to [5,4] AIController.ts:58:25
+[W1] finishWarriorTurn | W0[4,4](3hp,0mv) W1[5,4](1hp,0mv) Dragon[2,2] | W2Turn GameEngine.ts:27:13
+[Dragon] moved [2,2]→[3,3] | W0[4,4](3hp,0mv) W1[5,4](1hp,0mv) Dragon[3,3] | W2Turn | target=W1 GameEngine.ts:27:13
+[Store] dragon chime (moveWarrior) isDragonTurn=true gameStore.ts:223:17
+[AI] ✓ Move succeeded: [4,4] → [5,4] AIController.ts:58:25
+[AI] === AI TURN END === AIController.ts:58:25
+[Store] dragon revealed gameStore.ts:226:19
+[Store] dragon flying gameStore.ts:229:19
+[Store] dragon turn done isDragonTurn=false gameStore.ts:233:23

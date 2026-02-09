@@ -345,5 +345,129 @@
     font-size: 0.5rem !important;
     line-height: 1.2 !important;
   }
+
+  /* Leaderboard landscape adjustments */
+  #leaderboard-container {
+    max-width: 100% !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+  }
+
+  #leaderboard-inner {
+    padding: 4px 8px !important;
+  }
+
+  /* Header: compact */
+  #leaderboard-header {
+    margin-bottom: 4px !important;
+    padding: 0px 8px !important;
+  }
+
+  #leaderboard-title {
+    font-size: 1.25rem !important;
+  }
+
+  #leaderboard-close-btn {
+    font-size: 1.25rem !important;
+  }
+
+  /* Hide submission result to save space */
+  #leaderboard-submission-result {
+    display: none !important;
+  }
+
+  /* Tabs: force 1x4 horizontal layout */
+  #leaderboard-tabs {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 3px !important;
+    margin-bottom: 4px !important;
+  }
+
+  #leaderboard-tabs button {
+    padding: 3px 4px !important;
+  }
+
+  #leaderboard-tabs button > div:first-child {
+    font-size: 0.875rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  #leaderboard-tabs button > div:last-child {
+    font-size: 0.5rem !important;
+  }
+
+  /* Category title: compact */
+  #leaderboard-category-title {
+    font-size: 0.75rem !important;
+    margin-bottom: 4px !important;
+    padding: 2px 8px !important;
+  }
+
+  /* Columns: force 2-column side-by-side at landscape */
+  #leaderboard-columns {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+  }
+
+  /* Column headers: compact */
+  #leaderboard-solo-title,
+  #leaderboard-multiplayer-title {
+    font-size: 0.75rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* Entry cards: tighter spacing */
+  #leaderboard-solo-list > div,
+  #leaderboard-multiplayer-list > div {
+    gap: 3px !important;
+  }
+
+  /* Individual entries: compact */
+  [id^="leaderboard-solo-entry-"],
+  [id^="leaderboard-multiplayer-entry-"] {
+    padding: 3px 4px !important;
+  }
+
+  [id$="-top"] {
+    gap: 3px !important;
+  }
+
+  [id$="-rank"] {
+    font-size: 0.75rem !important;
+    width: 20px !important;
+  }
+
+  [id$="-name"] {
+    font-size: 0.625rem !important;
+  }
+
+  [id$="-time"] {
+    font-size: 0.625rem !important;
+  }
+
+  [id$="-stats"] {
+    gap: 3px !important;
+    margin-top: 2px !important;
+    margin-left: 24px !important;
+    font-size: 0.5rem !important;
+  }
+
+  [id$="-difficulty"],
+  [id$="-stats"] span:not([id$="-difficulty"]) {
+    padding: 1px 3px !important;
+    font-size: 0.5rem !important;
+  }
+
+  /* Hide bottom close button */
+  #leaderboard-close-bottom-btn {
+    display: none !important;
+  }
+
+  /* Loading/empty states: compact */
+  [id$="-loading"],
+  [id$="-empty"] {
+    padding: 12px 4px !important;
+    font-size: 0.625rem !important;
+  }
 }
 

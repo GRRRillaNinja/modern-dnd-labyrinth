@@ -1,0 +1,475 @@
+================================================================================
+  D&D COMPUTER LABYRINTH — SURVIVAL MODE
+  Design Document & Implementation Plan
+================================================================================
+
+OVERVIEW
+--------
+A new endless game mode where players descend through increasingly difficult
+dungeon floors. Instead of finding treasure and escaping, the objective on each
+floor is to find a weapon hidden in the labyrinth, then use it to slay the
+dragon (or other enemy) guarding the stairway to the next floor. Each new floor
+introduces harder mechanics, tougher enemies, and new hazards. The game
+continues until the player dies. Score is based on floors cleared, speed, and
+efficiency.
+
+
+================================================================================
+1. CORE LOOP (PER FLOOR)
+================================================================================
+
+  1. Player spawns on a new randomly generated 8x8 floor
+  2. A WEAPON is hidden somewhere in the maze (replaces treasure)
+  3. An ENEMY guards the floor (replaces dragon, starts asleep)
+  4. Player explores to find the weapon (sparkle hints still apply)
+  5. Enemy wakes when player gets close (existing mechanic)
+  6. Once armed, player moves onto the enemy tile to initiate COMBAT
+  7. Combat resolves (see Section 4)
+  8. If enemy is defeated, a STAIRWAY appears at the enemy's death tile
+  9. Player moves onto the stairway to descend to the next floor
+  10. New floor generates with increased difficulty
+
+  If the player dies (loses all lives), the run ends and score is submitted.
+
+
+================================================================================
+2. FLOOR SYSTEM
+================================================================================
+
+  Floor Counter
+  - Displayed in the header next to the timer: "Floor 3 | 2:41"
+  - Persists across the entire run
+
+  Floor Generation
+  - Each floor gets a fresh MazeGenerator call (new wall layout)
+  - Player spawns at a random edge tile (no waystone selection in survival)
+  - Weapon placed using existing treasure placement logic (away from spawn)
+  - Enemy placed using existing dragon placement logic (away from spawn)
+
+  Floor Transition
+  - On stairway entry: brief "Descending..." animation (fade to black, fade in)
+  - Play a new sound effect (e.g., "descend.mp3" — stone stairs echo)
+  - Floor counter increments
+  - Player state carries over (lives, HP, score)
+  - Board fully regenerated
+
+  Persistent State Between Floors
+  - Current lives remaining
+  - Current HP (see Section 3)
+  - Total score
+  - Floor number
+  - Run timer (continuous)
+  - Total kills, total damage taken (for stats)
+
+  What Resets Each Floor
+  - Maze layout (new walls, passages)
+  - Weapon location
+  - Enemy location and state (asleep)
+  - Discovered walls (fog of war resets)
+  - Player moves counter
+  - Traps and obstacles (freshly placed)
+
+
+================================================================================
+3. PLAYER SYSTEM CHANGES
+================================================================================
+
+  Health Model (replaces simple 3-lives system for Survival Mode only)
+  - Player has 3 LIVES (same as current)
+  - Each life has an HP pool: starts at 3 HP per life
+  - Dragon attacks deal damage to HP, not lives directly
+  - When HP reaches 0, player loses a life and respawns with full HP
+  - When all 3 lives are lost, run ends
+  - This gives more granularity for traps (1 HP) vs dragon attacks (2-3 HP)
+  - HP displayed as a bar or hearts within the warrior info panel
+
+  Alternative (simpler): Keep the existing 3-lives model but never restore
+  lives between floors. Traps cost 1 life. This makes survival inherently
+  tense and limited — 3 lives for the entire run.
+
+  >>> RECOMMENDATION: Start with the simpler 3-lives model. Add HP pools in
+  a future update if the mode needs more depth.
+
+  Moves Per Turn
+  - Floor 1-3: 5 moves per turn (standard)
+  - Floor 4-6: 4 moves per turn
+  - Floor 7+: 3 moves per turn
+  - Creates urgency as floors progress
+
+  Weapon Inventory
+  - Player can hold one weapon at a time
+  - Weapon is consumed on use (one combat encounter per weapon)
+  - If player has no weapon and touches the enemy, normal damage applies
+    (player takes damage, gets knocked back/respawned)
+  - Visual: weapon icon displayed next to warrior on board + in sidebar
+
+
+================================================================================
+4. COMBAT SYSTEM
+================================================================================
+
+  Initiating Combat
+  - Player must have a weapon equipped
+  - Player moves onto the enemy's tile (same as current dragon collision)
+  - If armed: combat begins
+  - If unarmed: player takes damage and respawns (existing behavior)
+
+  Combat Resolution
+
+  Option A — Simple (recommended for v1):
+    - Each weapon hit deals 1 damage to the enemy
+    - Enemy HP = floor number (Floor 1: 1 HP, Floor 5: 5 HP, etc.)
+    - Cap at some reasonable max (e.g., 10 HP)
+    - After hitting, player is knocked back to an adjacent tile
+    - Enemy retaliates on its next turn (moves toward player aggressively)
+    - Player must find a NEW weapon each hit (weapon consumed per strike)
+    - Multiple weapons spawn on higher floors (1 per enemy HP needed)
+
+  Option B — Dice Roll (thematic but RNG-heavy):
+    - On collision, a D6 is rolled
+    - Player needs to roll above a threshold to hit
+    - Threshold increases per floor
+    - Miss = player takes damage instead
+    - Adds randomness, may frustrate players
+
+  >>> RECOMMENDATION: Option A. Deterministic combat rewards strategy over
+  luck. Finding multiple weapons per floor adds exploration depth.
+
+  Combat Flow (Option A, multi-weapon):
+    Floor 1: 1 weapon spawns, enemy has 1 HP → find weapon, hit once, done
+    Floor 3: 3 weapons spawn, enemy has 3 HP → find & hit 3 times
+    Floor 5: 5 weapons spawn, enemy has 5 HP → find & hit 5 times
+    (Weapons could spawn one at a time — next appears after using current one)
+
+  Visual Feedback
+  - Screen shake on hit (existing battle shake effect)
+  - Enemy HP bar appears when combat begins (floating above enemy)
+  - Flash effect on successful hit (green) or player damage (red)
+  - Death animation when enemy HP reaches 0
+  - Stairway appears with glow effect
+
+
+================================================================================
+5. PROGRESSIVE DIFFICULTY
+================================================================================
+
+  Floor 1-3: "The Upper Halls" (Tutorial difficulty)
+  - Standard maze density
+  - Enemy: 1-3 HP, wakes at distance 3, moves 1 tile per turn
+  - No traps or obstacles
+  - 5 moves per turn
+  - Doors: none (Level 1 mechanics)
+
+  Floor 4-6: "The Deep Corridors"
+  - Denser maze (more walls)
+  - Enemy: 4-6 HP, wakes at distance 4, moves 1 tile per turn
+  - Introduce LOCKED DOORS (Level 2 mechanics)
+  - 4 moves per turn
+  - Introduce PIT TRAPS (see Section 6)
+
+  Floor 7-9: "The Dark Depths"
+  - Very dense maze
+  - Enemy: 7-9 HP, wakes at distance 4, moves 2 tiles per turn
+  - Locked doors + pit traps + POISON TILES
+  - 3 moves per turn
+  - Enemy becomes visible only at distance 2 (harder to track)
+
+  Floor 10-12: "The Dragon's Domain"
+  - Enemy: 10-12 HP, wakes at distance 5, moves 2 tiles per turn
+  - All previous hazards + CRUMBLING FLOORS
+  - 3 moves per turn
+  - TWO enemies on the board (both must be killed)
+
+  Floor 13+: "The Abyss"
+  - Difficulty caps but all mechanics active
+  - Enemy HP caps at 12
+  - 3 enemies on board
+  - All hazards at maximum density
+  - True endurance test
+
+
+================================================================================
+6. OBSTACLES & TRAPS
+================================================================================
+
+  PIT TRAPS (introduced Floor 4)
+  - Hidden until stepped on (like walls — discovered on contact)
+  - Stepping on a pit: lose 1 life, respawn at floor spawn point
+  - Pit remains visible after discovery (marked on map)
+  - Placed randomly, never on spawn tile or weapon/enemy tiles
+  - 2-4 pits per floor, scaling with floor number
+
+  POISON TILES (introduced Floor 7)
+  - Visible once within 2 tiles (faint green glow)
+  - Stepping on poison: lose 1 life, but DON'T respawn (stay in place)
+  - Can be walked through if you're willing to pay the cost
+  - Creates risk/reward — shortcut through poison or go around?
+  - 3-5 per floor
+
+  CRUMBLING FLOORS (introduced Floor 10)
+  - After walking through a passage, it collapses behind you (becomes a wall)
+  - Only affects the specific passage used, not the tile itself
+  - Forces player to think ahead — no backtracking through crumbled paths
+  - Visual: cracks appear, then wall texture fills in
+  - Sound: rumbling/collapse sound effect
+
+  FUTURE TRAP IDEAS (post-launch):
+  - Teleport tiles: randomly relocate the player
+  - Ice tiles: slide in move direction until hitting a wall
+  - Alarm tiles: immediately wake the enemy regardless of distance
+  - Darkness zones: hide all tile info within a 2-tile radius
+  - Mimic weapons: looks like a weapon but is actually a trap
+
+
+================================================================================
+7. ENEMY AI ENHANCEMENTS
+================================================================================
+
+  Current dragon AI: moves diagonally toward nearest warrior, attacks at
+  distance 0. This is the baseline.
+
+  Survival Mode Enhancements (per difficulty tier):
+
+  Floor 1-3: BASIC
+  - Same as current dragon behavior
+  - Moves 1 tile per turn toward player
+
+  Floor 4-6: PATROL
+  - When asleep, enemy patrols a set path (moves between 2-3 waypoints)
+  - Player must time movement to avoid patrol route
+  - When awake, switches to chase behavior (same as current)
+
+  Floor 7-9: STALKER
+  - Moves 2 tiles per turn
+  - 30% chance to move unpredictably (not toward player) to create tension
+  - Can "hear" through walls — moves toward player even if no direct path
+  - Visibility reduced to 2 tiles (player can't see enemy as easily)
+
+  Floor 10+: HUNTER
+  - Moves 2 tiles per turn
+  - Uses BFS pathfinding to find optimal path to player (like AI controller)
+  - Can break through locked doors
+  - Becomes temporarily enraged after taking damage (+1 move for 3 turns)
+
+  Multi-Enemy Floors (Floor 10+)
+  - Each enemy acts independently
+  - Enemies don't share knowledge of player position
+  - Different enemies could have different behaviors
+  - E.g., Floor 10: 1 Stalker + 1 Basic
+
+
+================================================================================
+8. SCORING SYSTEM
+================================================================================
+
+  Points Per Floor Cleared:
+  - Base: 1000 * floor_number
+  - Speed bonus: +500 if cleared under 60 seconds, +200 if under 120
+  - No-damage bonus: +300 if no lives lost on that floor
+  - Exploration bonus: +100 per 10% of walls discovered
+
+  Run Score:
+  - Sum of all floor scores
+  - Displayed during gameplay in the sidebar
+  - Final score shown on death screen
+
+  Leaderboard:
+  - New Supabase table: survival_scores
+  - Columns: player_name, highest_floor, total_score, total_time,
+    total_kills, total_deaths, date
+  - Leaderboard sorted by highest_floor first, then total_score
+  - Separate from the existing solo/multiplayer leaderboards
+
+
+================================================================================
+9. UI / UX CHANGES
+================================================================================
+
+  Header
+  - Add floor indicator: "Floor 3" between title and timer
+  - Timer runs continuously across all floors
+
+  Help Sidebar — Game Status
+  - Replace "Mode: Solo" with "Mode: Survival — Floor 3"
+  - Replace "Dragon: Asleep/Awake" with "Enemy: Asleep/Awake (5 HP)"
+  - Add "Score: 4,200"
+  - Add "Weapons: 2 remaining" (how many weapons still on this floor)
+
+  Help Sidebar — Quick Tips
+  - Update tips for survival mechanics
+  - Context-sensitive: show trap warnings on floors that have them
+  - "Find all weapons to defeat the enemy"
+  - "Watch for pit traps!" (Floor 4+)
+
+  Board
+  - Weapon rendered as a new icon (dagger/sword emoji or custom sprite)
+  - Stairway rendered as a descending stairs icon after enemy defeat
+  - Pit traps: dark hole icon after discovery
+  - Poison tiles: green glow overlay
+  - Crumbling passage: crack animation → wall fill
+  - Enemy HP bar: floating above enemy when damaged
+
+  Floor Transition Screen
+  - Full-screen overlay: "Floor 3 Complete!"
+  - Show floor stats: time, damage taken, score earned
+  - Brief pause (2-3 seconds) then auto-advance
+  - Or "Continue" button for player control
+
+  Death Screen
+  - "You Fell on Floor 7"
+  - Final stats: floors cleared, total score, total time, kills, deaths
+  - Submit to leaderboard
+  - "Try Again" button
+
+
+================================================================================
+10. ARCHITECTURE & IMPLEMENTATION PLAN
+================================================================================
+
+  Phase 1: Foundation (estimated: 1-2 sessions)
+  -----------------------------------------------
+  Files: shared/types/index.ts, GameEngine.ts, gameStore.ts
+
+  - Add GameMode.Survival to shared types
+  - Add SurvivalState type: { floor, score, weaponsRemaining, enemyHP,
+    enemyMaxHP, stairwayPosition, traps[], isArmed }
+  - Add weapon-related fields to game state
+  - Add floor generation logic to GameEngine (resetFloor method)
+  - Add weapon placement (reuse treasure placement algorithm)
+  - Add combat resolution method to GameEngine
+  - Add stairway spawn on enemy death
+  - Add floor advancement trigger (step on stairway)
+  - Emit new events: WEAPON_FOUND, COMBAT_HIT, ENEMY_DEFEATED,
+    FLOOR_CLEARED, FLOOR_STARTED
+  - Update gameStore to handle new events, sounds, and state
+
+  Phase 2: Core Gameplay (estimated: 1-2 sessions)
+  --------------------------------------------------
+  Files: gameStore.ts, AudioService.ts, GameEngine.ts
+
+  - Wire up the combat flow:
+    - Armed player hits enemy → damage dealt, weapon consumed, knockback
+    - Unarmed player hits enemy → player takes damage, respawn
+  - Add multi-weapon spawning for higher floors
+  - Add floor transition animation (overlay + fade)
+  - Add combat sounds: weapon_hit.mp3, enemy_death.mp3, descend.mp3
+  - Add scoring calculations per floor
+  - Add persistent state management between floors
+  - Handle death → end of run → score submission
+
+  Phase 3: Progressive Difficulty (estimated: 1-2 sessions)
+  -----------------------------------------------------------
+  Files: GameEngine.ts, new file: DifficultyScaler.ts
+
+  - Create DifficultyScaler module that returns config per floor:
+    { enemyHP, enemySpeed, enemyWakeDistance, movesPerTurn,
+      hasDoors, trapCount, trapTypes[], mazeWallDensity,
+      enemyCount, enemyVisibilityDistance }
+  - Integrate scaler into floor generation
+  - Adjust enemy movement speed (tiles per turn)
+  - Adjust moves per turn
+  - Adjust maze wall density in MazeGenerator
+  - Implement difficulty tiers with named zones
+
+  Phase 4: Traps & Obstacles (estimated: 1-2 sessions)
+  ------------------------------------------------------
+  Files: GameEngine.ts, Chamber.tsx, gameStore.ts, shared/types/index.ts
+
+  - Add Trap type: { position, type, discovered, active }
+  - Add trap placement logic (avoid spawn, weapon, enemy tiles)
+  - PIT TRAP: hidden, discovered on contact, costs 1 life + respawn
+  - POISON TILE: visible at distance 2, costs 1 life, no respawn
+  - CRUMBLING FLOOR: passage collapses after use, becomes wall
+  - Add trap visuals to Chamber component
+  - Add trap sound effects
+  - Add trap events: TRAP_TRIGGERED, TRAP_DISCOVERED
+
+  Phase 5: Enemy AI Enhancements (estimated: 1 session)
+  -------------------------------------------------------
+  Files: GameEngine.ts, new file: EnemyAI.ts
+
+  - Extract dragon movement into EnemyAI module
+  - Add patrol behavior (waypoint system)
+  - Add multi-tile movement (speed > 1)
+  - Add BFS pathfinding for hunter enemies
+  - Add enrage mechanic (speed boost after taking damage)
+  - Support multiple enemies per floor
+  - Each enemy tracks independently
+
+  Phase 6: UI Polish (estimated: 1 session)
+  -------------------------------------------
+  Files: App.tsx, HelpSidebar.tsx, RightSidebar.tsx, Board.tsx,
+         Chamber.tsx, Menu.tsx, Leaderboard.tsx
+
+  - Add Survival Mode to menu (new button alongside Solo/vs CPU/Two Warriors)
+  - Add floor indicator to header
+  - Add enemy HP bar component
+  - Add weapon inventory display in sidebar
+  - Update help tips for survival context
+  - Add floor transition overlay component
+  - Add death/run-over screen component
+  - Add survival leaderboard tab
+  - Create Supabase table for survival scores
+
+  Phase 7: Audio & Effects (estimated: 0.5 session)
+  ---------------------------------------------------
+  Files: AudioService.ts, App.tsx
+
+  - Record/source new sounds:
+    weapon_pickup, weapon_hit, enemy_death, floor_descend,
+    pit_trap, poison_damage, crumble
+  - Add visual effects:
+    weapon pickup flash (blue), combat hit shake, enemy death explosion,
+    floor descent fade, trap discovery pulse
+  - Floor-specific ambient differences (optional, stretch goal)
+
+
+================================================================================
+11. TECHNICAL CONSIDERATIONS
+================================================================================
+
+  State Management
+  - SurvivalState should be a separate top-level field in the Zustand store,
+    not nested inside gameState (which resets per floor)
+  - gameState continues to manage per-floor board state
+  - survivalState manages cross-floor persistent data
+
+  GameEngine Changes
+  - Add a `resetForNewFloor(floor: number, config: FloorConfig)` method
+  - Reuses existing maze generation, wall discovery, movement, and dragon
+    mechanics as the foundation
+  - Combat is a new method, not a modification of dragonAttack
+  - Keep existing game modes completely untouched — all survival logic
+    should be additive, gated behind GameMode.Survival checks
+
+  Performance
+  - Multiple enemies means multiple pathfinding calls per turn
+  - BFS on 8x8 grid is trivial (64 nodes max) — no concern
+  - Trap checking adds minimal overhead (array lookup per move)
+
+  Testing Strategy
+  - Each phase should be independently testable
+  - Phase 1-2: play through 3 floors manually, verify combat + transition
+  - Phase 3: verify difficulty scaling at floors 1, 5, 10
+  - Phase 4: verify each trap type triggers correctly
+  - Phase 5: verify enemy behaviors at each difficulty tier
+  - Phase 6-7: visual/audio QA pass
+
+
+================================================================================
+12. OPEN QUESTIONS FOR FUTURE DECISIONS
+================================================================================
+
+  - Should lives regenerate between floors? (1 life restored every 3 floors?)
+  - Should there be "shop" floors where player can choose upgrades?
+  - Should weapons have types (sword: 1 dmg, axe: 2 dmg, magic: 3 dmg)?
+  - Should there be a "boss floor" every 5 floors with unique mechanics?
+  - Should multiplayer survival be supported? (co-op or competitive)
+  - Should the maze size increase on higher floors? (10x10, 12x12?)
+  - Should there be a maximum floor (e.g., Floor 20 = victory)?
+    Or truly endless?
+
+
+================================================================================
+END OF DOCUMENT
+================================================================================

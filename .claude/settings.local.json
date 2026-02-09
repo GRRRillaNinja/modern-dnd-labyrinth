@@ -4,7 +4,9 @@
       "Bash(npm run dev:*)",
       "WebSearch",
       "WebFetch(domain:www.textures4photoshop.com)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)",
+      "WebFetch(domain:company.wizards.com)"
     ]
   }
 }
