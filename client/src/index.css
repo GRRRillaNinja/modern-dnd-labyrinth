@@ -401,11 +401,9 @@
     font-size: 0.625rem !important;
   }
 
-  /* Category title: compact */
+  /* Hide category title - redundant with tabs */
   #leaderboard-category-title {
-    font-size: 0.75rem !important;
-    margin-bottom: 4px !important;
-    padding: 2px 8px !important;
+    display: none !important;
   }
 
   /* Columns: single column only at landscape */
@@ -423,11 +421,10 @@
     display: none !important;
   }
 
-  /* Column headers: larger fonts for readability */
+  /* Hide column headers - redundant with mode toggle */
   #leaderboard-solo-title,
   #leaderboard-multiplayer-title {
-    font-size: 1rem !important;
-    margin-bottom: 6px !important;
+    display: none !important;
   }
 
   /* Entry cards: tighter spacing */
