@@ -99,3 +99,74 @@
   opacity: 15%;
 }
 
+/* ===== Landscape phone overrides ===== */
+/* Phones in landscape: wide (>500px) but very short (<500px) */
+@media (orientation: landscape) and (max-height: 500px) {
+  /* Compact header */
+  #app-header-content {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  /* Main content: fill remaining height */
+  #app-main-content {
+    height: calc(100vh - 44px) !important;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+
+  /* Force column layout (undo md:flex-row) */
+  #app-layout {
+    flex-direction: row !important;
+    flex-wrap: nowrap;
+    height: 100%;
+  }
+
+  /* Show mobile controls as a compact side strip */
+  #app-mobile-controls {
+    display: flex !important;
+    order: 2 !important;
+    width: auto;
+    flex-shrink: 0;
+    align-items: flex-start;
+    padding-top: 4px;
+  }
+
+  /* Hide tablet sidebar (would take too much space) */
+  #app-tablet-sidebar {
+    display: none !important;
+  }
+
+  /* Board: maximize for short viewport */
+  #app-board-wrapper {
+    order: 1 !important;
+    flex: 1;
+    min-height: 0;
+  }
+
+  #board-container {
+    min-height: unset !important;
+    padding: 2px;
+  }
+
+  #board-frame-wrapper {
+    width: min(100%, calc(100vh - 60px)) !important;
+  }
+
+  /* Hide help and sounds in landscape phone */
+  #app-mobile-help,
+  #app-mobile-sounds {
+    display: none !important;
+  }
+
+  /* Compact dungeon panel borders */
+  .dungeon-panel {
+    border-width: 10px;
+    border-image-width: 10px;
+  }
+
+  .dungeon-content {
+    padding: 6px;
+  }
+}
+
