@@ -376,7 +376,12 @@
     display: none !important;
   }
 
-  /* Tabs: force 1x4 horizontal layout */
+  /* Show mode toggle in landscape */
+  #leaderboard-mode-toggle {
+    display: grid !important;
+  }
+
+  /* Tabs: force 1x4 horizontal layout with larger fonts */
   #leaderboard-tabs {
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 3px !important;
@@ -384,16 +389,16 @@
   }
 
   #leaderboard-tabs button {
-    padding: 3px 4px !important;
+    padding: 4px 6px !important;
   }
 
   #leaderboard-tabs button > div:first-child {
-    font-size: 0.875rem !important;
-    margin-bottom: 0 !important;
+    font-size: 1.125rem !important;
+    margin-bottom: 1px !important;
   }
 
   #leaderboard-tabs button > div:last-child {
-    font-size: 0.5rem !important;
+    font-size: 0.625rem !important;
   }
 
   /* Category title: compact */
@@ -409,16 +414,20 @@
     gap: 6px !important;
   }
 
-  /* Hide multiplayer column to save space */
-  #leaderboard-multiplayer-column {
+  /* Conditionally hide columns based on mobile mode toggle */
+  #leaderboard-columns[data-mobile-mode="solo"] #leaderboard-multiplayer-column {
     display: none !important;
   }
 
-  /* Column headers: compact */
+  #leaderboard-columns[data-mobile-mode="multiplayer"] #leaderboard-solo-column {
+    display: none !important;
+  }
+
+  /* Column headers: larger fonts for readability */
   #leaderboard-solo-title,
   #leaderboard-multiplayer-title {
-    font-size: 0.75rem !important;
-    margin-bottom: 4px !important;
+    font-size: 1rem !important;
+    margin-bottom: 6px !important;
   }
 
   /* Entry cards: tighter spacing */

@@ -12,6 +12,7 @@ interface LeaderboardProps {
 export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, difficultyLevel: _difficultyLevel, onClose, submissionResult }) => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<'fastest-win' | 'slowest-win' | 'fastest-loss' | 'slowest-loss'>('fastest-win');
+  const [mobileMode, setMobileMode] = useState<'solo' | 'multiplayer'>('solo');
   const [leaderboards, setLeaderboards] = useState<{
     soloFastestWins: LeaderboardEntry[];
     soloSlowestWins: LeaderboardEntry[];
@@ -328,6 +329,52 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
             </motion.div>
           )}
 
+          {/* Mobile Mode Toggle (Solo/Multiplayer) - Only visible in landscape */}
+          <div id="leaderboard-mode-toggle" className="hidden grid-cols-2 gap-2 mb-2 flex-shrink-0">
+            <button
+              id="leaderboard-mode-solo"
+              onClick={() => setMobileMode('solo')}
+              className="px-4 py-2 rounded-lg font-medieval text-sm transition-all active:translate-y-0.5"
+              style={mobileMode === 'solo'
+                ? {
+                    background: 'linear-gradient(180deg, #1e40af 0%, #1e3a8a 50%, #1e3a8a 100%)',
+                    border: '2px solid #3b82f6',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -2px 0 rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.5)',
+                    color: '#ffffff',
+                  }
+                : {
+                    background: 'linear-gradient(180deg, #3d3529 0%, #2a241c 50%, #1a1610 100%)',
+                    border: '2px solid #4a4035',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -2px 0 rgba(0,0,0,0.3)',
+                    color: '#9ca3af',
+                  }
+              }
+            >
+              🗡️ Solo Quest
+            </button>
+            <button
+              id="leaderboard-mode-multiplayer"
+              onClick={() => setMobileMode('multiplayer')}
+              className="px-4 py-2 rounded-lg font-medieval text-sm transition-all active:translate-y-0.5"
+              style={mobileMode === 'multiplayer'
+                ? {
+                    background: 'linear-gradient(180deg, #7e22ce 0%, #6b21a8 50%, #581c87 100%)',
+                    border: '2px solid #a855f7',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -2px 0 rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.5)',
+                    color: '#ffffff',
+                  }
+                : {
+                    background: 'linear-gradient(180deg, #3d3529 0%, #2a241c 50%, #1a1610 100%)',
+                    border: '2px solid #4a4035',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -2px 0 rgba(0,0,0,0.3)',
+                    color: '#9ca3af',
+                  }
+              }
+            >
+              ⚔️ Two Warriors
+            </button>
+          </div>
+
           {/* Category Tabs */}
           <div id="leaderboard-tabs" className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-4 sm:mb-6 flex-shrink-0">
             {(['fastest-win', 'slowest-win', 'fastest-loss', 'slowest-loss'] as const).map((category) => (
@@ -368,7 +415,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
           </h3>
 
           {/* Leaderboard Columns - Side by Side on Desktop, Stacked on Mobile */}
-          <div id="leaderboard-columns" className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0">
+          <div id="leaderboard-columns" className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0" data-mobile-mode={mobileMode}>
             {/* Solo Leaderboard Column */}
             <div id="leaderboard-solo-column" className="dungeon-content flex flex-col min-h-0">
               {/* Solo Quest Title */}
