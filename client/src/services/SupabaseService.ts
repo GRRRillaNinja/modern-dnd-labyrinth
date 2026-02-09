@@ -50,7 +50,7 @@ export class SupabaseService {
    * Get or create a persistent session ID for anonymous tracking
    */
   private getOrCreateSessionId(): string {
-    const STORAGE_KEY = 'dnd_labyrinth_session_id';
+    const STORAGE_KEY = 'delve_dash_session_id';
     
     let sessionId = localStorage.getItem(STORAGE_KEY);
     

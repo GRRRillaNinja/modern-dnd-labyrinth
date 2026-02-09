@@ -104,7 +104,7 @@ function App() {
           </button>
           {/* Game Title */}
           <h1 id="app-header-title" className="text-xl sm:text-2xl font-medieval text-red-500">
-            D&D Computer Labyrinth
+            Delve & Dash
           </h1>
           {/* Live Game Timer */}
           <div

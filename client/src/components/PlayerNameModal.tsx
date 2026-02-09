@@ -12,7 +12,7 @@ interface PlayerNameModalProps {
   onSkip: () => void;
 }
 
-const STORAGE_KEY = 'dnd_labyrinth_player_name';
+const STORAGE_KEY = 'delve_dash_player_name';
 
 export const PlayerNameModal: React.FC<PlayerNameModalProps> = ({
   isVisible,

@@ -55,11 +55,11 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
         >
           {/* Main h1 title */}
           <h1 id="menu-title-main" className="text-4xl md:text-6xl font-medieval text-red-500 mb-2 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">
-            DUNGEONS & DRAGONS
+            DELVE & DASH
           </h1>
           {/* Subtitle h2 */}
           <h2 id="menu-title-subtitle" className="text-xl md:text-2xl font-medieval text-amber-500">
-            Computer Labyrinth Game
+            The Dungeon Crawler
           </h2>
           {/* Attribution div */}
           <div id="menu-title-attribution" className="mt-2 text-gray-400 text-xs">
@@ -264,11 +264,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           className="mt-2 text-center text-gray-500 text-xs"
         >
           {/* Footer attribution text */}
-          <p id="menu-footer-attribution">Based on the 1980 Mattel Electronics D&D Computer Labyrinth Game</p>
-          {/* Fan Content Policy disclaimer */}
-          <p id="menu-footer-disclaimer" className="mt-1 max-w-lg mx-auto leading-relaxed">
-            D&D Computer Labyrinth Game is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. &copy;Wizards of the Coast LLC.
-          </p>
+          <p id="menu-footer-attribution">Inspired by the 1980 Mattel Electronics D&D Computer Labyrinth Game</p>
         </motion.div>
       </motion.div>
 

@@ -1,6 +1,6 @@
-# D&D Computer Labyrinth Game v1.0
+# Delve & Dash
 
-A modernized tribute to the 1980 Mattel Electronics Dungeons & Dragons Computer Labyrinth Game, rebuilt with React, TypeScript, and modern web technologies.
+A modern dungeon crawler inspired by the 1980 Mattel Electronics D&D Computer Labyrinth Game, rebuilt with React, TypeScript, and modern web technologies.
 
 ![Game Status](https://img.shields.io/badge/status-v1.0_released-success)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -32,7 +32,7 @@ A modernized tribute to the 1980 Mattel Electronics Dungeons & Dragons Computer 
 - 🎯 **Free exploration** - No move limits until dragon wakes
 
 ### Visual & Audio
-- 🎨 **Classic D&D red box aesthetic** with modern polish
+- 🎨 **Classic dungeon aesthetic** with modern polish
 - 🎆 **Visual effects** - Treasure flash, death fade, victory fireworks, battle shake
 - 🔊 **13 sound effects** - Complete audio experience with interactive preview
 - 📱 **Responsive design** - Perfect on desktop, tablet, and mobile
@@ -234,16 +234,15 @@ npm install
 - Built with ❤️ using modern web technologies
 - React, TypeScript, Tailwind CSS, Framer Motion, Howler.js
 
-### Intellectual Property
-- **Dungeons & Dragons™** - Trademark of Wizards of the Coast LLC
-- This is a **non-commercial tribute project**
-- Not affiliated with or endorsed by Mattel, Wizards of the Coast, or Hasbro
+### Inspiration
+- Inspired by the 1980 Mattel Electronics D&D Computer Labyrinth Game
+- This is an **independent project**, not affiliated with or endorsed by Mattel
 
 ## 📄 License
 
 MIT License - See [LICENSE](LICENSE) file for details.
 
-This project is a non-commercial tribute to the original 1980 game. Original game design © 1980 Mattel Electronics. Dungeons & Dragons™ is a trademark of Wizards of the Coast LLC.
+This project is inspired by the original 1980 Mattel Electronics D&D Computer Labyrinth Game.
 
 ## 🤝 Contributing
 

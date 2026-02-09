@@ -1,7 +1,7 @@
 {
-  "name": "dnd-computer-labyrinth",
+  "name": "delve-and-dash",
   "version": "1.0.0",
-  "description": "A modernized tribute to the 1980 Mattel Electronics D&D Computer Labyrinth Game",
+  "description": "Delve & Dash - A modern dungeon crawler inspired by the 1980 Mattel Electronics classic",
   "private": true,
   "workspaces": [
     "client",

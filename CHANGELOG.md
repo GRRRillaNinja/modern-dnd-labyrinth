@@ -1,11 +1,11 @@
 # Changelog
 
-All notable changes to the D&D Computer Labyrinth Game will be documented in this file.
+All notable changes to Delve & Dash will be documented in this file.
 
 ## [1.0.0] - 2025-01-28
 
 ### Initial Release 🎉
-Complete modernization of the 1980 Mattel Electronics D&D Computer Labyrinth Game with modern web technologies.
+Complete modernization inspired by the 1980 Mattel Electronics D&D Computer Labyrinth Game, rebuilt with modern web technologies.
 
 ---
 
@@ -173,15 +173,11 @@ dnd-labyrinth-v2/
 - **Framer** - Framer Motion animation library
 - **James Simpson** - Howler.js audio library
 
-### Intellectual Property
-- **Wizards of the Coast** - Dungeons & Dragons™ trademark
-- **Hasbro** - D&D brand ownership
-
 ---
 
 ## License
 
-This project is a **non-commercial tribute** to the original 1980 game. See LICENSE file for details.
+This project is inspired by the original 1980 game. See LICENSE file for details.
 
 ---
 
