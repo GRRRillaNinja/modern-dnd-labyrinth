@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Chamber } from './Chamber';
 import { useGameStore } from '../store/gameStore';
 import { Position, GameState } from '@shared/types';
 
+const ARROW_KEY_OFFSETS: Record<string, [number, number]> = {
+  ArrowUp:    [-1,  0],
+  ArrowDown:  [ 1,  0],
+  ArrowLeft:  [ 0, -1],
+  ArrowRight: [ 0,  1],
+};
+
 export const Board: React.FC = () => {
   const { gameState, chamberPaths, moveWarrior, setWarriorRoom, isDragonTurn, isCPUMode } = useGameStore();
 
-  if (!gameState) return null;
-
-  const handleChamberClick = (position: Position) => {
+  const handleChamberClick = useCallback((position: Position) => {
+    if (!gameState) return;
     const state = gameState.state;
 
     // Block clicks during AI turn in CPU mode
@@ -28,7 +34,40 @@ export const Board: React.FC = () => {
     } else if (state === GameState.WarriorTwoTurn) {
       moveWarrior(1, position);
     }
-  };
+  }, [gameState, isCPUMode, moveWarrior, setWarriorRoom]);
+
+  // Keyboard arrow key support
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const offset = ARROW_KEY_OFFSETS[e.key];
+      if (!offset) return;
+
+      const state = useGameStore.getState();
+      const gs = state.gameState;
+      if (!gs || state.isDragonTurn) return;
+
+      // Determine which warrior is active
+      let warriorIndex = -1;
+      if (gs.state === GameState.WarriorOneTurn) warriorIndex = 0;
+      else if (gs.state === GameState.WarriorTwoTurn && !state.isCPUMode) warriorIndex = 1;
+      if (warriorIndex < 0) return;
+
+      const pos = gs.warriors[warriorIndex].position;
+      if (!pos) return;
+      const target: Position = [pos[0] + offset[0], pos[1] + offset[1]];
+
+      // Bounds check
+      if (target[0] < 0 || target[0] > 7 || target[1] < 0 || target[1] > 7) return;
+
+      e.preventDefault();
+      handleChamberClick(target);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleChamberClick]);
+
+  if (!gameState) return null;
 
   return (
     <div id="board-container" className="relative flex items-center justify-center p-2 w-full" style={{ minHeight: '300px' }}>
