@@ -150,18 +150,19 @@
     height: 100%;
   }
 
-  /* Show mobile controls as a compact side strip */
-  #app-mobile-controls {
+  /* Show tablet sidebar as a compact side strip */
+  #app-tablet-sidebar {
     display: flex !important;
     order: 2 !important;
-    width: auto;
+    width: 140px !important;
+    max-width: 140px;
     flex-shrink: 0;
-    align-items: flex-start;
     padding-top: 4px;
+    gap: 4px;
   }
 
-  /* Hide tablet sidebar (would take too much space) */
-  #app-tablet-sidebar {
+  /* Hide mobile controls in favor of tablet sidebar */
+  #app-mobile-controls {
     display: none !important;
   }
 
@@ -181,9 +182,43 @@
     width: min(100%, calc(100vh - 60px)) !important;
   }
 
-  /* Hide help and sounds in landscape phone */
+  /* Hide mobile-specific help and sounds (already in tablet sidebar) */
   #app-mobile-help,
   #app-mobile-sounds {
+    display: none !important;
+  }
+
+  /* Compact right sidebar content for landscape */
+  #app-tablet-sidebar .dungeon-panel {
+    border-width: 6px;
+    border-image-width: 6px;
+  }
+
+  #app-tablet-sidebar .dungeon-content {
+    padding: 4px;
+    font-size: 0.75rem;
+  }
+
+  #app-tablet-sidebar h3 {
+    font-size: 0.875rem;
+    margin-bottom: 2px;
+  }
+
+  #app-tablet-sidebar .text-sm {
+    font-size: 0.65rem;
+  }
+
+  /* Compact warrior info in landscape */
+  #right-sidebar-desktop-warrior-info,
+  #right-sidebar-mobile-controls-warrior-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  /* Hide sound preview section in landscape (too much) */
+  #right-sidebar-desktop-sounds,
+  #right-sidebar-mobile-sounds-sounds {
     display: none !important;
   }
 
