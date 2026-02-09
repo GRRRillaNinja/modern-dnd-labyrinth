@@ -227,25 +227,32 @@
     padding: 6px;
   }
 
-  /* Menu/landing page landscape adjustments */
+  /* Menu/landing page landscape adjustments - restructure to horizontal layout */
   #menu-root {
-    padding: 2px !important;
-    overflow-y: auto !important;
-    align-items: flex-start !important;
+    padding: 8px !important;
+    align-items: center !important;
   }
 
   #menu-container {
-    padding-top: 4px;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 16px !important;
+    max-width: 100% !important;
   }
 
+  /* Left side: Title */
   #menu-title-section {
-    margin-bottom: 4px !important;
+    flex-shrink: 0 !important;
+    width: auto !important;
+    margin-bottom: 0 !important;
+    text-align: left !important;
   }
 
   #menu-title-main {
-    font-size: 1.5rem !important;
+    font-size: 1.75rem !important;
     line-height: 1.1 !important;
-    margin-bottom: 0 !important;
+    margin-bottom: 2px !important;
   }
 
   #menu-title-subtitle {
@@ -253,29 +260,20 @@
     line-height: 1.1 !important;
   }
 
-  #menu-title-attribution {
-    margin-top: 2px !important;
-    font-size: 0.5rem !important;
-    line-height: 1.2 !important;
-  }
-
+  #menu-title-attribution,
   #menu-title-manual-wrapper {
-    margin-top: 2px !important;
+    display: none !important; /* Hide to save vertical space */
   }
 
-  #menu-title-manual-link {
-    font-size: 0.625rem !important;
-  }
-
+  /* Right side: Quest panel */
   #menu-quest-panel {
-    margin-top: 4px !important;
-    margin-bottom: 4px !important;
+    flex: 1 !important;
+    margin: 0 !important;
   }
 
-  /* Make panel borders thinner */
   #menu-quest-panel.dungeon-panel {
-    border-width: 8px !important;
-    border-image-width: 8px !important;
+    border-width: 10px !important;
+    border-image-width: 10px !important;
   }
 
   #menu-quest-content {
@@ -287,42 +285,60 @@
     margin-bottom: 6px !important;
   }
 
+  /* Grid layout for players and level side-by-side */
   #menu-players-section,
   #menu-level-section {
     margin-bottom: 6px !important;
+    display: inline-block !important;
+    width: 48% !important;
+    vertical-align: top !important;
+  }
+
+  #menu-players-section {
+    margin-right: 4% !important;
   }
 
   #menu-players-label,
   #menu-level-label {
     font-size: 0.625rem !important;
-    margin-bottom: 2px !important;
+    margin-bottom: 3px !important;
+    text-align: center !important;
   }
 
   #menu-players-buttons,
   #menu-level-buttons {
-    gap: 4px !important;
+    gap: 3px !important;
+    flex-direction: column !important;
   }
 
   #menu-players-buttons button,
   #menu-level-buttons button {
     padding: 4px 8px !important;
     font-size: 0.625rem !important;
+    width: 100% !important;
+  }
+
+  /* Buttons side by side */
+  #menu-start-wrapper,
+  #menu-leaderboard-wrapper {
+    display: inline-block !important;
+    width: 48% !important;
+    margin-bottom: 4px !important;
+  }
+
+  #menu-start-wrapper {
+    margin-right: 4% !important;
   }
 
   #menu-start-btn,
   #menu-leaderboard-btn {
-    padding: 4px 16px !important;
+    padding: 6px 12px !important;
     font-size: 0.75rem !important;
-  }
-
-  #menu-start-wrapper,
-  #menu-leaderboard-wrapper {
-    margin-bottom: 4px !important;
+    width: 100% !important;
   }
 
   #menu-instructions-section {
-    padding-top: 4px !important;
-    display: none !important; /* Hide instructions in landscape to save space */
+    display: none !important;
   }
 
   #menu-footer {
@@ -332,6 +348,7 @@
   #menu-footer-attribution {
     font-size: 0.5rem !important;
     line-height: 1.2 !important;
+    text-align: center !important;
   }
 }
 
