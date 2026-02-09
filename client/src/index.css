@@ -192,6 +192,37 @@
   [id$="-stats"] {
     display: none !important;
   }
+
+  /* Show mode toggle in portrait */
+  #leaderboard-mode-toggle {
+    display: grid !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Single column layout */
+  #leaderboard-columns {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Conditionally hide columns based on toggle */
+  #leaderboard-columns[data-mobile-mode="solo"] #leaderboard-multiplayer-column {
+    display: none !important;
+  }
+
+  #leaderboard-columns[data-mobile-mode="multiplayer"] #leaderboard-solo-column {
+    display: none !important;
+  }
+
+  /* Hide column headers - redundant with toggle */
+  #leaderboard-solo-title,
+  #leaderboard-multiplayer-title {
+    display: none !important;
+  }
+
+  /* Hide category title - redundant with tabs */
+  #leaderboard-category-title {
+    display: none !important;
+  }
 }
 
 /* ===== Landscape phone overrides ===== */
