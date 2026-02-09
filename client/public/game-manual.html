@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>D&D Computer Labyrinth - Game Manual</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=IM+Fell+English:ital@0;1&display=swap');
+
+  :root {
+    --parchment: #f4e4c1;
+    --parchment-dark: #e8d5a3;
+    --ink: #2c1810;
+    --ink-light: #5a3a28;
+    --accent: #8b1a1a;
+    --accent-gold: #b8860b;
+    --accent-green: #2d5a27;
+    --border-ornate: #6b3a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page {
+    size: letter;
+    margin: 0;
+  }
+
+  body {
+    background: #1a1a1a;
+    color: var(--ink);
+    font-family: 'IM Fell English', serif;
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0 auto;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(139, 90, 43, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(139, 90, 43, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(244, 228, 193, 1) 0%, rgba(232, 213, 163, 1) 100%);
+    background-color: var(--parchment);
+    padding: 0.7in 0.9in;
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0.35in;
+    left: 0.35in;
+    right: 0.35in;
+    bottom: 0.35in;
+    border: 2px solid var(--border-ornate);
+    border-radius: 4px;
+    pointer-events: none;
+  }
+
+  .page::after {
+    content: '';
+    position: absolute;
+    top: 0.4in;
+    left: 0.4in;
+    right: 0.4in;
+    bottom: 0.4in;
+    border: 1px solid rgba(107, 58, 42, 0.3);
+    pointer-events: none;
+  }
+
+  /* Corner ornaments */
+  .corner {
+    position: absolute;
+    font-size: 24pt;
+    color: var(--border-ornate);
+    opacity: 0.7;
+    font-family: serif;
+    line-height: 1;
+  }
+  .corner-tl { top: 0.28in; left: 0.28in; }
+  .corner-tr { top: 0.28in; right: 0.28in; }
+  .corner-bl { bottom: 0.28in; left: 0.28in; }
+  .corner-br { bottom: 0.28in; right: 0.28in; }
+
+  .page-number {
+    position: absolute;
+    bottom: 0.5in;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 10pt;
+    color: var(--ink-light);
+  }
+
+  /* Title page */
+  .title-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 9.6in;
+  }
+
+  .title-dragon {
+    font-size: 72pt;
+    line-height: 1;
+    margin-bottom: 10px;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+  }
+
+  .title-main {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 28pt;
+    font-weight: 900;
+    color: var(--accent);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+  }
+
+  .title-sub {
+    font-family: 'Cinzel', serif;
+    font-size: 16pt;
+    color: var(--accent-gold);
+    letter-spacing: 6px;
+    margin-bottom: 30px;
+  }
+
+  .title-divider {
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-ornate), transparent);
+    margin: 15px auto;
+  }
+
+  .title-edition {
+    font-family: 'Cinzel', serif;
+    font-size: 12pt;
+    color: var(--ink-light);
+    letter-spacing: 4px;
+    margin-top: 5px;
+  }
+
+  .title-manual {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 18pt;
+    color: var(--ink);
+    margin-top: 25px;
+    letter-spacing: 8px;
+  }
+
+  .title-year {
+    font-family: 'Cinzel', serif;
+    font-size: 10pt;
+    color: var(--ink-light);
+    margin-top: 30px;
+  }
+
+  .title-flavor {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 11pt;
+    color: var(--ink-light);
+    max-width: 5in;
+    margin-top: 25px;
+    line-height: 1.5;
+  }
+
+  /* Section headers */
+  h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 20pt;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
+
+  h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 14pt;
+    color: var(--accent);
+    margin-top: 18px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(139, 26, 26, 0.25);
+  }
+
+  h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 11pt;
+    color: var(--ink);
+    margin-top: 12px;
+    margin-bottom: 4px;
+  }
+
+  p { margin-bottom: 8px; }
+
+  .section-ornament {
+    text-align: center;
+    font-size: 14pt;
+    color: var(--accent-gold);
+    margin: 10px 0;
+    letter-spacing: 8px;
+  }
+
+  .divider {
+    text-align: center;
+    color: var(--border-ornate);
+    margin: 14px 0;
+    font-size: 10pt;
+    letter-spacing: 4px;
+    opacity: 0.6;
+  }
+
+  /* Two-column layout */
+  .two-col {
+    column-count: 2;
+    column-gap: 0.35in;
+    column-rule: 1px solid rgba(107, 58, 42, 0.15);
+  }
+
+  /* Info boxes */
+  .info-box {
+    border: 1px solid var(--border-ornate);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    background: rgba(139, 90, 43, 0.06);
+    break-inside: avoid;
+  }
+
+  .info-box-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10pt;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .warning-box {
+    border-color: var(--accent);
+    background: rgba(139, 26, 26, 0.06);
+  }
+
+  .tip-box {
+    border-color: var(--accent-green);
+    background: rgba(45, 90, 39, 0.06);
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 10pt;
+  }
+
+  th {
+    font-family: 'Cinzel', serif;
+    font-size: 9pt;
+    background: rgba(139, 26, 26, 0.1);
+    color: var(--accent);
+    padding: 5px 8px;
+    text-align: left;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  td {
+    padding: 4px 8px;
+    border-bottom: 1px solid rgba(107, 58, 42, 0.15);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  /* Lists */
+  ul, ol {
+    margin-left: 20px;
+    margin-bottom: 8px;
+  }
+
+  li {
+    margin-bottom: 3px;
+  }
+
+  /* Icon labels */
+  .icon-label {
+    display: inline-block;
+    margin-right: 4px;
+    font-size: 13pt;
+    vertical-align: middle;
+  }
+
+  .legend-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 16px;
+    margin: 8px 0;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10pt;
+    break-inside: avoid;
+  }
+
+  .legend-icon {
+    font-size: 16pt;
+    width: 28px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  /* Diagram */
+  .board-diagram {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 1px;
+    max-width: 3in;
+    margin: 12px auto;
+    border: 2px solid var(--ink-light);
+    background: var(--ink-light);
+  }
+
+  .board-cell {
+    aspect-ratio: 1;
+    background: var(--parchment-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8pt;
+  }
+
+  .board-cell.highlight { background: rgba(139, 26, 26, 0.15); }
+  .board-cell.dragon { background: rgba(139, 26, 26, 0.25); }
+
+  /* Emphasis */
+  em { font-style: italic; }
+  strong { font-weight: bold; color: var(--ink); }
+  .red { color: var(--accent); }
+  .gold { color: var(--accent-gold); }
+
+  /* TOC */
+  .toc-entry {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 6px;
+    font-size: 11pt;
+  }
+
+  .toc-title {
+    font-family: 'Cinzel', serif;
+  }
+
+  .toc-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: baseline;
+    width: 100%;
+  }
+
+  .toc-link:hover .toc-title {
+    color: var(--accent);
+  }
+
+  .toc-dots {
+    flex: 1;
+    border-bottom: 1px dotted rgba(107, 58, 42, 0.3);
+    margin: 0 8px;
+    min-width: 20px;
+  }
+
+  .toc-page {
+    font-family: 'Cinzel', serif;
+    color: var(--ink-light);
+  }
+
+  .toc-section {
+    font-family: 'Cinzel', serif;
+    font-size: 12pt;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 12px;
+    margin-bottom: 2px;
+  }
+
+  /* Avoid breaks */
+  .no-break { break-inside: avoid; }
+
+  .small { font-size: 9pt; }
+  .center { text-align: center; }
+
+  .move-diagram {
+    display: inline-grid;
+    grid-template-columns: repeat(3, 28px);
+    grid-template-rows: repeat(3, 28px);
+    gap: 2px;
+    margin: 8px auto;
+    text-align: center;
+    font-size: 9pt;
+  }
+
+  .move-diagram .cell {
+    border: 1px solid rgba(107, 58, 42, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--parchment-dark);
+    font-size: 12pt;
+  }
+
+  .move-diagram .cell.active { background: rgba(45, 90, 39, 0.15); }
+  .move-diagram .cell.center-cell { background: rgba(139, 26, 26, 0.15); font-size: 10pt; }
+  .move-diagram .cell.diag { background: rgba(139, 26, 26, 0.08); }
+</style>
+</head>
+<body>
+
+<!-- ========== PAGE 1: TITLE ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <div class="title-page">
+    <div class="title-dragon">&#x1F409;</div>
+    <div class="title-divider"></div>
+    <div class="title-main">DUNGEONS &amp; DRAGONS</div>
+    <div class="title-sub">COMPUTER LABYRINTH</div>
+    <div class="title-divider"></div>
+    <div class="title-edition">VERSION 2.0</div>
+    <div class="title-manual">GAME MANUAL</div>
+    <div class="title-flavor">
+      &ldquo;Deep beneath the forgotten fortress lies a labyrinth of shifting stone,
+      where treasure glimmers in the dark and a dragon stirs in its ancient lair.
+      Only the bravest adventurers dare enter&mdash;fewer still escape.&rdquo;
+    </div>
+    <div class="title-year">
+      Based on the 1980 Mattel Electronics Board Game<br>
+      Rebuilt for the Modern Web
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE 2: TABLE OF CONTENTS ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <h1>Table of Contents</h1>
+
+  <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+  <div class="toc-section">I. Introduction</div>
+  <div class="toc-entry"><a class="toc-link" href="#welcome"><span class="toc-title">Welcome to the Labyrinth</span><span class="toc-dots"></span><span class="toc-page">3</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#object"><span class="toc-title">Object of the Game</span><span class="toc-dots"></span><span class="toc-page">3</span></a></div>
+
+  <div class="toc-section">II. Getting Started</div>
+  <div class="toc-entry"><a class="toc-link" href="#game-modes"><span class="toc-title">Game Modes</span><span class="toc-dots"></span><span class="toc-page">3</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#difficulty"><span class="toc-title">Difficulty Levels</span><span class="toc-dots"></span><span class="toc-page">4</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#waystone"><span class="toc-title">Choosing Your Waystone</span><span class="toc-dots"></span><span class="toc-page">4</span></a></div>
+
+  <div class="toc-section">III. Rules of Play</div>
+  <div class="toc-entry"><a class="toc-link" href="#board"><span class="toc-title">The Labyrinth Board</span><span class="toc-dots"></span><span class="toc-page">5</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#movement"><span class="toc-title">Movement</span><span class="toc-dots"></span><span class="toc-page">5</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#walls"><span class="toc-title">Walls &amp; Passages</span><span class="toc-dots"></span><span class="toc-page">5</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#doors"><span class="toc-title">Doors (Level 2)</span><span class="toc-dots"></span><span class="toc-page">6</span></a></div>
+
+  <div class="toc-section">IV. The Dragon</div>
+  <div class="toc-entry"><a class="toc-link" href="#awakening"><span class="toc-title">Awakening the Dragon</span><span class="toc-dots"></span><span class="toc-page">6</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#dragon-movement"><span class="toc-title">Dragon Movement &amp; Attacks</span><span class="toc-dots"></span><span class="toc-page">7</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#dragon-visibility"><span class="toc-title">Dragon Visibility</span><span class="toc-dots"></span><span class="toc-page">7</span></a></div>
+
+  <div class="toc-section">V. The Treasure</div>
+  <div class="toc-entry"><a class="toc-link" href="#finding-treasure"><span class="toc-title">Finding the Treasure</span><span class="toc-dots"></span><span class="toc-page">8</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#carrying-treasure"><span class="toc-title">Carrying the Treasure</span><span class="toc-dots"></span><span class="toc-page">8</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#warrior-battles"><span class="toc-title">Warrior Battles</span><span class="toc-dots"></span><span class="toc-page">8</span></a></div>
+
+  <div class="toc-section">VI. Lives &amp; Combat</div>
+  <div class="toc-entry"><a class="toc-link" href="#lives"><span class="toc-title">The Lives System</span><span class="toc-dots"></span><span class="toc-page">9</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#respawning"><span class="toc-title">Dragon Attacks &amp; Respawning</span><span class="toc-dots"></span><span class="toc-page">9</span></a></div>
+
+  <div class="toc-section">VII. Winning &amp; Losing</div>
+  <div class="toc-entry"><a class="toc-link" href="#victory"><span class="toc-title">Victory Conditions</span><span class="toc-dots"></span><span class="toc-page">9</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#defeat"><span class="toc-title">Defeat Conditions</span><span class="toc-dots"></span><span class="toc-page">10</span></a></div>
+
+  <div class="toc-section">VIII. Game Modes in Detail</div>
+  <div class="toc-entry"><a class="toc-link" href="#solo-quest"><span class="toc-title">Solo Quest</span><span class="toc-dots"></span><span class="toc-page">10</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#two-player"><span class="toc-title">Two-Player Duel</span><span class="toc-dots"></span><span class="toc-page">10</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#vs-cpu"><span class="toc-title">vs CPU Challenge</span><span class="toc-dots"></span><span class="toc-page">11</span></a></div>
+
+  <div class="toc-section">IX. Board Legend &amp; Interface</div>
+  <div class="toc-entry"><a class="toc-link" href="#board-symbols"><span class="toc-title">Board Symbols</span><span class="toc-dots"></span><span class="toc-page">11</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#controls"><span class="toc-title">Game Controls</span><span class="toc-dots"></span><span class="toc-page">12</span></a></div>
+
+  <div class="toc-section">X. Strategy &amp; Tips</div>
+  <div class="toc-entry"><a class="toc-link" href="#strategy"><span class="toc-title">General Strategy</span><span class="toc-dots"></span><span class="toc-page">12</span></a></div>
+  <div class="toc-entry"><a class="toc-link" href="#advanced-tactics"><span class="toc-title">Advanced Tactics</span><span class="toc-dots"></span><span class="toc-page">13</span></a></div>
+
+  <div class="toc-section">XI. Leaderboards &amp; Scoring</div>
+  <div class="toc-entry"><a class="toc-link" href="#leaderboards"><span class="toc-title">Score Submission</span><span class="toc-dots"></span><span class="toc-page">13</span></a></div>
+
+  <div class="toc-section">XII. Quick Reference</div>
+  <div class="toc-entry"><a class="toc-link" href="#quick-reference"><span class="toc-title">Reference Tables</span><span class="toc-dots"></span><span class="toc-page">14</span></a></div>
+
+  <div class="page-number">ii</div>
+</div>
+
+<!-- ========== PAGE 3: INTRODUCTION & GAME MODES ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <h1>I. Introduction</h1>
+  <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+  <div class="two-col">
+    <h2 id="welcome">Welcome to the Labyrinth</h2>
+    <p>
+      <em>D&amp;D Computer Labyrinth</em> is a digital reimagining of the classic 1980 Mattel Electronics board game. You take the role of a brave warrior venturing into a vast dungeon&mdash;an 8&times;8 grid of dark chambers connected by hidden passages.
+    </p>
+    <p>
+      Somewhere in the labyrinth, a dragon sleeps atop a hoard of treasure. Your quest: find the treasure, claim it, and escape alive by returning to your Waystone before the dragon catches you.
+    </p>
+    <p>
+      But beware&mdash;the labyrinth's passages are hidden until you discover them, and once the dragon awakens, it will hunt you relentlessly through the maze.
+    </p>
+
+    <h2 id="object">Object of the Game</h2>
+    <p>
+      <strong>Find the treasure and return it to your Waystone.</strong> The first warrior to carry the treasure back to their Waystone wins. In single-player mode, simply survive long enough to accomplish this feat. In multiplayer modes, you must also outrace your opponent.
+    </p>
+
+    <div class="divider">&#x2736; &bull; &#x2736; &bull; &#x2736;</div>
+
+    <h1 style="font-size: 16pt; margin-top: 8px;">II. Getting Started</h1>
+
+    <h2 id="game-modes">Game Modes</h2>
+
+    <div class="info-box no-break">
+      <div class="info-box-title"><span class="icon-label">&#x2694;</span> Solo Quest (1 Player)</div>
+      <p>
+        Explore the labyrinth alone. The dragon sleeps while you map the dungeon freely with unlimited moves. Once you venture too close, the dragon awakens and the real challenge begins&mdash;your moves become limited and the dragon begins its hunt.
+      </p>
+    </div>
+
+    <div class="info-box no-break">
+      <div class="info-box-title"><span class="icon-label">&#x2694;</span> Two-Player Duel (2 Players)</div>
+      <p>
+        Two warriors compete on the same labyrinth, taking turns. Both players have limited moves from the start. The dragon moves after <em>both</em> players have completed their turns. Players can fight each other for possession of the treasure.
+      </p>
+    </div>
+
+    <div class="info-box no-break">
+      <div class="info-box-title"><span class="icon-label">&#x2694;</span> vs CPU Challenge</div>
+      <p>
+        Face off against a computer-controlled opponent. The CPU uses advanced pathfinding and strategic decision-making to explore the maze, hunt for treasure, and race you back to its Waystone. Can you outsmart it?
+      </p>
+    </div>
+  </div>
+
+  <div class="page-number">3</div>
+</div>
+
+<!-- ========== PAGE 4: DIFFICULTY & WAYSTONES ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <h2 id="difficulty">Difficulty Levels</h2>
+
+  <div class="two-col">
+    <div class="info-box no-break">
+      <div class="info-box-title">&#x2605; Level 1 &mdash; Open Passages</div>
+      <p>
+        The labyrinth contains only <strong>walls</strong> and <strong>open passages</strong>. Once you discover a passage, it remains open permanently. This level is recommended for new players learning the game.
+      </p>
+      <p><em>Passages stay open. Navigate with confidence.</em></p>
+    </div>
+
+    <div class="info-box warning-box no-break">
+      <div class="info-box-title">&#x2605;&#x2605; Level 2 &mdash; Locked Doors</div>
+      <p>
+        In addition to walls and passages, the labyrinth now contains <strong>doors</strong>. Approximately <strong>35%</strong> of doors begin locked. When you encounter a locked door:
+      </p>
+      <ul>
+        <li><strong>50% chance</strong> you force it open (it stays unlocked)</li>
+        <li><strong>50% chance</strong> the door holds&mdash;you stay in place and <strong>lose one move</strong></li>
+      </ul>
+      <p>When you pass through an <em>unlocked</em> door, it <strong>locks behind you</strong>. This means routes you have used before may become impassable!</p>
+      <p><em>The labyrinth shifts and changes. Trust nothing.</em></p>
+    </div>
+
+    <div class="divider">&#x2736; &bull; &#x2736; &bull; &#x2736;</div>
+
+    <h2 id="waystone">Choosing Your Waystone</h2>
+    <p>
+      Before the game begins, each warrior must select a <strong>Waystone</strong>&mdash;a secret chamber that serves as your home base. Your Waystone is critically important:
+    </p>
+    <ul>
+      <li><strong>Safety:</strong> The dragon <em>cannot</em> enter your Waystone. You are completely safe there.</li>
+      <li><strong>Victory:</strong> You must return the treasure to your Waystone to win the game.</li>
+      <li><strong>Respawn:</strong> After being attacked by the dragon, you respawn at a random location&mdash;not at your Waystone.</li>
+    </ul>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">&#x1F4A1; Waystone Strategy</div>
+      <p>
+        Choose your Waystone carefully! A Waystone near the edge or corner of the board gives you a safe retreat and a clear direction for your escape route. Placing it too close to the center may leave you surrounded by the dragon's hunting grounds.
+      </p>
+      <p>
+        In multiplayer, your Waystone is hidden from your opponent&mdash;they cannot see it on the board.
+      </p>
+    </div>
+
+    <p>
+      Your Waystone is marked on the board with a glowing gem symbol (<span class="icon-label">&#x1F48E;</span>) visible only to you. In two-player mode, each warrior's Waystone is invisible to their opponent.
+    </p>
+  </div>
+
+  <div class="page-number">4</div>
+</div>
+
+<!-- ========== PAGE 5: RULES - BOARD & MOVEMENT ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <h1>III. Rules of Play</h1>
+  <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+  <div class="two-col">
+    <h2 id="board">The Labyrinth Board</h2>
+    <p>
+      The labyrinth is an <strong>8&times;8 grid</strong> of chambers (64 total). Each chamber can connect to its four neighbors&mdash;north, south, east, and west&mdash;via passages, walls, or doors.
+    </p>
+    <p>
+      At the start of the game, <strong>all passages and walls are hidden</strong>. You can only discover them by attempting to move through them. This fog of war means every move into unknown territory is a gamble.
+    </p>
+
+    <h2 id="movement">Movement</h2>
+    <p>
+      Warriors move <strong>one chamber at a time</strong> in any of the four cardinal directions (north, south, east, west). Click or tap an adjacent chamber to attempt to move there.
+    </p>
+
+    <h3>Move Allowance</h3>
+    <p>Your moves per turn are calculated as:</p>
+
+    <table>
+      <tr>
+        <th>Lives Remaining</th>
+        <th>Moves Per Turn</th>
+      </tr>
+      <tr><td>3 lives (full health)</td><td>8 moves</td></tr>
+      <tr><td>2 lives</td><td>6 moves</td></tr>
+      <tr><td>1 life</td><td>4 moves</td></tr>
+      <tr><td>Carrying treasure</td><td>4 moves (fixed)</td></tr>
+    </table>
+    <p class="small"><em>Formula: 2 base moves + 2 bonus moves per remaining life. Treasure overrides to 4.</em></p>
+
+    <h3>Move Costs</h3>
+    <ul>
+      <li><strong>Successful move</strong> &mdash; costs 1 move</li>
+      <li><strong>Hitting a wall</strong> &mdash; costs 1 move (wall is revealed)</li>
+      <li><strong>Locked door failure</strong> &mdash; costs 1 move (Level 2 only)</li>
+    </ul>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">&#x1F4A1; Solo Mode: Free Exploration</div>
+      <p>
+        In single-player mode, moves are <strong>not tracked</strong> while the dragon sleeps. Explore freely! Once the dragon awakens, your moves per turn become limited and every step counts.
+      </p>
+    </div>
+
+    <h2 id="walls">Walls &amp; Passages</h2>
+    <p>
+      Approximately <strong>80%</strong> of chamber boundaries are walls. When you attempt to move into a wall:
+    </p>
+    <ul>
+      <li>Your warrior stays in place</li>
+      <li>The wall is revealed on the board (visible to all players)</li>
+      <li>You lose 1 move</li>
+    </ul>
+    <p>
+      Discovered passages remain open permanently (on Level 1). Use your knowledge of revealed walls and passages to map efficient routes through the dungeon.
+    </p>
+  </div>
+
+  <div class="page-number">5</div>
+</div>
+
+<!-- ========== PAGE 6: DOORS & DRAGON ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <div class="two-col">
+    <h2 id="doors">Doors (Level 2 Only)</h2>
+    <p>
+      Level 2 introduces <strong>doors</strong>&mdash;passages that can be locked or unlocked. About 35% of all doors begin locked at the start of the game.
+    </p>
+
+    <h3>Encountering a Locked Door</h3>
+    <p>When you attempt to move through a locked door:</p>
+    <ul>
+      <li><strong>50% success:</strong> The door swings open! It remains unlocked and you pass through.</li>
+      <li><strong>50% failure:</strong> The door holds firm. You stay in place and lose 1 move. Your turn ends immediately.</li>
+    </ul>
+
+    <h3>Door Locking Mechanic</h3>
+    <p>
+      When you pass through an <em>unlocked</em> door, it <strong>locks behind you</strong> after you walk through. This means:
+    </p>
+    <ul>
+      <li>Routes you used before may now be blocked</li>
+      <li>You may need to force the door open again (50/50 chance)</li>
+      <li>Planning your escape route becomes far more complex</li>
+    </ul>
+
+    <div class="info-box warning-box no-break">
+      <div class="info-box-title">&#x26A0; Door Danger</div>
+      <p>
+        Be very careful using your last move on a locked door when the dragon is nearby! If the door fails to open, you will end your turn in place&mdash;potentially within the dragon's attack range.
+      </p>
+    </div>
+
+    <div class="divider">&#x2736; &bull; &#x2736; &bull; &#x2736;</div>
+
+    <h1 style="font-size: 16pt; margin-top: 6px;">IV. The Dragon</h1>
+    <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+    <h2 id="awakening">Awakening the Dragon</h2>
+    <p>
+      The dragon begins each game <strong>asleep</strong> in its lair, hidden somewhere in the labyrinth. The treasure is always located <strong>within 2 chambers</strong> of the dragon's lair.
+    </p>
+    <p>
+      The dragon awakens when any warrior moves within <strong>3 chambers</strong> (Manhattan distance) of its position. When it wakes:
+    </p>
+    <ul>
+      <li>A dramatic sound effect announces the awakening</li>
+      <li>The dragon becomes visible on the board</li>
+      <li>The dragon's lair location is marked as a <strong>treasure hint</strong>&mdash;the treasure is within 2 tiles of this spot</li>
+      <li>In solo mode, your moves become limited from this point forward</li>
+    </ul>
+
+    <div class="info-box no-break">
+      <div class="info-box-title">&#x1F48E; The Treasure Hint</div>
+      <p>
+        When the dragon awakens, its lair is marked with a sparkle effect. The treasure is <strong>guaranteed</strong> to be within 2 chambers of this location. Use this hint to narrow your search!
+      </p>
+    </div>
+  </div>
+
+  <div class="page-number">6</div>
+</div>
+
+<!-- ========== PAGE 7: DRAGON MOVEMENT & VISIBILITY ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <div class="two-col">
+    <h2 id="dragon-movement">Dragon Movement</h2>
+    <p>
+      Once awake, the dragon moves <strong>one tile per round</strong> toward its target. Unlike warriors, the dragon moves <strong>diagonally</strong>&mdash;it can close both the row and column gap simultaneously, making it faster than you at covering distance.
+    </p>
+
+    <div class="center no-break">
+      <p class="small"><em>Warrior Movement (4 directions)</em></p>
+      <div class="move-diagram" style="display:inline-grid;">
+        <div class="cell"></div>
+        <div class="cell active">&#x2191;</div>
+        <div class="cell"></div>
+        <div class="cell active">&#x2190;</div>
+        <div class="cell center-cell">&#x2694;</div>
+        <div class="cell active">&#x2192;</div>
+        <div class="cell"></div>
+        <div class="cell active">&#x2193;</div>
+        <div class="cell"></div>
+      </div>
+      &nbsp;&nbsp;&nbsp;
+      <p class="small"><em>Dragon Movement (8 directions)</em></p>
+      <div class="move-diagram" style="display:inline-grid;">
+        <div class="cell diag">&#x2196;</div>
+        <div class="cell active">&#x2191;</div>
+        <div class="cell diag">&#x2197;</div>
+        <div class="cell active">&#x2190;</div>
+        <div class="cell center-cell">&#x1F409;</div>
+        <div class="cell active">&#x2192;</div>
+        <div class="cell diag">&#x2199;</div>
+        <div class="cell active">&#x2193;</div>
+        <div class="cell diag">&#x2198;</div>
+      </div>
+    </div>
+
+    <p style="margin-top: 8px;">
+      The dragon <strong>ignores walls and doors</strong>&mdash;it passes through all obstacles freely. There is no hiding behind walls from the dragon.
+    </p>
+
+    <h3>Dragon Targeting</h3>
+    <p>The dragon chooses its target based on priority:</p>
+    <ol>
+      <li>If a warrior <strong>carries the treasure</strong>, the dragon pursues that warrior</li>
+      <li>Otherwise, the dragon moves toward the <strong>nearest visible warrior</strong> who is outside their Waystone</li>
+      <li>If all warriors are safe in their Waystones, the dragon patrols toward its last known warrior position</li>
+    </ol>
+
+    <h3>When the Dragon Moves</h3>
+    <ul>
+      <li><strong>Solo mode:</strong> Dragon moves after your turn (if awake)</li>
+      <li><strong>Multiplayer:</strong> Dragon moves after <em>both</em> players complete their turns</li>
+    </ul>
+
+    <h2>Dragon Attacks</h2>
+    <p>
+      The dragon attacks when it lands on the <strong>same chamber</strong> as an unsafe warrior. Dragon attacks also occur if a warrior walks <em>onto</em> the dragon's chamber during their own turn.
+    </p>
+    <p>When attacked:</p>
+    <ul>
+      <li>You lose <strong>1 life</strong></li>
+      <li>If you were carrying treasure, it <strong>drops at your location</strong></li>
+      <li>You <strong>respawn</strong> at a random chamber</li>
+    </ul>
+
+    <h2 id="dragon-visibility">Dragon Visibility</h2>
+    <p>
+      In <strong>multiplayer</strong>, the dragon is always visible once awakened.
+    </p>
+    <p>
+      In <strong>solo mode</strong>, the dragon is only visible when within <strong>5 chambers</strong> of your warrior. It may slip out of sight if you move far enough away&mdash;but once you have seen the dragon, it will reappear whenever you get close again.
+    </p>
+  </div>
+
+  <div class="page-number">7</div>
+</div>
+
+<!-- ========== PAGE 8: TREASURE ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <h1>V. The Treasure</h1>
+  <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+  <div class="two-col">
+    <h2 id="finding-treasure">Finding the Treasure</h2>
+    <p>
+      The treasure is hidden in a chamber near the dragon's lair, always within <strong>2 chambers</strong> (Manhattan distance) of the dragon's starting position. It is <strong>completely invisible</strong> until you walk directly onto its chamber.
+    </p>
+    <p>
+      When you find the treasure:
+    </p>
+    <ul>
+      <li>A special sound effect plays and a visual flash marks the discovery</li>
+      <li>The treasure appears on the board</li>
+      <li>You automatically pick it up</li>
+      <li>Your move allowance changes to <strong>4 moves per turn</strong> (regardless of lives)</li>
+    </ul>
+
+    <div class="info-box no-break">
+      <div class="info-box-title">&#x1F48E; Treasure Location Clue</div>
+      <p>
+        The treasure is always within 2 tiles of where the dragon was sleeping. When the dragon wakes, a sparkle marker appears at the dragon's lair. Search all chambers within 2 steps of that marker to find the treasure.
+      </p>
+    </div>
+
+    <h2 id="carrying-treasure">Carrying the Treasure</h2>
+    <p>
+      While carrying the treasure, your movement is restricted to <strong>4 moves per turn</strong>, regardless of how many lives you have. The treasure is heavy and slows you down!
+    </p>
+    <p>
+      The dragon will aggressively pursue the treasure carrier. Plan your escape route carefully before picking up the treasure.
+    </p>
+
+    <div class="info-box warning-box no-break">
+      <div class="info-box-title">&#x26A0; Dropping the Treasure</div>
+      <p>
+        If you are attacked by the dragon while carrying the treasure, the treasure <strong>drops at the chamber where you were attacked</strong>. It remains there on the ground, visible to all players, until someone picks it up again by walking onto that chamber.
+      </p>
+    </div>
+
+    <h2 id="warrior-battles">Warrior Battles (Multiplayer)</h2>
+    <p>
+      In multiplayer and vs CPU modes, when two warriors occupy the <strong>same chamber</strong> and one of them carries the treasure, a <strong>battle</strong> erupts!
+    </p>
+    <ul>
+      <li>The outcome is a <strong>50/50 coin flip</strong></li>
+      <li>The winner claims the treasure</li>
+      <li>A dramatic scuffle sound effect plays and gameplay pauses briefly</li>
+      <li>If the treasure changes hands, the new carrier continues with their remaining moves</li>
+    </ul>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">&#x1F4A1; Battle Tip</div>
+      <p>
+        Battles only trigger when the treasure <strong>changes hands</strong>. If you already have the treasure and the battle favors you, nothing happens&mdash;you simply keep it. But if your opponent wins, they steal the treasure and you must chase them down!
+      </p>
+    </div>
+  </div>
+
+  <div class="page-number">8</div>
+</div>
+
+<!-- ========== PAGE 9: LIVES & WINNING ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <h1>VI. Lives &amp; Combat</h1>
+  <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+  <div class="two-col">
+    <h2 id="lives">The Lives System</h2>
+    <p>
+      Each warrior begins with <strong>3 lives</strong>, represented by hearts (<span style="color:#c00;">&#x2764; &#x2764; &#x2764;</span>). Your lives directly affect your move allowance:
+    </p>
+
+    <table>
+      <tr>
+        <th>Lives</th>
+        <th>Moves</th>
+        <th>Status</th>
+      </tr>
+      <tr><td><span style="color:#c00;">&#x2764;&#x2764;&#x2764;</span></td><td>8</td><td>Full strength</td></tr>
+      <tr><td><span style="color:#c00;">&#x2764;&#x2764;</span></td><td>6</td><td>Wounded</td></tr>
+      <tr><td><span style="color:#c00;">&#x2764;</span></td><td>4</td><td>Critical</td></tr>
+      <tr><td>&mdash;</td><td>&mdash;</td><td>Dead</td></tr>
+    </table>
+
+    <p>Fewer lives means fewer moves per turn, making you slower and more vulnerable to the dragon.</p>
+
+    <h2 id="respawning">Dragon Attacks &amp; Respawning</h2>
+    <p>When the dragon attacks you:</p>
+    <ol>
+      <li>You lose <strong>1 life</strong></li>
+      <li>If you had the treasure, it <strong>drops at your death location</strong></li>
+      <li>You <strong>respawn</strong> at a random unoccupied chamber (not your Waystone, not the dragon's position, not the treasure room)</li>
+      <li>Your turn continues normally on your next turn (no penalty)</li>
+    </ol>
+
+    <div class="info-box warning-box no-break">
+      <div class="info-box-title">&#x26A0; Walking Into the Dragon</div>
+      <p>
+        If you move <em>onto</em> the dragon's chamber during your own turn, you are immediately attacked and your <strong>turn ends</strong>&mdash;forfeiting all remaining moves. The dragon does not need to wait for its movement phase to strike you down!
+      </p>
+    </div>
+
+    <div class="divider">&#x2736; &bull; &#x2736; &bull; &#x2736;</div>
+
+    <h1 style="font-size: 16pt; margin-top: 6px;">VII. Winning &amp; Losing</h1>
+    <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+    <h2 id="victory">Victory Conditions</h2>
+    <p>
+      You win by carrying the treasure back to your <strong>Waystone</strong> chamber. The moment you step onto your Waystone with the treasure in hand, the game ends in victory!
+    </p>
+    <p>In multiplayer, the <strong>first warrior</strong> to return the treasure wins.</p>
+
+    <h2 id="defeat">Defeat Conditions</h2>
+    <ul>
+      <li><strong>Solo mode:</strong> You lose all 3 lives &rarr; game over</li>
+      <li><strong>Multiplayer:</strong> All warriors lose all lives &rarr; game over</li>
+      <li><strong>vs CPU:</strong> If you (Player 1) die, the CPU wins. If the CPU returns the treasure first, you also lose.</li>
+    </ul>
+  </div>
+
+  <div class="page-number">9</div>
+</div>
+
+<!-- ========== PAGE 10: GAME MODES DETAIL ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <h1>VIII. Game Modes in Detail</h1>
+  <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+  <div class="two-col">
+    <h2 id="solo-quest">Solo Quest</h2>
+    <p>
+      In Solo Quest, you explore the labyrinth alone. The game has two distinct phases:
+    </p>
+
+    <h3>Phase 1: Free Exploration</h3>
+    <p>
+      While the dragon sleeps, you have <strong>unlimited moves</strong>. Use this time wisely to map as much of the labyrinth as possible. Walls you discover and passages you find will be essential knowledge once the dragon wakes.
+    </p>
+
+    <h3>Phase 2: The Hunt</h3>
+    <p>
+      Once you move within 3 chambers of the dragon, it awakens. From this point:
+    </p>
+    <ul>
+      <li>Your moves become <strong>limited per turn</strong> (based on lives)</li>
+      <li>The dragon pursues you after each turn</li>
+      <li>The dragon is visible when within 5 chambers (may disappear at greater distances)</li>
+    </ul>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">&#x1F4A1; Solo Strategy</div>
+      <p>
+        Map the entire labyrinth before approaching the dragon! In Phase 1 you have unlimited moves, so take full advantage. Identify clear routes from the dragon's area back to your Waystone before waking the beast.
+      </p>
+    </div>
+
+    <div class="divider">&#x2736; &bull; &#x2736; &bull; &#x2736;</div>
+
+    <h2 id="two-player">Two-Player Duel</h2>
+    <p>
+      Two human players compete on a shared labyrinth. The rules change significantly from solo mode:
+    </p>
+    <ul>
+      <li><strong>Moves are always tracked</strong> &mdash; no free exploration phase</li>
+      <li>Players <strong>alternate turns</strong>: Warrior 1 &rarr; Warrior 2 &rarr; Dragon &rarr; repeat</li>
+      <li>The dragon moves after <strong>both</strong> players have taken their turns</li>
+      <li>The dragon is <strong>always visible</strong> once awakened</li>
+      <li>Players can <strong>battle</strong> for the treasure when on the same chamber</li>
+      <li>Each player's Waystone is <strong>hidden</strong> from the other player</li>
+      <li>Walls discovered by <em>either</em> player are visible to <em>both</em></li>
+    </ul>
+
+    <h3>Turn Structure</h3>
+    <table>
+      <tr><th>Step</th><th>Action</th></tr>
+      <tr><td>1</td><td>Warrior 1 uses their moves</td></tr>
+      <tr><td>2</td><td>Warrior 2 uses their moves</td></tr>
+      <tr><td>3</td><td>Dragon moves (if awake)</td></tr>
+      <tr><td>4</td><td>Return to Step 1</td></tr>
+    </table>
+
+    <p>
+      You may end your turn early by clicking the <strong>"Next Turn"</strong> button if you do not wish to use all your remaining moves.
+    </p>
+  </div>
+
+  <div class="page-number">10</div>
+</div>
+
+<!-- ========== PAGE 11: VS CPU & BOARD LEGEND ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <div class="two-col">
+    <h2 id="vs-cpu">vs CPU Challenge</h2>
+    <p>
+      In this mode, you face a computer-controlled Warrior 2. The CPU opponent is a formidable adversary that:
+    </p>
+    <ul>
+      <li><strong>Explores intelligently</strong> &mdash; Maps the maze using pathfinding algorithms and avoids dead-end corridors</li>
+      <li><strong>Hunts strategically</strong> &mdash; If you have the treasure, the CPU will chase you down</li>
+      <li><strong>Evades the dragon</strong> &mdash; Avoids ending its turn near the dragon when possible</li>
+      <li><strong>Seeks the treasure hint</strong> &mdash; Searches systematically around the dragon's lair</li>
+      <li><strong>Understands doors</strong> &mdash; On Level 2, avoids risky locked doors when near the dragon</li>
+    </ul>
+    <p>
+      The CPU takes its turns with brief animated delays so you can follow its movements. A small <strong>15% randomness factor</strong> prevents the CPU from playing perfectly every time.
+    </p>
+
+    <div class="info-box no-break">
+      <div class="info-box-title">&#x1F916; CPU Behavior Phases</div>
+      <table style="font-size: 9pt;">
+        <tr><th>Phase</th><th>Behavior</th></tr>
+        <tr><td><strong>Explore</strong></td><td>Map the labyrinth, seek unknown passages</td></tr>
+        <tr><td><strong>Seek Hint</strong></td><td>Search near the dragon's lair for treasure</td></tr>
+        <tr><td><strong>Seek Treasure</strong></td><td>Head toward visible dropped treasure</td></tr>
+        <tr><td><strong>Return to Base</strong></td><td>Carry treasure back to Waystone</td></tr>
+        <tr><td><strong>Hunt Player</strong></td><td>Chase you if you have the treasure</td></tr>
+        <tr><td><strong>Evade Dragon</strong></td><td>Flee when dragon is dangerously close</td></tr>
+      </table>
+    </div>
+
+    <div class="divider">&#x2736; &bull; &#x2736; &bull; &#x2736;</div>
+
+    <h1 style="font-size: 16pt; margin-top: 6px;">IX. Board Legend &amp; Interface</h1>
+    <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+    <h2 id="board-symbols">Board Symbols</h2>
+    <div class="legend-grid">
+      <div class="legend-item"><span class="legend-icon">&#x2694;</span> <span>Warrior 1 (You)</span></div>
+      <div class="legend-item"><span class="legend-icon">&#x2694;</span> <span>Warrior 2 / CPU</span></div>
+      <div class="legend-item"><span class="legend-icon">&#x1F409;</span> <span>Dragon</span></div>
+      <div class="legend-item"><span class="legend-icon">&#x1F48E;</span> <span>Your Waystone</span></div>
+      <div class="legend-item"><span class="legend-icon">&#x2728;</span> <span>Treasure Hint Area</span></div>
+      <div class="legend-item"><span class="legend-icon" style="color:gold;">&#x1F451;</span> <span>Treasure (visible)</span></div>
+      <div class="legend-item"><span class="legend-icon" style="color:#c00;">&#x2764;</span> <span>Life / Health</span></div>
+      <div class="legend-item"><span class="legend-icon">&#x1F6AA;</span> <span>Door (Level 2)</span></div>
+    </div>
+
+    <h3>Wall Indicators</h3>
+    <p>
+      Discovered walls appear as <strong>brick-textured barriers</strong> on the edges of chambers. Passages (open routes) appear as clear openings between chambers. Undiscovered edges are hidden.
+    </p>
+
+    <h3>Chamber Shading</h3>
+    <p>
+      Chambers you have visited may appear slightly different from unexplored chambers, helping you track your explored territory.
+    </p>
+  </div>
+
+  <div class="page-number">11</div>
+</div>
+
+<!-- ========== PAGE 12: CONTROLS & STRATEGY ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <div class="two-col">
+    <h2 id="controls">Game Controls</h2>
+
+    <table>
+      <tr>
+        <th>Control</th>
+        <th>Action</th>
+      </tr>
+      <tr><td><strong>Click/Tap Chamber</strong></td><td>Move warrior to adjacent chamber</td></tr>
+      <tr><td><strong>Next Turn</strong></td><td>End your turn early (forfeit remaining moves)</td></tr>
+      <tr><td><strong>New Game</strong></td><td>Reset and start a new game</td></tr>
+      <tr><td><strong>Sound Toggle</strong></td><td>Enable or disable game audio</td></tr>
+    </table>
+
+    <h3>Sound Effects</h3>
+    <p>
+      The game features immersive audio. Each event has a distinct sound:
+    </p>
+    <ul>
+      <li><strong>Footsteps</strong> &mdash; Successful movement</li>
+      <li><strong>Thud</strong> &mdash; Wall discovered</li>
+      <li><strong>Creak</strong> &mdash; Door locked (Level 2)</li>
+      <li><strong>Chime</strong> &mdash; Dragon is about to move</li>
+      <li><strong>Roar</strong> &mdash; Dragon awakens</li>
+      <li><strong>Wings</strong> &mdash; Dragon flying / moving</li>
+      <li><strong>Clash</strong> &mdash; Warrior battle for treasure</li>
+      <li><strong>Fanfare</strong> &mdash; Victory!</li>
+    </ul>
+
+    <div class="divider">&#x2736; &bull; &#x2736; &bull; &#x2736;</div>
+
+    <h1 style="font-size: 16pt; margin-top: 6px;">X. Strategy &amp; Tips</h1>
+    <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+    <h2 id="strategy">General Strategy</h2>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">1. Map Before You Engage</div>
+      <p>
+        In solo mode, use the free exploration phase to map as much of the labyrinth as possible. Know your escape routes <em>before</em> waking the dragon. In multiplayer, balance exploration with speed&mdash;your opponent is mapping too.
+      </p>
+    </div>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">2. Plan Your Escape Route</div>
+      <p>
+        Before picking up the treasure, trace a clear path from the treasure back to your Waystone. The dragon will pursue you aggressively once you have the treasure, and with only 4 moves per turn, every step counts.
+      </p>
+    </div>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">3. Respect the Dragon's Speed</div>
+      <p>
+        The dragon moves diagonally&mdash;it closes distance faster than you can. Use the labyrinth's twisting passages to your advantage. The dragon ignores walls, but it can only move one tile per round.
+      </p>
+    </div>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">4. Use Your Waystone Wisely</div>
+      <p>
+        Your Waystone is a safe haven. The dragon cannot enter it. If the dragon is closing in and you are near your Waystone, retreat to safety and wait for it to move away.
+      </p>
+    </div>
+  </div>
+
+  <div class="page-number">12</div>
+</div>
+
+<!-- ========== PAGE 13: ADVANCED TACTICS & LEADERBOARDS ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <div class="two-col">
+    <h2 id="advanced-tactics">Advanced Tactics</h2>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">5. Level 2: Door Management</div>
+      <p>
+        On Level 2, remember that doors lock behind you. When planning your escape route with the treasure, prefer paths you have <em>not</em> recently used&mdash;those doors will still be unlocked. If you must go through a locked door, avoid doing so on your last move when near the dragon.
+      </p>
+    </div>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">6. Multiplayer: Deny Your Opponent</div>
+      <p>
+        In two-player modes, you can intercept your opponent by moving onto their chamber when they carry the treasure. The 50/50 battle may steal the treasure for you! Watch the dragon too&mdash;it chases the treasure carrier, which may work in your favor.
+      </p>
+    </div>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">7. Losing Lives Strategically</div>
+      <p>
+        Losing a life reduces your moves per turn. Sometimes it is better to retreat to safety than risk a dragon encounter, even if it means taking a longer path. Going from 8 moves to 6 moves is a significant handicap.
+      </p>
+    </div>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">8. Using the Treasure Hint</div>
+      <p>
+        The sparkle marker shows the dragon's lair. The treasure is within 2 tiles of this point, giving you a maximum of 13 possible chambers to search. Cross-reference with passages you have already explored to narrow it down further.
+      </p>
+    </div>
+
+    <div class="info-box tip-box no-break">
+      <div class="info-box-title">9. vs CPU: Exploit the AI</div>
+      <p>
+        The CPU has a 15% chance of making a random move each turn. It also cannot see your Waystone, so it does not know where you need to go. Use unpredictable routes and take advantage of the CPU's occasional mistakes.
+      </p>
+    </div>
+
+    <div class="divider">&#x2736; &bull; &#x2736; &bull; &#x2736;</div>
+
+    <h1 style="font-size: 16pt; margin-top: 6px;">XI. Leaderboards &amp; Scoring</h1>
+    <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+    <h2 id="leaderboards">Score Submission</h2>
+    <p>
+      Upon winning a game, you can submit your score to the <strong>global leaderboard</strong>. Your entry records:
+    </p>
+
+    <table>
+      <tr><th>Stat</th><th>Description</th></tr>
+      <tr><td><strong>Time</strong></td><td>Total time from first move to victory</td></tr>
+      <tr><td><strong>Moves</strong></td><td>Total number of moves taken</td></tr>
+      <tr><td><strong>Deaths</strong></td><td>Number of times killed by the dragon</td></tr>
+      <tr><td><strong>Explored</strong></td><td>Percentage of labyrinth walls discovered</td></tr>
+      <tr><td><strong>Level</strong></td><td>Difficulty level (1 or 2)</td></tr>
+      <tr><td><strong>Mode</strong></td><td>Game mode (Solo, 2P, vs CPU)</td></tr>
+    </table>
+
+    <p>
+      Leaderboards are sorted by <strong>fastest time</strong>. Try to find the treasure and escape with as few moves and deaths as possible!
+    </p>
+
+    <p>
+      Enter your adventurer name when prompted after victory. The top 100 scores for each category are displayed on the leaderboard.
+    </p>
+  </div>
+
+  <div class="page-number">13</div>
+</div>
+
+<!-- ========== PAGE 14: QUICK REFERENCE ========== -->
+<div class="page">
+  <span class="corner corner-tl">&lfloor;</span>
+  <span class="corner corner-tr">&rfloor;</span>
+  <span class="corner corner-bl">&lceil;</span>
+  <span class="corner corner-br">&rceil;</span>
+
+  <h1>XII. Quick Reference</h1>
+  <div class="section-ornament">&#x2726; &#x2726; &#x2726;</div>
+
+  <div class="two-col">
+    <h2 id="quick-reference">Movement Reference</h2>
+    <table>
+      <tr><th>Condition</th><th>Moves</th></tr>
+      <tr><td>3 lives</td><td>8 per turn</td></tr>
+      <tr><td>2 lives</td><td>6 per turn</td></tr>
+      <tr><td>1 life</td><td>4 per turn</td></tr>
+      <tr><td>Carrying treasure</td><td>4 per turn</td></tr>
+      <tr><td>Solo (dragon asleep)</td><td>Unlimited</td></tr>
+    </table>
+
+    <h2>Dragon Reference</h2>
+    <table>
+      <tr><th>Behavior</th><th>Value</th></tr>
+      <tr><td>Wake distance</td><td>3 chambers</td></tr>
+      <tr><td>Solo visibility range</td><td>5 chambers</td></tr>
+      <tr><td>Movement speed</td><td>1 tile/round (diagonal)</td></tr>
+      <tr><td>Attack range</td><td>Same chamber only</td></tr>
+      <tr><td>Ignores walls?</td><td>Yes</td></tr>
+      <tr><td>Enters Waystones?</td><td>No</td></tr>
+    </table>
+
+    <h2>Level 2 Doors Reference</h2>
+    <table>
+      <tr><th>Mechanic</th><th>Value</th></tr>
+      <tr><td>Doors starting locked</td><td>~35%</td></tr>
+      <tr><td>Unlock attempt success</td><td>50%</td></tr>
+      <tr><td>Failed attempt cost</td><td>1 move + turn ends</td></tr>
+      <tr><td>After passing through</td><td>Door locks behind you</td></tr>
+    </table>
+
+    <h2>Maze Generation</h2>
+    <table>
+      <tr><th>Parameter</th><th>Value</th></tr>
+      <tr><td>Board size</td><td>8 &times; 8 chambers</td></tr>
+      <tr><td>Wall probability</td><td>~80%</td></tr>
+      <tr><td>Treasure distance from lair</td><td>&le; 2 chambers</td></tr>
+      <tr><td>Max lives</td><td>3</td></tr>
+    </table>
+
+    <h2>Battle Reference</h2>
+    <table>
+      <tr><th>Event</th><th>Result</th></tr>
+      <tr><td>Walk onto dragon</td><td>Lose 1 life, turn ends</td></tr>
+      <tr><td>Dragon reaches you</td><td>Lose 1 life, respawn</td></tr>
+      <tr><td>Warrior battle</td><td>50/50 for treasure</td></tr>
+      <tr><td>All lives lost</td><td>Game over</td></tr>
+      <tr><td>Treasure + Waystone</td><td>You win!</td></tr>
+    </table>
+
+    <div class="divider">&#x2736; &bull; &#x2736; &bull; &#x2736;</div>
+
+    <p class="center" style="margin-top: 16px;">
+      <em>&ldquo;The labyrinth awaits, brave adventurer.<br>
+      Will you find the treasure and escape,<br>
+      or will the dragon find you first?&rdquo;</em>
+    </p>
+
+    <div class="section-ornament" style="margin-top: 16px;">&#x1F409;</div>
+
+    <p class="center small" style="margin-top: 20px; color: var(--ink-light);">
+      D&amp;D Computer Labyrinth v2.0<br>
+      Based on the 1980 Mattel Electronics Game<br>
+      Rebuilt for the Modern Web<br><br>
+      Play free at: dnd-labyrinth.vercel.app
+    </p>
+  </div>
+
+  <div class="page-number">14</div>
+</div>
+
+</body>
+</html>

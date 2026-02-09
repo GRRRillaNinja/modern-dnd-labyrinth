@@ -68,7 +68,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           {/* Manual link wrapper */}
           <div id="menu-title-manual-wrapper" className="mt-1">
             {/* Manual link anchor */}
-            <a id="menu-title-manual-link" href="https://tinyurl.com/dndlab-manual"
+            <a id="menu-title-manual-link" href="/game-manual.html"
               target="_blank"
               rel="noopener noreferrer"
               className="text-amber-500 hover:text-amber-400 text-xs underline transition-colors"
