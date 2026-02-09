@@ -403,10 +403,15 @@
     padding: 2px 8px !important;
   }
 
-  /* Columns: force 2-column side-by-side at landscape */
+  /* Columns: single column only at landscape */
   #leaderboard-columns {
-    grid-template-columns: 1fr 1fr !important;
+    grid-template-columns: 1fr !important;
     gap: 6px !important;
+  }
+
+  /* Hide multiplayer column to save space */
+  #leaderboard-multiplayer-column {
+    display: none !important;
   }
 
   /* Column headers: compact */
