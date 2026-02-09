@@ -227,30 +227,18 @@
     padding: 6px;
   }
 
-  /* Menu/landing page landscape adjustments - restructure to horizontal layout */
+  /* Menu/landing page landscape adjustments - keep vertical stack, optimize panel interior */
   #menu-root {
-    padding: 8px !important;
-    align-items: center !important;
+    padding: 4px 8px !important;
   }
 
-  #menu-container {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 16px !important;
-    max-width: 100% !important;
-  }
-
-  /* Left side: Title */
+  /* Header: compact */
   #menu-title-section {
-    flex-shrink: 0 !important;
-    width: auto !important;
-    margin-bottom: 0 !important;
-    text-align: left !important;
+    margin-bottom: 4px !important;
   }
 
   #menu-title-main {
-    font-size: 1.75rem !important;
+    font-size: 1.5rem !important;
     line-height: 1.1 !important;
     margin-bottom: 2px !important;
   }
@@ -260,38 +248,45 @@
     line-height: 1.1 !important;
   }
 
-  #menu-title-attribution,
-  #menu-title-manual-wrapper {
-    display: none !important; /* Hide to save vertical space */
+  #menu-title-attribution {
+    display: none !important; /* Hide to save space */
   }
 
-  /* Right side: Quest panel */
+  #menu-title-manual-wrapper {
+    margin-top: 2px !important;
+  }
+
+  #menu-title-manual-link {
+    font-size: 0.625rem !important;
+  }
+
+  /* Panel: thinner borders, tight padding */
   #menu-quest-panel {
-    flex: 1 !important;
-    margin: 0 !important;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
   }
 
   #menu-quest-panel.dungeon-panel {
-    border-width: 10px !important;
-    border-image-width: 10px !important;
+    border-width: 8px !important;
+    border-image-width: 8px !important;
   }
 
   #menu-quest-content {
-    padding: 8px 12px !important;
+    padding: 6px 10px !important;
   }
 
   #menu-quest-title {
     font-size: 0.875rem !important;
-    margin-bottom: 6px !important;
+    margin-bottom: 4px !important;
   }
 
-  /* Grid layout for players and level side-by-side */
+  /* Players and Level: side-by-side */
   #menu-players-section,
   #menu-level-section {
-    margin-bottom: 6px !important;
     display: inline-block !important;
     width: 48% !important;
     vertical-align: top !important;
+    margin-bottom: 6px !important;
   }
 
   #menu-players-section {
@@ -301,8 +296,7 @@
   #menu-players-label,
   #menu-level-label {
     font-size: 0.625rem !important;
-    margin-bottom: 3px !important;
-    text-align: center !important;
+    margin-bottom: 2px !important;
   }
 
   #menu-players-buttons,
@@ -313,12 +307,12 @@
 
   #menu-players-buttons button,
   #menu-level-buttons button {
-    padding: 4px 8px !important;
+    padding: 4px 6px !important;
     font-size: 0.625rem !important;
     width: 100% !important;
   }
 
-  /* Buttons side by side */
+  /* Start and Leaderboard: side-by-side */
   #menu-start-wrapper,
   #menu-leaderboard-wrapper {
     display: inline-block !important;
@@ -332,23 +326,24 @@
 
   #menu-start-btn,
   #menu-leaderboard-btn {
-    padding: 6px 12px !important;
+    padding: 5px 10px !important;
     font-size: 0.75rem !important;
     width: 100% !important;
   }
 
+  /* Hide instructions to save space */
   #menu-instructions-section {
     display: none !important;
   }
 
+  /* Footer: compact */
   #menu-footer {
-    margin-top: 4px !important;
+    margin-top: 2px !important;
   }
 
   #menu-footer-attribution {
     font-size: 0.5rem !important;
     line-height: 1.2 !important;
-    text-align: center !important;
   }
 }
 
