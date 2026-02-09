@@ -229,48 +229,90 @@
 
   /* Menu/landing page landscape adjustments */
   #menu-root {
-    padding: 8px !important;
-  }
-
-  #menu-container {
-    max-width: 100% !important;
+    padding: 4px !important;
   }
 
   #menu-title-main {
-    font-size: 1.5rem !important;
-    margin-bottom: 4px !important;
+    font-size: 1.75rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 2px !important;
   }
 
   #menu-title-subtitle {
-    font-size: 1rem !important;
+    font-size: 1.125rem !important;
+    line-height: 1.2 !important;
+  }
+
+  #menu-title-attribution {
+    margin-top: 4px !important;
+    font-size: 0.65rem !important;
+  }
+
+  #menu-title-manual-wrapper {
+    margin-top: 2px !important;
   }
 
   #menu-quest-panel {
-    padding: 12px !important;
-  }
-
-  #menu-quest-title {
-    font-size: 1.25rem !important;
+    margin-top: 8px !important;
     margin-bottom: 8px !important;
   }
 
-  #menu-mode-grid {
-    gap: 8px !important;
+  #menu-quest-content {
+    padding: 12px 16px !important;
   }
 
-  #menu-mode-grid > button {
-    padding: 8px !important;
+  #menu-quest-title {
+    font-size: 1rem !important;
+    margin-bottom: 8px !important;
   }
 
-  #menu-settings-grid {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 8px !important;
+  #menu-players-section,
+  #menu-level-section {
+    margin-bottom: 8px !important;
+  }
+
+  #menu-players-label,
+  #menu-level-label {
+    font-size: 0.75rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  #menu-players-buttons button,
+  #menu-level-buttons button {
+    padding: 6px 12px !important;
+    font-size: 0.75rem !important;
   }
 
   #menu-start-btn,
   #menu-leaderboard-btn {
-    padding: 8px 16px !important;
+    padding: 6px 20px !important;
     font-size: 0.875rem !important;
+  }
+
+  #menu-start-wrapper,
+  #menu-leaderboard-wrapper {
+    margin-bottom: 8px !important;
+  }
+
+  #menu-instructions-section {
+    padding-top: 8px !important;
+  }
+
+  #menu-instructions-title {
+    font-size: 0.75rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  #menu-instructions-list {
+    font-size: 0.65rem !important;
+  }
+
+  #menu-footer {
+    margin-top: 8px !important;
+  }
+
+  #menu-footer-attribution {
+    font-size: 0.6rem !important;
   }
 }
 
