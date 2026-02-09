@@ -347,6 +347,10 @@
   }
 
   /* Leaderboard landscape adjustments */
+  #leaderboard-overlay {
+    padding: 0 !important;
+  }
+
   #leaderboard-container {
     max-width: 100% !important;
     min-height: 100vh !important;
