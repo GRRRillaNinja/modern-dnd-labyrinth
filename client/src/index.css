@@ -427,40 +427,40 @@
     gap: 3px !important;
   }
 
-  /* Individual entries: compact */
+  /* Individual entries: use full width for readability */
   [id^="leaderboard-solo-entry-"],
   [id^="leaderboard-multiplayer-entry-"] {
-    padding: 3px 4px !important;
+    padding: 6px 8px !important;
   }
 
   [id$="-top"] {
-    gap: 3px !important;
+    gap: 8px !important;
   }
 
   [id$="-rank"] {
-    font-size: 0.75rem !important;
-    width: 20px !important;
+    font-size: 1rem !important;
+    width: 28px !important;
   }
 
   [id$="-name"] {
-    font-size: 0.625rem !important;
+    font-size: 0.875rem !important;
   }
 
   [id$="-time"] {
-    font-size: 0.625rem !important;
+    font-size: 0.875rem !important;
   }
 
   [id$="-stats"] {
-    gap: 3px !important;
-    margin-top: 2px !important;
-    margin-left: 24px !important;
-    font-size: 0.5rem !important;
+    gap: 6px !important;
+    margin-top: 3px !important;
+    margin-left: 36px !important;
+    font-size: 0.75rem !important;
   }
 
   [id$="-difficulty"],
   [id$="-stats"] span:not([id$="-difficulty"]) {
-    padding: 1px 3px !important;
-    font-size: 0.5rem !important;
+    padding: 2px 6px !important;
+    font-size: 0.75rem !important;
   }
 
   /* Hide bottom close button */
