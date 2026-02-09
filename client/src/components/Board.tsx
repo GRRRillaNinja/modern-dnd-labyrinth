@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { Chamber } from './Chamber';
 import { useGameStore } from '../store/gameStore';
 import { Position, GameState } from '@shared/types';
@@ -69,6 +69,28 @@ export const Board: React.FC = () => {
 
   if (!gameState) return null;
 
+  // Memoize chamber grid to prevent unnecessary re-renders
+  const chambers = useMemo(() =>
+    Array.from({ length: 8 }).flatMap((_, row) =>
+      Array.from({ length: 8 }).map((_, col) => {
+        const position: Position = [row, col];
+        const paths = chamberPaths[row]?.[col];
+
+        return (
+          <Chamber
+            key={`${row}-${col}`}
+            position={position}
+            paths={paths}
+            gameState={gameState}
+            onClick={() => handleChamberClick(position)}
+            isDragonTurn={isDragonTurn}
+          />
+        );
+      })
+    ),
+    [gameState, chamberPaths, isDragonTurn, handleChamberClick]
+  );
+
   return (
     <div id="board-container" className="relative flex items-center justify-center p-2 w-full" style={{ minHeight: '300px' }}>
       {/* Board Frame Wrapper */}
@@ -109,23 +131,7 @@ export const Board: React.FC = () => {
 
         {/* 8x8 Chamber Grid */}
         <div id="board-grid" className="relative w-full h-full p-[6%] grid grid-cols-8 grid-rows-8 gap-1">
-          {Array.from({ length: 8 }).map((_, row) =>
-            Array.from({ length: 8 }).map((_, col) => {
-              const position: Position = [row, col];
-              const paths = chamberPaths[row]?.[col];
-
-              return (
-                <Chamber
-                  key={`${row}-${col}`}
-                  position={position}
-                  paths={paths}
-                  gameState={gameState}
-                  onClick={() => handleChamberClick(position)}
-                  isDragonTurn={isDragonTurn}
-                />
-              );
-            })
-          )}
+          {chambers}
         </div>
       </div>
     </div>

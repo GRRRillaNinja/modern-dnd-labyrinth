@@ -99,6 +99,34 @@
   opacity: 15%;
 }
 
+/* ===== Mobile performance optimizations ===== */
+/* Reduce motion and complexity on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover animations on chambers (no hover on touch) */
+  #board-grid {
+    will-change: auto;
+  }
+
+  /* Simpler transitions */
+  .transition-all {
+    transition-duration: 0.1s !important;
+  }
+
+  /* Disable particle clouds on mobile (performance) */
+  .particle-cloud {
+    display: none !important;
+  }
+}
+
+/* Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* ===== Landscape phone overrides ===== */
 /* Phones in landscape: wide (>500px) but very short (<500px) */
 @media (orientation: landscape) and (max-height: 500px) {

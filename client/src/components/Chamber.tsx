@@ -18,7 +18,7 @@ interface ChamberProps {
   isDragonTurn: boolean;
 }
 
-export const Chamber: React.FC<ChamberProps> = ({
+export const Chamber: React.FC<ChamberProps> = React.memo(({
   position,
   paths,
   gameState,
@@ -104,6 +104,7 @@ export const Chamber: React.FC<ChamberProps> = ({
         }}
         whileHover={isDragonTurn ? {} : { scale: 1.02, filter: 'brightness(1.15)' }}
         whileTap={isDragonTurn ? {} : { scale: 0.98 }}
+        transition={{ duration: 0.15 }}
         onClick={isDragonTurn ? undefined : onClick}
       >
         {/* Secret room background for warrior 0 */}
@@ -464,4 +465,13 @@ export const Chamber: React.FC<ChamberProps> = ({
       )}
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  // Custom comparison for performance — only re-render if these change
+  return (
+    prevProps.position[0] === nextProps.position[0] &&
+    prevProps.position[1] === nextProps.position[1] &&
+    prevProps.isDragonTurn === nextProps.isDragonTurn &&
+    prevProps.gameState === nextProps.gameState &&
+    prevProps.paths === nextProps.paths
+  );
+});
