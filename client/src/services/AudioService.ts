@@ -92,8 +92,12 @@ export class AudioService {
   public async play(sound: SoundType): Promise<void> {
     if (!this.enabled) return;
 
-    // Stop current sound if playing
+    // Stop current sound if playing, and remove its pending 'end' listener.
+    // Without this cleanup, the orphaned listener fires when the same Howl
+    // plays again later, causing chained playForEvent calls (like DRAGON_ATTACK's
+    // warriorOne → dragonAttacks) to resume at unexpected times.
     if (this.currentSound) {
+      this.currentSound.off('end');
       this.currentSound.stop();
     }
 

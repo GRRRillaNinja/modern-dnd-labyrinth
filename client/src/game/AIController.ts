@@ -926,6 +926,18 @@ export class AIController {
     return true;
   }
 
+  /**
+   * Check if moving from pos in direction dir goes through a locked door.
+   * Locked doors have a 50% chance of failure (staying in place, wasting a move).
+   * The lockedDoors map is pre-populated for all doors at game start:
+   * true = locked, false = unlocked, undefined = not a door.
+   */
+  private isLockedDoor(state: GameStateData, pos: Position, dir: Direction): boolean {
+    if (state.level !== 2) return false;
+    const key = `${pos[0]}-${pos[1]}-${dir}`;
+    return state.lockedDoors[key] === true;
+  }
+
   /** An edge is known blocked if it's a discovered wall. */
   private isEdgeKnownBlocked(
     state: GameStateData, pos: Position, dir: Direction,
@@ -1332,18 +1344,32 @@ export class AIController {
     if (!dragonPos) return null;
 
     const proposedCheby = this.chebyshevDistance(proposedTarget, dragonPos);
-
-    // Safe if Chebyshev distance > 1 (dragon can't reach us in one move)
-    if (proposedCheby > 1) {
-      return null;
-    }
-
-    aiLog(`Last-move safety: target [${proposedTarget}] is Chebyshev dist ${proposedCheby} from dragon [${dragonPos}] - DANGEROUS!`);
-
     const currentCheby = this.chebyshevDistance(currentPos, dragonPos);
 
+    // Check if the proposed move goes through a locked door (50% failure = stay in place)
+    const proposedDir = this.getDirection(currentPos, proposedTarget);
+    const proposedIsLockedDoor = proposedDir !== null && this.isLockedDoor(state, currentPos, proposedDir);
+
+    // Move is risky if:
+    // 1. Target itself is in dragon range (cheby ≤ 1), OR
+    // 2. Move goes through a locked door AND current pos is in dragon range
+    //    (because 50% chance of staying at current pos → dragon attack)
+    const targetDangerous = proposedCheby <= 1;
+    const doorDangerous = proposedIsLockedDoor && currentCheby <= 1;
+
+    if (!targetDangerous && !doorDangerous) {
+      return null; // Safe move — proceed normally
+    }
+
+    if (targetDangerous) {
+      aiLog(`Last-move safety: target [${proposedTarget}] is Chebyshev dist ${proposedCheby} from dragon [${dragonPos}] - DANGEROUS!`);
+    }
+    if (doorDangerous) {
+      aiLog(`Last-move safety: target [${proposedTarget}] goes through LOCKED DOOR. Current pos [${currentPos}] cheby=${currentCheby} from dragon - door failure = DEATH RISK!`);
+    }
+
     // Find all adjacent move options, scored by safety
-    const candidates: { pos: Position; cheby: number; known: boolean; deadEnd: number }[] = [];
+    const candidates: { pos: Position; cheby: number; known: boolean; deadEnd: number; lockedDoor: boolean }[] = [];
 
     for (const dir of ALL_DIRS) {
       const neighbor = getAdjacentPosition(currentPos, dir);
@@ -1353,22 +1379,27 @@ export class AIController {
       const cheby = this.chebyshevDistance(neighbor, dragonPos);
       const known = this.isEdgeKnownPassable(state, currentPos, dir);
       const deadEnd = this.getDeadEndDepth(neighbor, oppositeDir(dir), state);
-      candidates.push({ pos: neighbor, cheby, known, deadEnd });
+      const lockedDoor = this.isLockedDoor(state, currentPos, dir);
+      candidates.push({ pos: neighbor, cheby, known, deadEnd, lockedDoor });
     }
 
-    // Sort all candidates: farthest from dragon first, avoid dead-ends, prefer known-passable
+    // Sort: farthest from dragon, avoid locked doors when in danger zone, avoid dead-ends, prefer known
     candidates.sort((a, b) => {
       if (b.cheby !== a.cheby) return b.cheby - a.cheby;
+      // When current pos is in dragon range, prefer non-door moves (door failure = stay in danger)
+      if (currentCheby <= 1 && a.lockedDoor !== b.lockedDoor) return a.lockedDoor ? 1 : -1;
       if (a.deadEnd !== b.deadEnd) return a.deadEnd - b.deadEnd;
       if (a.known !== b.known) return a.known ? -1 : 1;
       return 0;
     });
 
-    // Try to find a safe move (Chebyshev > 1), prefer non-dead-ends
-    const safeMoves = candidates.filter(c => c.cheby > 1);
+    // Safe moves: target cheby > 1 AND (not a locked door OR current pos is also safe)
+    const safeMoves = candidates.filter(c =>
+      c.cheby > 1 && (!c.lockedDoor || currentCheby > 1)
+    );
     if (safeMoves.length > 0) {
       aiLog(`Last-move safety: found ${safeMoves.length} safe alternatives:`,
-        safeMoves.map(c => `[${c.pos}] cheby=${c.cheby} deadEnd=${c.deadEnd} ${c.known ? 'known' : 'unknown'}`).join(' | '),
+        safeMoves.map(c => `[${c.pos}] cheby=${c.cheby} deadEnd=${c.deadEnd} door=${c.lockedDoor} ${c.known ? 'known' : 'unknown'}`).join(' | '),
         '→ chose', `[${safeMoves[0].pos}]`);
       return safeMoves[0].pos;
     }

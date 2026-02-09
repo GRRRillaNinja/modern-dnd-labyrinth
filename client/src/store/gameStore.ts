@@ -27,6 +27,9 @@ const DRAGON_CHIME_DELAY = 1100;
 // Dragon wake delay (milliseconds) - pause to let the dragonWakes sound play before resuming
 const DRAGON_WAKE_DELAY = 2500;
 
+/** Time to pause gameplay while the warrior battle scuffle sound plays */
+const BATTLE_SCUFFLE_DELAY = 2500;
+
 // Calculate percentage of internal walls discovered
 export function calculateWallsDiscoveredPct(
   chamberPaths: ChamberPath[][],
@@ -302,6 +305,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (treasureJustFound) {
       set({ gameState: { ...newState } });
       triggerAITurnIfNeeded();
+      return;
+    }
+
+    // Warrior battle — treasure changed hands in a fight.
+    // isDragonTurn was already set to true by the WARRIOR_BATTLE event handler.
+    // Pause gameplay while the scuffle sound plays.
+    const battleJustHappened = treasureHeldBefore >= 0
+      && newState.treasure.warrior >= 0
+      && newState.treasure.warrior !== treasureHeldBefore;
+
+    if (battleJustHappened) {
+      set({ gameState: { ...newState } });
+      audioService.play('scuffle');
+      setTimeout(() => {
+        set({ isDragonTurn: false });
+        triggerAITurnIfNeeded();
+      }, BATTLE_SCUFFLE_DELAY);
       return;
     }
 
@@ -614,7 +634,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const winnerName = event.winner === 0 ? 'one' : 'two';
         const loserName = event.loser === 0 ? 'one' : 'two';
         message = `⚔️ WARRIORS CLASH! Warrior ${winnerName} wins the battle and takes the treasure from warrior ${loserName}!`;
-        
+
+        // Block input immediately while scuffle plays
+        set({ isDragonTurn: true });
+
         // Trigger battle shake effect
         set({ showBattleShake: true });
         setTimeout(() => set({ showBattleShake: false }), 600);
@@ -788,7 +811,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // DOOR_CLOSED: handled manually (plays door sound, then finishes turn)
     // DRAGON_MOVED: deferred — chime plays first, then dragon flying sound plays after delay
     // DRAGON_AWAKE: handled manually in moveWarrior (blocks input while sound plays)
-    if (event.type !== 'DOOR_CLOSED' && event.type !== 'DRAGON_MOVED' && event.type !== 'DRAGON_AWAKE') {
+    if (event.type !== 'DOOR_CLOSED' && event.type !== 'DRAGON_MOVED' && event.type !== 'DRAGON_AWAKE' && event.type !== 'WARRIOR_BATTLE') {
       audioService.playForEvent(event);
     }
   },
