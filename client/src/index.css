@@ -127,6 +127,73 @@
   }
 }
 
+/* ===== Portrait phone leaderboard optimizations ===== */
+@media (max-width: 767px) and (orientation: portrait) {
+  /* Wider leaderboard containers */
+  #leaderboard-container {
+    max-width: 100vw !important;
+    margin: 0 !important;
+  }
+
+  #leaderboard-inner {
+    padding: 1rem 0.5rem !important;
+  }
+
+  /* Reduce dungeon-panel borders for more space */
+  #leaderboard-solo-column.dungeon-panel,
+  #leaderboard-multiplayer-column.dungeon-panel {
+    border-width: 12px !important;
+    border-image-width: 12px !important;
+  }
+
+  .dungeon-content {
+    padding: 8px !important;
+  }
+
+  /* Single-line leaderboard entries */
+  [id^="leaderboard-solo-entry-"],
+  [id^="leaderboard-multiplayer-entry-"] {
+    padding: 6px 4px !important;
+  }
+
+  /* Top row: make it fill full width with all info */
+  [id$="-top"] {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Rank: compact */
+  [id$="-rank"] {
+    font-size: 0.875rem !important;
+    width: 24px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Name: allow to truncate */
+  [id$="-name"] {
+    font-size: 0.75rem !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  /* Time: compact, no wrap */
+  [id$="-time"] {
+    font-size: 0.75rem !important;
+    flex-shrink: 0 !important;
+    margin-left: auto !important;
+  }
+
+  /* Hide stats row completely for single-line layout */
+  [id$="-stats"] {
+    display: none !important;
+  }
+}
+
 /* ===== Landscape phone overrides ===== */
 /* Phones in landscape: wide (>500px) but very short (<500px) */
 @media (orientation: landscape) and (max-height: 500px) {
