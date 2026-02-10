@@ -170,7 +170,8 @@
     align-items: center !important;
     gap: 6px !important;
     flex-wrap: nowrap !important;
-    margin-bottom: 2px !important;
+    margin-bottom: 0 !important;
+    line-height: 1.2 !important;
   }
 
   /* Rank: larger and more prominent */
@@ -208,11 +209,14 @@
   [id$="-stats"] {
     display: flex !important;
     gap: 8px !important;
-    margin-top: 0 !important;
+    margin-top: 4px !important;
+    margin-bottom: 0 !important;
     margin-left: 0 !important;
+    padding-top: 0 !important;
     font-size: 0.875rem !important;
     flex-wrap: wrap !important;
     justify-content: flex-start !important;
+    line-height: 1.2 !important;
   }
 
   /* Individual metrics with distinct colors */
