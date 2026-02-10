@@ -158,30 +158,31 @@
     padding: 8px !important;
   }
 
-  /* Single-line leaderboard entries */
+  /* Two-line leaderboard entries with better spacing */
   [id^="leaderboard-solo-entry-"],
   [id^="leaderboard-multiplayer-entry-"] {
-    padding: 6px 4px !important;
+    padding: 8px 6px !important;
   }
 
-  /* Top row: make it fill full width with all info */
+  /* Top row: evenly distributed */
   [id$="-top"] {
     display: flex !important;
     align-items: center !important;
-    gap: 4px !important;
+    gap: 6px !important;
     flex-wrap: nowrap !important;
+    margin-bottom: 4px !important;
   }
 
-  /* Rank: compact */
+  /* Rank: larger and more prominent */
   [id$="-rank"] {
-    font-size: 0.875rem !important;
-    width: 24px !important;
+    font-size: 1.125rem !important;
+    width: 32px !important;
     flex-shrink: 0 !important;
   }
 
-  /* Name: allow to truncate */
+  /* Name: larger and readable */
   [id$="-name"] {
-    font-size: 0.75rem !important;
+    font-size: 0.875rem !important;
     flex: 1 !important;
     min-width: 0 !important;
     overflow: hidden !important;
@@ -189,28 +190,29 @@
     white-space: nowrap !important;
   }
 
-  /* Time: compact, no wrap */
+  /* Time: larger and prominent */
   [id$="-time"] {
-    font-size: 0.75rem !important;
+    font-size: 0.875rem !important;
     flex-shrink: 0 !important;
     margin-left: auto !important;
   }
 
-  /* Show stats row with all metrics */
+  /* Stats row: use full width, no offset */
   [id$="-stats"] {
     display: flex !important;
-    gap: 4px !important;
-    margin-top: 3px !important;
-    margin-left: 28px !important;
-    font-size: 0.625rem !important;
+    gap: 6px !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    font-size: 0.75rem !important;
     flex-wrap: wrap !important;
+    justify-content: flex-start !important;
   }
 
-  /* Compact difficulty badges and stats */
+  /* Larger difficulty badges and stats */
   [id$="-difficulty"],
   [id$="-stats"] span {
-    padding: 2px 4px !important;
-    font-size: 0.625rem !important;
+    padding: 3px 6px !important;
+    font-size: 0.75rem !important;
   }
 
   /* Show mode toggle in portrait */
