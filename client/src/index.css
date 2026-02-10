@@ -288,35 +288,46 @@
     padding-bottom: 2px;
   }
 
-  /* Force column layout (undo md:flex-row) */
+  /* Force 3-column layout: Help | Board | Right Sidebar */
   #app-layout {
     flex-direction: row !important;
     flex-wrap: nowrap;
     height: 100%;
   }
 
-  /* Show tablet sidebar as a compact side strip */
-  #app-tablet-sidebar {
-    display: flex !important;
-    order: 2 !important;
-    width: 160px !important;
-    max-width: 160px;
+  /* Left sidebar: Help Tips */
+  #app-help-sidebar-wrapper {
+    display: block !important;
+    order: 1 !important;
+    width: 140px !important;
+    max-width: 140px;
     flex-shrink: 0;
-    padding-top: 4px;
-    gap: 4px;
     overflow-y: auto !important;
   }
 
-  /* Hide mobile controls in favor of tablet sidebar */
-  #app-mobile-controls {
-    display: none !important;
-  }
-
-  /* Board: maximize for short viewport */
+  /* Board: center */
   #app-board-wrapper {
-    order: 1 !important;
+    order: 2 !important;
     flex: 1;
     min-height: 0;
+  }
+
+  /* Right sidebar: Controls + Sounds */
+  #app-right-sidebar-wrapper {
+    display: block !important;
+    order: 3 !important;
+    width: 140px !important;
+    max-width: 140px;
+    flex-shrink: 0;
+    overflow-y: auto !important;
+  }
+
+  /* Hide tablet sidebar and mobile elements */
+  #app-tablet-sidebar,
+  #app-mobile-controls,
+  #app-mobile-help,
+  #app-mobile-sounds {
+    display: none !important;
   }
 
   #board-container {
@@ -328,38 +339,42 @@
     width: min(100%, calc(100vh - 60px)) !important;
   }
 
-  /* Hide mobile-specific help and sounds (already in tablet sidebar) */
-  #app-mobile-help,
-  #app-mobile-sounds {
-    display: none !important;
+  /* Compact sidebars for landscape */
+  #app-help-sidebar-wrapper .dungeon-panel,
+  #app-right-sidebar-wrapper .dungeon-panel {
+    border-width: 6px !important;
+    border-image-width: 6px !important;
   }
 
-  /* Compact right sidebar content for landscape */
-  #app-tablet-sidebar .dungeon-panel {
-    border-width: 6px;
-    border-image-width: 6px;
+  #app-help-sidebar-wrapper .dungeon-content,
+  #app-right-sidebar-wrapper .dungeon-content {
+    padding: 4px !important;
+    font-size: 0.65rem !important;
   }
 
-  #app-tablet-sidebar .dungeon-content {
-    padding: 4px;
-    font-size: 0.75rem;
+  #app-help-sidebar-wrapper h3,
+  #app-right-sidebar-wrapper h3 {
+    font-size: 0.75rem !important;
+    margin-bottom: 2px !important;
   }
 
-  #app-tablet-sidebar h3 {
-    font-size: 0.875rem;
-    margin-bottom: 2px;
-  }
-
-  #app-tablet-sidebar .text-sm {
-    font-size: 0.65rem;
+  #app-help-sidebar-wrapper .text-sm,
+  #app-right-sidebar-wrapper .text-sm {
+    font-size: 0.6rem !important;
   }
 
   /* Compact warrior info in landscape */
-  #right-sidebar-desktop-warrior-info,
-  #right-sidebar-mobile-controls-warrior-info {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2px;
+  #right-sidebar-desktop-warrior-info {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 2px !important;
+  }
+
+  /* Compact buttons */
+  #app-help-sidebar-wrapper button,
+  #app-right-sidebar-wrapper button {
+    padding: 3px 6px !important;
+    font-size: 0.625rem !important;
   }
 
   /* Compact dungeon panel borders */
