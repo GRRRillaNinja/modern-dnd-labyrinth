@@ -167,7 +167,7 @@
   div[id^="leaderboard-solo-entry-"],
   div[id^="leaderboard-multiplayer-entry-"] {
     padding: 8px 6px !important;
-    line-height: 1 !important;
+    line-height: 0.5rem !important;
   }
 
   /* Top row: evenly distributed */
@@ -177,11 +177,11 @@
     gap: 6px !important;
     flex-wrap: nowrap !important;
     margin-bottom: 0 !important;
-    line-height: 1 !important;
+    line-height: 0.5rem !important;
   }
 
   div[id$="-top"] span {
-    line-height: 1 !important;
+    line-height: 0.5rem !important;
   }
 
   /* Rank: larger and more prominent */
@@ -226,11 +226,11 @@
     font-size: 0.875rem !important;
     flex-wrap: wrap !important;
     justify-content: flex-start !important;
-    line-height: 1 !important;
+    line-height: 0.5rem !important;
   }
 
   div[id$="-stats"] span {
-    line-height: 1 !important;
+    line-height: 0.5rem !important;
   }
 
   /* Individual metrics with distinct colors */
