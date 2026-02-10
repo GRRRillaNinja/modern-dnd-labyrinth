@@ -164,9 +164,10 @@
   }
 
   /* Two-line leaderboard entries with better spacing */
-  [id^="leaderboard-solo-entry-"],
-  [id^="leaderboard-multiplayer-entry-"] {
+  div[id^="leaderboard-solo-entry-"],
+  div[id^="leaderboard-multiplayer-entry-"] {
     padding: 8px 6px !important;
+    line-height: 1 !important;
   }
 
   /* Top row: evenly distributed */
