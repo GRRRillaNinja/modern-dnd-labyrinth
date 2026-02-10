@@ -288,44 +288,76 @@
     padding-bottom: 2px;
   }
 
-  /* Force 3-column layout: Help | Board | Right Sidebar */
+  /* Force 4-column layout: Help Tips | Board | Controls | Legend */
   #app-layout {
     flex-direction: row !important;
     flex-wrap: nowrap;
     height: 100%;
+    gap: 4px !important;
   }
 
-  /* Left sidebar: Help Tips */
+  /* Column 1: Help Tips only (no legend) */
   #app-help-sidebar-wrapper {
     display: block !important;
     order: 1 !important;
-    width: 140px !important;
-    max-width: 140px;
+    width: 120px !important;
+    max-width: 120px;
     flex-shrink: 0;
     overflow-y: auto !important;
   }
 
-  /* Board: center */
+  /* Hide legend in column 1 */
+  #app-help-sidebar-wrapper #help-sidebar-legend-panel {
+    display: none !important;
+  }
+
+  /* Column 2: Board */
   #app-board-wrapper {
     order: 2 !important;
     flex: 1;
     min-height: 0;
   }
 
-  /* Right sidebar: Controls + Sounds */
+  /* Column 3: Controls + Sounds */
   #app-right-sidebar-wrapper {
     display: block !important;
     order: 3 !important;
-    width: 140px !important;
-    max-width: 140px;
+    width: 110px !important;
+    max-width: 110px;
     flex-shrink: 0;
     overflow-y: auto !important;
   }
 
-  /* Hide tablet sidebar and mobile elements */
+  /* Column 4: Legend only - show mobile help which will be styled to show only legend */
+  #app-mobile-help {
+    display: block !important;
+    order: 4 !important;
+    width: 100px !important;
+    max-width: 100px;
+    flex-shrink: 0;
+    overflow-y: auto !important;
+  }
+
+  /* In column 4, hide everything except legend */
+  #app-mobile-help #help-sidebar-toggle-panel,
+  #app-mobile-help #help-sidebar-content-panel {
+    display: none !important;
+  }
+
+  /* Show legend in column 4 */
+  #app-mobile-help #help-sidebar-legend-panel {
+    display: block !important;
+  }
+
+  /* Restructure legend to vertical list (one icon per row) */
+  #app-mobile-help #help-sidebar-legend-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2px !important;
+  }
+
+  /* Hide tablet sidebar and other mobile elements */
   #app-tablet-sidebar,
   #app-mobile-controls,
-  #app-mobile-help,
   #app-mobile-sounds {
     display: none !important;
   }
@@ -339,31 +371,45 @@
     width: min(100%, calc(100vh - 60px)) !important;
   }
 
-  /* Compact sidebars for landscape */
+  /* Compact styling for all sidebars */
   #app-help-sidebar-wrapper .dungeon-panel,
-  #app-right-sidebar-wrapper .dungeon-panel {
-    border-width: 6px !important;
-    border-image-width: 6px !important;
+  #app-right-sidebar-wrapper .dungeon-panel,
+  #app-mobile-help .dungeon-panel {
+    border-width: 4px !important;
+    border-image-width: 4px !important;
   }
 
   #app-help-sidebar-wrapper .dungeon-content,
-  #app-right-sidebar-wrapper .dungeon-content {
-    padding: 4px !important;
-    font-size: 0.65rem !important;
-  }
-
-  #app-help-sidebar-wrapper h3,
-  #app-right-sidebar-wrapper h3 {
-    font-size: 0.75rem !important;
-    margin-bottom: 2px !important;
-  }
-
-  #app-help-sidebar-wrapper .text-sm,
-  #app-right-sidebar-wrapper .text-sm {
+  #app-right-sidebar-wrapper .dungeon-content,
+  #app-mobile-help .dungeon-content {
+    padding: 3px !important;
     font-size: 0.6rem !important;
   }
 
-  /* Compact warrior info in landscape */
+  #app-help-sidebar-wrapper h3,
+  #app-right-sidebar-wrapper h3,
+  #app-mobile-help h3 {
+    font-size: 0.7rem !important;
+    margin-bottom: 1px !important;
+  }
+
+  #app-help-sidebar-wrapper .text-sm,
+  #app-right-sidebar-wrapper .text-sm,
+  #app-mobile-help .text-sm {
+    font-size: 0.55rem !important;
+  }
+
+  /* Extra compact legend text */
+  #app-mobile-help .text-gray-400,
+  #app-mobile-help span {
+    font-size: 0.5rem !important;
+  }
+
+  #app-mobile-help .text-lg {
+    font-size: 0.875rem !important;
+  }
+
+  /* Compact warrior info */
   #right-sidebar-desktop-warrior-info {
     display: grid !important;
     grid-template-columns: 1fr !important;
@@ -373,8 +419,8 @@
   /* Compact buttons */
   #app-help-sidebar-wrapper button,
   #app-right-sidebar-wrapper button {
-    padding: 3px 6px !important;
-    font-size: 0.625rem !important;
+    padding: 2px 4px !important;
+    font-size: 0.55rem !important;
   }
 
   /* Compact dungeon panel borders */
