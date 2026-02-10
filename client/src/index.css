@@ -128,11 +128,16 @@
 }
 
 /* ===== Portrait phone leaderboard optimizations ===== */
-@media (max-width: 767px) and (orientation: portrait) {
+@media (max-width: 1023px) {
   /* Align overlay to top and remove padding */
   #leaderboard-overlay {
     padding: 0 !important;
     align-items: flex-start !important;
+  }
+
+  /* TEST: Make container background slightly different to verify media query works */
+  #leaderboard-container {
+    background-color: rgba(10, 0, 0, 0.05) !important;
   }
 
   /* Container fits exactly in viewport */
@@ -165,13 +170,17 @@
   }
 
   /* Top row: evenly distributed */
-  [id$="-top"] {
+  div[id$="-top"] {
     display: flex !important;
     align-items: center !important;
     gap: 6px !important;
     flex-wrap: nowrap !important;
     margin-bottom: 0 !important;
-    line-height: 1.2 !important;
+    line-height: 1 !important;
+  }
+
+  div[id$="-top"] span {
+    line-height: 1 !important;
   }
 
   /* Rank: larger and more prominent */
@@ -206,7 +215,7 @@
   }
 
   /* Stats row: color-coded metrics */
-  [id$="-stats"] {
+  div[id$="-stats"] {
     display: flex !important;
     gap: 8px !important;
     margin-top: 4px !important;
@@ -216,7 +225,11 @@
     font-size: 0.875rem !important;
     flex-wrap: wrap !important;
     justify-content: flex-start !important;
-    line-height: 1.2 !important;
+    line-height: 1 !important;
+  }
+
+  div[id$="-stats"] span {
+    line-height: 1 !important;
   }
 
   /* Individual metrics with distinct colors */
