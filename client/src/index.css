@@ -197,22 +197,29 @@
     margin-left: auto !important;
   }
 
-  /* Stats row: use full width, no offset */
+  /* Difficulty and game type badges in top row */
+  [id$="-difficulty"],
+  [id$="-gametype"] {
+    font-size: 0.75rem !important;
+    padding: 3px 6px !important;
+  }
+
+  /* Stats row: color-coded metrics */
   [id$="-stats"] {
     display: flex !important;
-    gap: 6px !important;
+    gap: 8px !important;
     margin-top: 0 !important;
     margin-left: 0 !important;
-    font-size: 0.75rem !important;
+    font-size: 0.875rem !important;
     flex-wrap: wrap !important;
     justify-content: flex-start !important;
   }
 
-  /* Larger difficulty badges and stats */
-  [id$="-difficulty"],
-  [id$="-stats"] span {
-    padding: 3px 6px !important;
-    font-size: 0.75rem !important;
+  /* Individual metrics with distinct colors */
+  [id$="-moves"],
+  [id$="-deaths"],
+  [id$="-walls"] {
+    font-size: 0.875rem !important;
   }
 
   /* Show mode toggle in portrait */

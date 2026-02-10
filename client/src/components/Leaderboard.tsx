@@ -144,7 +144,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
               boxShadow: 'inset 0 1px 0 rgba(225, 160, 80, 0.2), 0 0 10px rgba(205, 127, 50, 0.12)',
             } : undefined}
           >
-            {/* Top Row: Rank + Name + Time */}
+            {/* Top Row: Rank + Name + Difficulty + Game Type + Time */}
             <div id={`leaderboard-${listId}-entry-${index}-top`} className="flex items-center gap-2">
               {/* Rank */}
               <span id={`leaderboard-${listId}-entry-${index}-rank`} className={`
@@ -180,17 +180,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
               >
                 {entry.player_name || 'Anonymous'}
               </span>
-              {/* Time */}
-              <span id={`leaderboard-${listId}-entry-${index}-time`} className="text-amber-400 font-bold text-xs sm:text-sm whitespace-nowrap flex-shrink-0">
-                {SupabaseService.formatTime(entry.game_time)}
-              </span>
-            </div>
-
-            {/* Bottom Row: Stats */}
-            <div id={`leaderboard-${listId}-entry-${index}-stats`} className="flex items-center gap-2 sm:gap-3 mt-1 ml-9 sm:ml-11 text-[10px] sm:text-xs text-gray-400">
               {/* Difficulty Badge */}
               <span id={`leaderboard-${listId}-entry-${index}-difficulty`} className={`
-                px-1.5 sm:px-2 py-0.5 rounded font-bold
+                px-1.5 sm:px-2 py-0.5 rounded font-bold flex-shrink-0 text-[10px] sm:text-xs
                 ${entry.difficulty_level === 1
                   ? 'bg-green-900/50 text-green-400 border border-green-700'
                   : 'bg-red-900/50 text-red-400 border border-red-700'}
@@ -199,8 +191,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
               </span>
               {/* vs CPU / PvP Badge (multiplayer only) */}
               {entry.game_mode === 'multiplayer' && (
-                <span className={`
-                  px-1.5 sm:px-2 py-0.5 rounded font-bold
+                <span id={`leaderboard-${listId}-entry-${index}-gametype`} className={`
+                  px-1.5 sm:px-2 py-0.5 rounded font-bold flex-shrink-0 text-[10px] sm:text-xs
                   ${entry.vs_cpu
                     ? 'bg-cyan-900/50 text-cyan-400 border border-cyan-700'
                     : 'bg-purple-900/50 text-purple-400 border border-purple-700'}
@@ -208,10 +200,30 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
                   {entry.vs_cpu ? 'vs CPU' : 'PvP'}
                 </span>
               )}
-              {/* Moves | Deaths | Walls Discovered */}
+              {/* Time */}
+              <span id={`leaderboard-${listId}-entry-${index}-time`} className="text-amber-400 font-bold text-xs sm:text-sm whitespace-nowrap flex-shrink-0 ml-auto">
+                {SupabaseService.formatTime(entry.game_time)}
+              </span>
+            </div>
+
+            {/* Bottom Row: Color-coded Metrics */}
+            <div id={`leaderboard-${listId}-entry-${index}-stats`} className="flex items-center gap-2 sm:gap-3 mt-1 text-[10px] sm:text-xs">
+              {/* Moves */}
               {entry.total_moves != null && (
-                <span id={`leaderboard-${listId}-entry-${index}-metrics`} className="whitespace-nowrap">
-                  {entry.total_moves} Moves{entry.total_deaths != null && ` | ${entry.total_deaths} Deaths`}{entry.walls_discovered_pct != null && ` | ${entry.walls_discovered_pct}% Walls Discovered`}
+                <span id={`leaderboard-${listId}-entry-${index}-moves`} className="text-blue-400 font-semibold">
+                  {entry.total_moves} Moves
+                </span>
+              )}
+              {/* Deaths */}
+              {entry.total_deaths != null && (
+                <span id={`leaderboard-${listId}-entry-${index}-deaths`} className="text-red-400 font-semibold">
+                  {entry.total_deaths} Deaths
+                </span>
+              )}
+              {/* Walls Discovered */}
+              {entry.walls_discovered_pct != null && (
+                <span id={`leaderboard-${listId}-entry-${index}-walls`} className="text-green-400 font-semibold">
+                  {entry.walls_discovered_pct}% Walls
                 </span>
               )}
             </div>
