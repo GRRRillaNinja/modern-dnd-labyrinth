@@ -207,7 +207,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
             </div>
 
             {/* Bottom Row: Color-coded Metrics */}
-            <div id={`leaderboard-${listId}-entry-${index}-stats`} className="flex items-center gap-2 sm:gap-3 mt-1 text-[10px] sm:text-xs">
+            <div id={`leaderboard-${listId}-entry-${index}-stats`} className="flex items-baseline gap-2 sm:gap-3 text-[10px] sm:text-xs">
               {/* Moves */}
               {entry.total_moves != null && (
                 <span id={`leaderboard-${listId}-entry-${index}-moves`} className="text-blue-400 font-semibold">
