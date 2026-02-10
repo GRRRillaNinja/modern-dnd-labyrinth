@@ -196,9 +196,21 @@
     margin-left: auto !important;
   }
 
-  /* Hide stats row completely for single-line layout */
+  /* Show stats row with all metrics */
   [id$="-stats"] {
-    display: none !important;
+    display: flex !important;
+    gap: 4px !important;
+    margin-top: 3px !important;
+    margin-left: 28px !important;
+    font-size: 0.625rem !important;
+    flex-wrap: wrap !important;
+  }
+
+  /* Compact difficulty badges and stats */
+  [id$="-difficulty"],
+  [id$="-stats"] span {
+    padding: 2px 4px !important;
+    font-size: 0.625rem !important;
   }
 
   /* Show mode toggle in portrait */
