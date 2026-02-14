@@ -226,6 +226,12 @@ npm install
 
 ## 📜 Credits
 
+### Primary Inspiration
+- **Bob Whitley** - Creator of the web-based recreation that inspired this project
+  - Play his version: [dndlabyrinth.com](https://dndlabyrinth.com/)
+  - GitHub repository: [bobwhitley/dndlabyrinth](https://github.com/bobwhitley/dndlabyrinth)
+  - Bob's faithful recreation introduced me to this classic game and served as the foundation for this modern interpretation
+
 ### Original Game
 - **1980 Mattel Electronics** - Original D&D Computer Labyrinth Game
 - **Gary Gygax & Dave Arneson** - Dungeons & Dragons creators
@@ -233,10 +239,7 @@ npm install
 ### Modern Implementation
 - Built with ❤️ using modern web technologies
 - React, TypeScript, Tailwind CSS, Framer Motion, Howler.js
-
-### Inspiration
-- Inspired by the 1980 Mattel Electronics D&D Computer Labyrinth Game
-- This is an **independent project**, not affiliated with or endorsed by Mattel
+- This is an **independent project**, not affiliated with or endorsed by Mattel or Bob Whitley
 
 ## 📄 License
 
@@ -255,6 +258,7 @@ This is a personal tribute project, but suggestions and feedback are welcome!
 ## 🎉 Acknowledgments
 
 Thank you to:
+- **Bob Whitley** for creating the web recreation that introduced me to this game and inspired this project
 - The original designers at Mattel Electronics for creating a timeless classic
 - Gary Gygax and Dave Arneson for creating Dungeons & Dragons
 - The open-source community for the amazing tools and libraries
