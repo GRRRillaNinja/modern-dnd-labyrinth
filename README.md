@@ -111,6 +111,8 @@ dnd-labyrinth-v2/
    - Visit `http://localhost:3000`
    - The game should load automatically!
 
+**Note:** The game works fully without any additional setup. Leaderboards require a Supabase database - see **[SUPABASE_SETUP.md](SUPABASE_SETUP.md)** if you want to enable them (optional).
+
 ### Building for Production
 
 ```bash
