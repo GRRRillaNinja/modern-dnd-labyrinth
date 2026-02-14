@@ -1,10 +1,16 @@
 # Delve & Dash
 
-A modern dungeon crawler inspired by the 1980 Mattel Electronics D&D Computer Labyrinth Game, rebuilt with React, TypeScript, and modern web technologies.
+A modern dungeon crawler inspired by [Bob Whitley's web recreation](https://dndlabyrinth.com/) and the original 1980 Mattel Electronics D&D Computer Labyrinth Game, rebuilt with React, TypeScript, and modern web technologies.
 
 ![Game Status](https://img.shields.io/badge/status-v1.0_released-success)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-web-lightgrey)
+
+## 🙏 Inspiration & Credits
+
+This project was inspired by **[Bob Whitley's web-based recreation](https://dndlabyrinth.com/)** ([GitHub](https://github.com/bobwhitley/dndlabyrinth)) of the 1980 Mattel Electronics D&D Computer Labyrinth Game. Bob's faithful recreation introduced me to this classic game and served as the foundation for this modern interpretation.
+
+The original 1980 D&D Computer Labyrinth Game was created by Mattel Electronics, based on Dungeons & Dragons by Gary Gygax and Dave Arneson.
 
 ## 🎮 Features
 
@@ -226,19 +232,8 @@ npm install
 
 ## 📜 Credits
 
-### Primary Inspiration
-- **Bob Whitley** - Creator of the web-based recreation that inspired this project
-  - Play his version: [dndlabyrinth.com](https://dndlabyrinth.com/)
-  - GitHub repository: [bobwhitley/dndlabyrinth](https://github.com/bobwhitley/dndlabyrinth)
-  - Bob's faithful recreation introduced me to this classic game and served as the foundation for this modern interpretation
-
-### Original Game
-- **1980 Mattel Electronics** - Original D&D Computer Labyrinth Game
-- **Gary Gygax & Dave Arneson** - Dungeons & Dragons creators
-
-### Modern Implementation
-- Built with ❤️ using modern web technologies
-- React, TypeScript, Tailwind CSS, Framer Motion, Howler.js
+### Technologies
+- Built with ❤️ using React, TypeScript, Tailwind CSS, Framer Motion, and Howler.js
 - This is an **independent project**, not affiliated with or endorsed by Mattel or Bob Whitley
 
 ## 📄 License
