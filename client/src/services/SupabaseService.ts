@@ -26,18 +26,12 @@ export class SupabaseService {
   private sessionId: string;
 
   constructor() {
-    // 1. ADD THIS LINE HERE:
-    console.log("DEBUG: Vite Env Variables:", import.meta.env);
-
     // Generate or retrieve session ID
     this.sessionId = this.getOrCreateSessionId();
-    
+
     // Initialize Supabase client if env vars are present
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    
-    // 2. AND ADD THIS LINE TO SEE THE SPECIFIC VALUES:
-    console.log("DEBUG: URL:", supabaseUrl, "Key:", supabaseKey ? "Present" : "Missing");
 
     if (supabaseUrl && supabaseKey) {
       this.client = createClient(supabaseUrl, supabaseKey);
@@ -47,18 +41,34 @@ export class SupabaseService {
   }
 
   /**
+   * Generate a UUID v4 compatible string (fallback for browsers without crypto.randomUUID)
+   */
+  private generateUUID(): string {
+    if (crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+
+    // Fallback for older browsers
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  }
+
+  /**
    * Get or create a persistent session ID for anonymous tracking
    */
   private getOrCreateSessionId(): string {
     const STORAGE_KEY = 'delve_dash_session_id';
-    
+
     let sessionId = localStorage.getItem(STORAGE_KEY);
-    
+
     if (!sessionId) {
-      sessionId = crypto.randomUUID();
+      sessionId = this.generateUUID();
       localStorage.setItem(STORAGE_KEY, sessionId);
     }
-    
+
     return sessionId;
   }
 

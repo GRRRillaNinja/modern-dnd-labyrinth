@@ -332,10 +332,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (dragonJustWoke) {
       // Update state immediately so the dragon is visible on the board
       set({ gameState: { ...newState } });
-      console.log(`%c[Store] dragon wakes — pausing for sound`, 'color:#ff6b6b;font-weight:bold');
+      // Debug log removed for production
       audioService.play('dragonWakes');
       setTimeout(() => {
-        console.log(`%c[Store] dragon wake done isDragonTurn=false`, 'color:#ff6b6b;font-weight:bold');
+        // Debug log removed for production
         set({ isDragonTurn: false });
         triggerAITurnIfNeeded();
       }, DRAGON_WAKE_DELAY);
@@ -372,18 +372,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
         // hidden, but warrior moves are already visible (CPU position is correct)
         set({ isDragonTurn: true, gameState: preDragonSS ?? JSON.parse(JSON.stringify(gameEngine.getState())) });
 
-        console.log(`%c[Store] dragon chime (moveWarrior) isDragonTurn=true`, 'color:#ff6b6b;font-weight:bold');
+        // Debug log removed for production
         audioService.play('dragonChime');
         setTimeout(() => {
-          console.log(`%c[Store] dragon revealed`, 'color:#ff6b6b;font-weight:bold');
+          // Debug log removed for production
           // Now reveal the actual post-move state (dragon position, warrior respawns, etc.)
           set({ gameState: JSON.parse(JSON.stringify(gameEngine.getState())) });
           audioService.play('dragonFlying');
-          console.log(`%c[Store] dragon flying`, 'color:#ff6b6b;font-weight:bold');
+          // Debug log removed for production
           setTimeout(() => {
             audioService.announceWarrior(turnResetWarrior);
             setTimeout(() => {
-              console.log(`%c[Store] dragon turn done isDragonTurn=false`, 'color:#ff6b6b;font-weight:bold');
+              // Debug log removed for production
               set({ isDragonTurn: false });
               triggerAITurnIfNeeded();
             }, 1000);
@@ -469,7 +469,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({ isDragonTurn: true, gameState: preFinishSS });
       if (turnMessage) set({ helpMessage: turnMessage });
 
-      console.log(`%c[Store] dragon chime (finishTurn) isDragonTurn=true`, 'color:#ff6b6b;font-weight:bold');
+      // Debug log removed for production
       audioService.play('dragonChime');
       setTimeout(() => {
         console.log(`%c[Store] dragon revealed`, 'color:#ff6b6b;font-weight:bold');
@@ -761,18 +761,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
               // dragon movement, life changes, etc. are all hidden until delay finishes
               set({ gameState: preDoorSS });
 
-              console.log(`%c[Store] dragon chime (doorClosed) isDragonTurn=true`, 'color:#ff6b6b;font-weight:bold');
+              // Debug log removed for production
               audioService.play('dragonChime');
               setTimeout(() => {
-                console.log(`%c[Store] dragon revealed`, 'color:#ff6b6b;font-weight:bold');
+                // Debug log removed for production
                 // Now reveal the actual post-door state (dragon position, warrior respawns, etc.)
                 set({ gameState: JSON.parse(JSON.stringify(gameEngine.getState())) });
                 audioService.play('dragonFlying');
-                console.log(`%c[Store] dragon flying`, 'color:#ff6b6b;font-weight:bold');
+                // Debug log removed for production
                 setTimeout(() => {
                   audioService.announceWarrior(currentWarrior);
                   setTimeout(() => {
-                    console.log(`%c[Store] dragon turn done isDragonTurn=false`, 'color:#ff6b6b;font-weight:bold');
+                    // Debug log removed for production
                     set({ isDragonTurn: false });
                     triggerAITurnIfNeeded();
                   }, 1000); // Re-enable after warrior announcement completes

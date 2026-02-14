@@ -18,7 +18,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
   useEffect(() => {
     // Try to play intro (will work after user interaction)
     audioService.play('intro').catch(() => {
-      console.log('Intro music will play after user interaction');
+      // Audio will play after user interaction - silently ignore for production
     });
 
     // Cleanup: stop intro sound when component unmounts

@@ -7,16 +7,16 @@ export default defineConfig({
   envDir: './',
   resolve: {
     alias: {
-      '@shared': path.resolve(__dirname, '../shared'),
+      '@shared': path.resolve(__dirname, './src/shared'),
     },
   },
   server: {
     host: '0.0.0.0', // Allow access from network
     port: 3000,
-    open: true,
+    // open: true, // Disabled for production
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: false, // Disabled for production to protect source code
   },
 });

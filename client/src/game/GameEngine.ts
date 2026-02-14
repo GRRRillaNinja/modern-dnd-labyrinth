@@ -26,18 +26,20 @@ export class GameEngine {
   }
 
   /** Structured one-line action log for debugging turn flow */
-  private logAction(actor: string, action: string, extra?: string): void {
-    const p = (pos: Position | null) => pos ? `[${pos[0]},${pos[1]}]` : '---';
-    const w0 = this.gameState.warriors[0];
-    const w1 = this.gameState.warriors[1];
-    const d = this.gameState.dragon;
-    const turn = ['Wait','W1Select','W2Select','W1Turn','W2Turn','Over'][this.gameState.state];
-    const suffix = extra ? ` | ${extra}` : '';
-    console.log(
-      `%c[${actor}]%c ${action} | W0${p(w0.position)}(${w0.lives}hp,${w0.moves}mv) W1${p(w1.position)}(${w1.lives}hp,${w1.moves}mv) Dragon${p(d.position)} | ${turn}${suffix}`,
-      actor === 'Dragon' ? 'color:#ff6b6b;font-weight:bold' : 'color:#4caf50;font-weight:bold',
-      'color:inherit'
-    );
+  private logAction(_actor: string, _action: string, _extra?: string): void {
+    // Debug logging disabled for production
+    // Uncomment below for debugging:
+    // const p = (pos: Position | null) => pos ? `[${pos[0]},${pos[1]}]` : '---';
+    // const w0 = this.gameState.warriors[0];
+    // const w1 = this.gameState.warriors[1];
+    // const d = this.gameState.dragon;
+    // const turn = ['Wait','W1Select','W2Select','W1Turn','W2Turn','Over'][this.gameState.state];
+    // const suffix = extra ? ` | ${extra}` : '';
+    // console.log(
+    //   `%c[${actor}]%c ${action} | W0${p(w0.position)}(${w0.lives}hp,${w0.moves}mv) W1${p(w1.position)}(${w1.lives}hp,${w1.moves}mv) Dragon${p(d.position)} | ${turn}${suffix}`,
+    //   actor === 'Dragon' ? 'color:#ff6b6b;font-weight:bold' : 'color:#4caf50;font-weight:bold',
+    //   'color:inherit'
+    // );
   }
 
   /**

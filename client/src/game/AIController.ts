@@ -55,7 +55,7 @@ enum AIPhase {
 }
 
 // --- Debug logging ---
-const AI_DEBUG = true;
+const AI_DEBUG = false; // Disabled for production
 function aiLog(...args: unknown[]): void {
   if (AI_DEBUG) console.log('%c[AI]', 'color: #00bcd4; font-weight: bold', ...args);
 }
