@@ -63,7 +63,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           </h2>
           {/* Attribution div */}
           <div id="menu-title-attribution" className="mt-2 text-gray-400 text-xs">
-            A modernized tribute to the 1980 Mattel Electronics classic, heavily inspired by {/* Attribution link (Bob Whitley) */}<a id="menu-title-attribution-link" href="https://github.com/bobwhitley/dndlabyrinth" className="text-amber-500 hover:text-amber-400 text-xs underline transition-colors">Bob Whitley's port</a> to a modern computer game.
+            Heavily inspired by {/* Attribution link (Bob Whitley) */}<a id="menu-title-attribution-link" href="https://github.com/bobwhitley/dndlabyrinth" className="text-amber-500 hover:text-amber-400 text-xs underline transition-colors">Bob Whitley's classic dungeon crawler</a>.
           </div>
           {/* Manual link wrapper */}
           <div id="menu-title-manual-wrapper" className="mt-1">
@@ -264,7 +264,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           className="mt-2 text-center text-gray-500 text-xs"
         >
           {/* Footer attribution text */}
-          <p id="menu-footer-attribution">Inspired by the 1980 Mattel Electronics D&D Computer Labyrinth Game</p>
+          <p id="menu-footer-attribution">Inspired by <a href="https://dndlabyrinth.com/" className="underline hover:text-gray-400 transition-colors" target="_blank" rel="noopener noreferrer">Bob Whitley's dungeon crawler</a></p>
         </motion.div>
       </motion.div>
 

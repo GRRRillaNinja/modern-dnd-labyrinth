@@ -1,5 +1,5 @@
 ================================================================================
-  D&D COMPUTER LABYRINTH — SURVIVAL MODE
+  DELVE & DASH — SURVIVAL MODE
   Design Document & Implementation Plan
 ================================================================================
 

@@ -1,7 +1,7 @@
 {
   "name": "delve-and-dash",
   "version": "1.0.0",
-  "description": "Delve & Dash - A modern dungeon crawler inspired by the 1980 Mattel Electronics classic",
+  "description": "Delve & Dash - A modern dungeon crawler inspired by Bob Whitley's classic dungeon crawler",
   "private": true,
   "workspaces": [
     "client",

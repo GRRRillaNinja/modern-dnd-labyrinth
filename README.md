@@ -1,6 +1,6 @@
 # Delve & Dash
 
-A modern dungeon crawler inspired by [Bob Whitley's web recreation](https://dndlabyrinth.com/) and the original 1980 Mattel Electronics D&D Computer Labyrinth Game, rebuilt with React, TypeScript, and modern web technologies.
+A modern dungeon crawler inspired by [Bob Whitley's web recreation](https://dndlabyrinth.com/), rebuilt with React, TypeScript, and modern web technologies.
 
 ![Game Status](https://img.shields.io/badge/status-v1.0_released-success)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -8,9 +8,7 @@ A modern dungeon crawler inspired by [Bob Whitley's web recreation](https://dndl
 
 ## 🙏 Inspiration & Credits
 
-This project was inspired by **[Bob Whitley's web-based recreation](https://dndlabyrinth.com/)** ([GitHub](https://github.com/bobwhitley/dndlabyrinth)) of the 1980 Mattel Electronics D&D Computer Labyrinth Game. Bob's faithful recreation introduced me to this classic game and served as the foundation for this modern interpretation.
-
-The original 1980 D&D Computer Labyrinth Game was created by Mattel Electronics, based on Dungeons & Dragons by Gary Gygax and Dave Arneson.
+This project was inspired by **[Bob Whitley's web-based recreation](https://dndlabyrinth.com/)** ([GitHub](https://github.com/bobwhitley/dndlabyrinth)) of a classic dungeon crawler game. Bob's faithful recreation introduced me to this classic game and served as the foundation for this modern interpretation.
 
 ## 🎮 Features
 
@@ -236,13 +234,13 @@ npm install
 
 ### Technologies
 - Built with ❤️ using React, TypeScript, Tailwind CSS, Framer Motion, and Howler.js
-- This is an **independent project**, not affiliated with or endorsed by Mattel or Bob Whitley
+- This is an **independent project**, not affiliated with or endorsed by Bob Whitley
 
 ## 📄 License
 
 MIT License - See [LICENSE](LICENSE) file for details.
 
-This project is inspired by the original 1980 Mattel Electronics D&D Computer Labyrinth Game.
+This project is inspired by Bob Whitley's classic dungeon crawler recreation.
 
 ## 🤝 Contributing
 
@@ -256,8 +254,6 @@ This is a personal tribute project, but suggestions and feedback are welcome!
 
 Thank you to:
 - **Bob Whitley** for creating the web recreation that introduced me to this game and inspired this project
-- The original designers at Mattel Electronics for creating a timeless classic
-- Gary Gygax and Dave Arneson for creating Dungeons & Dragons
 - The open-source community for the amazing tools and libraries
 - Everyone who has played and enjoyed this tribute
 

@@ -5,7 +5,7 @@ All notable changes to Delve & Dash will be documented in this file.
 ## [1.0.0] - 2025-01-28
 
 ### Initial Release 🎉
-Complete modernization inspired by the 1980 Mattel Electronics D&D Computer Labyrinth Game, rebuilt with modern web technologies.
+Complete modernization of a classic dungeon crawler, rebuilt with modern web technologies.
 
 ---
 
@@ -163,9 +163,8 @@ dnd-labyrinth-v2/
 
 ## Credits
 
-### Original Game
-- **1980 Mattel Electronics** - Original D&D Computer Labyrinth Game
-- **Gary Gygax & Dave Arneson** - Dungeons & Dragons creators
+### Inspiration
+- **Bob Whitley** - Classic dungeon crawler web recreation ([dndlabyrinth.com](https://dndlabyrinth.com/))
 
 ### Modern Implementation
 - **React Team** - React framework

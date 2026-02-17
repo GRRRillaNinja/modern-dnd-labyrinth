@@ -4,7 +4,7 @@ const path = require('path');
 const sourceDir = path.join(__dirname, '..', 'DnDLab', 'audio');
 const targetDir = path.join(__dirname, 'client', 'public', 'audio');
 
-console.log('🎮 D&D Labyrinth v2 - Audio Setup');
+console.log('🎮 Delve & Dash - Audio Setup');
 console.log('=================================\n');
 
 // Create target directory if it doesn't exist
