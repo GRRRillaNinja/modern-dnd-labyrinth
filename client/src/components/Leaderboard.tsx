@@ -375,14 +375,13 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
           {/* Social Share Buttons - shown after a game */}
           {submissionResult && submissionResult.rank > 0 && (() => {
             const shareText = submissionResult.isTop100
-              ? `🐉 I ranked #${submissionResult.rank} in Delve & Dash (${submissionResult.gameMode === 'solo' ? 'Solo Quest' : 'Two Warriors'} / ${submissionResult.gameResult === 'win' ? 'Wins' : 'Losses'})! Can you beat me?`
-              : `🐉 Just played Delve & Dash - a dungeon crawler where you hunt treasure and flee a dragon!`;
+              ? `🐉 I ranked #${submissionResult.rank} in Delve & Dash (${submissionResult.gameMode === 'solo' ? 'Solo Quest' : 'Two Warriors'} / ${submissionResult.gameResult === 'win' ? 'Wins' : 'Losses'})! Can you beat me? delvedash.com`
+              : `🐉 Just played Delve & Dash - hunt treasure and flee a dragon! delvedash.com`;
             const shareUrl = 'https://delvedash.com';
-            const fullShareText = `${shareText} ${shareUrl}`;
-            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
-            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+            const facebookUrl = 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdelvedash.com';
             const handleCopy = () => {
-              navigator.clipboard.writeText(fullShareText).then(() => {
+              navigator.clipboard.writeText(shareText).then(() => {
                 setCopied(true);
                 setTimeout(() => setCopied(false), 2000);
               });

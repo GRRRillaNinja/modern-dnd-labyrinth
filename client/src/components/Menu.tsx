@@ -265,13 +265,13 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
         >
           <p className="text-gray-500 text-xs mb-2">Share the adventure!</p>
           <div id="menu-footer-share" className="flex justify-center gap-2 flex-wrap">
-            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('🐉 Delve & Dash - a dungeon crawler where you hunt treasure and flee a dragon!')}&url=${encodeURIComponent('https://delvedash.com')}`}
+            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('🐉 Delve & Dash - hunt treasure and flee a dragon! delvedash.com')}`}
               target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-1 px-3 py-1.5 rounded text-xs font-bold text-white transition-all hover:scale-105 active:scale-95"
               style={{ background: '#000', border: '1px solid #333' }}>
               𝕏 Post
             </a>
-            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://delvedash.com')}`}
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdelvedash.com"
               target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-1 px-3 py-1.5 rounded text-xs font-bold text-white transition-all hover:scale-105 active:scale-95"
               style={{ background: '#1877F2', border: '1px solid #1455b3' }}>
@@ -279,7 +279,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
             </a>
             {'share' in navigator && (
               <button
-                onClick={() => navigator.share({ title: 'Delve & Dash', text: '🐉 Delve & Dash - a dungeon crawler where you hunt treasure and flee a dragon!', url: 'https://delvedash.com' })}
+                onClick={() => navigator.share({ title: 'Delve & Dash', text: '🐉 Hunt treasure and flee a dragon!', url: 'https://delvedash.com' })}
                 className="flex items-center gap-1 px-3 py-1.5 rounded text-xs font-bold text-white transition-all hover:scale-105 active:scale-95"
                 style={{ background: '#6b21a8', border: '1px solid #581c87' }}>
                 ↑ Share
