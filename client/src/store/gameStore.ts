@@ -83,7 +83,7 @@ interface GameStore {
   showLeaderboardAfterGame: boolean; // Show leaderboard after score submission
   totalMoves: number; // Total valid actions taken during the game
   totalDeaths: number; // Total dragon attacks (lives lost) during the game
-  submissionResult: { rank: number; isTop100: boolean } | null; // Result of score submission
+  submissionResult: { rank: number; isTop100: boolean; gameMode: 'solo' | 'multiplayer'; gameResult: 'win' | 'loss' } | null; // Result of score submission
   aiController: AIController | null; // AI controller for CPU mode
   isCPUMode: boolean; // Whether warrior 2 is CPU-controlled
   isAIThinking: boolean; // Whether AI is currently executing its turn
@@ -854,7 +854,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({
         showPlayerNameModal: false,
         showLeaderboardAfterGame: true,
-        submissionResult: rankResult,
+        submissionResult: rankResult ? { ...rankResult, gameMode, gameResult } : null,
       });
     } else {
       // If submission failed, just close the modal

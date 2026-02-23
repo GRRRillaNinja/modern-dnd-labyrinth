@@ -50,7 +50,20 @@
       "Bash(git -C \"C:\\\\xampp\\\\htdocs\\\\dnd-labyrinth-v2\" commit -m \"$\\(cat <<''EOF''\nAdd proper landscape layout for Menu/landing page\n\nTarget actual Menu component IDs with compact spacing:\n- Smaller title/subtitle fonts\n- Tighter margins and padding throughout\n- Smaller button text and spacing\n- Compact instructions and footer\n- Makes full menu visible in landscape phone viewport\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git -C \"C:\\\\xampp\\\\htdocs\\\\dnd-labyrinth-v2\" commit -m \"$\\(cat <<''EOF''\nFit Menu completely within landscape viewport\n\n- Make menu scrollable if needed \\(overflow-y: auto\\)\n- Reduce all font sizes and spacing further\n- Thinner panel borders \\(8px instead of default\\)\n- Hide instructions section in landscape to save space\n- Align to top instead of center\n- All content now fits without scrolling on most phones\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git -C \"C:\\\\xampp\\\\htdocs\\\\dnd-labyrinth-v2\" commit -m \"$\\(cat <<''EOF''\nRestructure Menu to horizontal layout for landscape\n\n- Title on left, quest panel on right \\(side-by-side\\)\n- Players/Level sections arranged horizontally \\(48% width each\\)\n- Start/Leaderboard buttons side-by-side\n- Player/Level buttons in vertical columns\n- Hide attribution/manual link to save space\n- All content fits viewport height in landscape\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git -C \"C:\\\\xampp\\\\htdocs\\\\dnd-labyrinth-v2\" commit -m \"$\\(cat <<''EOF''\nOptimize Menu panel interior for landscape layout\n\nKeep vertical stack \\(header/panel/footer\\) but reorganize panel:\n- Players and Level sections side-by-side \\(48% each\\)\n- Start and Leaderboard buttons side-by-side\n- Thinner borders \\(8px\\), tighter padding throughout\n- Hide attribution and instructions to save vertical space\n- Panel contents use horizontal space efficiently\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git -C \"C:\\\\xampp\\\\htdocs\\\\dnd-labyrinth-v2\" commit -m \"$\\(cat <<''EOF''\nOptimize Menu panel interior for landscape layout\n\nKeep vertical stack \\(header/panel/footer\\) but reorganize panel:\n- Players and Level sections side-by-side \\(48% each\\)\n- Start and Leaderboard buttons side-by-side\n- Thinner borders \\(8px\\), tighter padding throughout\n- Hide attribution and instructions to save vertical space\n- Panel contents use horizontal space efficiently\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(curl:*)",
+      "Bash(npx serve -l 5000)",
+      "Bash(npx serve -p 5000)",
+      "Bash(npx serve -p 3000)",
+      "Bash(npx serve:*)",
+      "Bash(python -m http.server:*)",
+      "Bash(lsof:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(npx vercel --prod)",
+      "Bash(npx --yes playwright screenshot:*)",
+      "Bash(npx --yes @resvg/resvg-js-cli:*)"
     ]
   },
   "outputStyle": "default"

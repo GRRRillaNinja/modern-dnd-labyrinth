@@ -185,7 +185,8 @@
   }
 
   /* Rank: larger and more prominent */
-  [id$="-rank"] {
+  div[id^="leaderboard-solo-entry-"] [id$="-rank"],
+  div[id^="leaderboard-multiplayer-entry-"] [id$="-rank"] {
     font-size: 1.125rem !important;
     width: 32px !important;
     flex-shrink: 0 !important;

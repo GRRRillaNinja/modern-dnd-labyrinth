@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { supabaseService, LeaderboardEntry, SupabaseService } from '../services/SupabaseService';
 
@@ -6,13 +6,19 @@ interface LeaderboardProps {
   gameMode: 'solo' | 'multiplayer';
   difficultyLevel: 1 | 2;
   onClose: () => void;
-  submissionResult?: { rank: number; isTop100: boolean } | null;
+  submissionResult?: { rank: number; isTop100: boolean; gameMode: 'solo' | 'multiplayer'; gameResult: 'win' | 'loss' } | null;
 }
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, difficultyLevel: _difficultyLevel, onClose, submissionResult }) => {
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<'fastest-win' | 'slowest-win' | 'fastest-loss' | 'slowest-loss'>('fastest-win');
-  const [mobileMode, setMobileMode] = useState<'solo' | 'multiplayer'>('solo');
+  const [selectedCategory, setSelectedCategory] = useState<'fastest-win' | 'slowest-win' | 'fastest-loss' | 'slowest-loss'>(
+    submissionResult ? (submissionResult.gameResult === 'win' ? 'fastest-win' : 'fastest-loss') : 'fastest-win'
+  );
+  const [mobileMode, setMobileMode] = useState<'solo' | 'multiplayer'>(
+    submissionResult ? submissionResult.gameMode : 'solo'
+  );
+  const [copied, setCopied] = useState(false);
+  const playerEntryRef = useRef<HTMLDivElement>(null);
   const [leaderboards, setLeaderboards] = useState<{
     soloFastestWins: LeaderboardEntry[];
     soloSlowestWins: LeaderboardEntry[];
@@ -36,6 +42,15 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
   useEffect(() => {
     loadLeaderboards();
   }, []);
+
+  // Scroll player's highlighted entry into view after leaderboard loads
+  useEffect(() => {
+    if (!loading && submissionResult?.isTop100 && playerEntryRef.current) {
+      setTimeout(() => {
+        playerEntryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+  }, [loading, submissionResult]);
 
   const loadLeaderboards = async () => {
     setLoading(true);
@@ -99,7 +114,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
     }
   };
 
-  const renderLeaderboardList = (entries: LeaderboardEntry[], listId: string) => {
+  const renderLeaderboardList = (entries: LeaderboardEntry[], listId: string, playerRank?: number) => {
     if (loading) {
       return (
         <div id={`leaderboard-${listId}-loading`} className="text-center text-gray-400 py-8">
@@ -118,19 +133,32 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
 
     return (
       <div id={`leaderboard-${listId}-entries`} className="space-y-2">
-        {entries.map((entry, index) => (
+        {entries.map((entry, index) => {
+          const isPlayerEntry = playerRank !== undefined && index === playerRank - 1;
+          return (
           /* Leaderboard Entry Card */
           <motion.div
             key={entry.id}
+            ref={isPlayerEntry ? playerEntryRef : undefined}
             id={`leaderboard-${listId}-entry-${index}`}
             initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.05 }}
+            animate={isPlayerEntry
+              ? { opacity: 1, x: 0, scale: [1, 1.02, 1] }
+              : { opacity: 1, x: 0 }
+            }
+            transition={isPlayerEntry
+              ? { delay: index * 0.05, scale: { repeat: Infinity, duration: 1.5, ease: 'easeInOut' } }
+              : { delay: index * 0.05 }
+            }
             className={`
               p-2 sm:p-3 rounded text-sm
-              ${index > 2 ? 'bg-stone-700/30 border border-stone-600' : ''}
+              ${index > 2 && !isPlayerEntry ? 'bg-stone-700/30 border border-stone-600' : ''}
             `}
-            style={index === 0 ? {
+            style={isPlayerEntry ? {
+              background: 'linear-gradient(135deg, rgba(6, 78, 59, 0.5) 0%, rgba(4, 120, 87, 0.3) 50%, rgba(6, 78, 59, 0.5) 100%)',
+              border: '2px solid #10b981',
+              boxShadow: '0 0 16px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(16, 185, 129, 0.2)',
+            } : index === 0 ? {
               background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.25) 0%, rgba(218, 165, 32, 0.15) 50%, rgba(184, 134, 11, 0.25) 100%)',
               border: '2px solid #b8860b',
               boxShadow: 'inset 0 1px 0 rgba(255, 215, 0, 0.2), 0 0 12px rgba(218, 165, 32, 0.15)',
@@ -144,6 +172,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
               boxShadow: 'inset 0 1px 0 rgba(225, 160, 80, 0.2), 0 0 10px rgba(205, 127, 50, 0.12)',
             } : undefined}
           >
+            {isPlayerEntry && (
+              <div className="text-emerald-400 text-[10px] font-bold mb-1 text-center tracking-wider">⭐ YOUR SCORE ⭐</div>
+            )}
             {/* Top Row: Rank + Name + Difficulty + Game Type + Time */}
             <div id={`leaderboard-${listId}-entry-${index}-top`} className="flex items-center gap-2">
               {/* Rank */}
@@ -228,7 +259,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
               )}
             </div>
           </motion.div>
-        ))}
+          );
+        })}
       </div>
     );
   };
@@ -324,8 +356,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
                   <div id="leaderboard-submission-result-success" className="text-green-400 font-medieval text-lg mb-1">
                     Congratulations! You made the Top 100!
                   </div>
-                  <div id="leaderboard-submission-result-rank" className="text-gray-300">
-                    Your score ranks <span className="text-amber-400 font-bold">#{submissionResult.rank}</span> out of all recorded scores.
+                  <div id="leaderboard-submission-result-rank" className="text-gray-300 text-sm leading-snug">
+                    Your score ranks <span className="text-amber-400 font-bold">#{submissionResult.rank}</span> in the <span className="text-amber-400 font-bold">{submissionResult.gameMode === 'solo' ? 'Solo Quest' : 'Two Warriors'} / {submissionResult.gameResult === 'win' ? 'Wins' : 'Losses'}</span> category.
                   </div>
                 </>
               ) : (
@@ -333,13 +365,62 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
                   <div id="leaderboard-submission-result-not-top" className="text-gray-400 font-medieval text-lg mb-1">
                     Your time didn't make the Top 100. Keep trying!
                   </div>
-                  <div id="leaderboard-submission-result-rank" className="text-gray-300">
-                    Your score ranks <span className="text-amber-400 font-bold">#{submissionResult.rank}</span> out of all recorded scores.
+                  <div id="leaderboard-submission-result-rank" className="text-gray-300 text-sm leading-snug">
+                    Your score ranks <span className="text-amber-400 font-bold">#{submissionResult.rank}</span> in the <span className="text-amber-400 font-bold">{submissionResult.gameMode === 'solo' ? 'Solo Quest' : 'Two Warriors'} / {submissionResult.gameResult === 'win' ? 'Wins' : 'Losses'}</span> category.
                   </div>
                 </>
               )}
             </motion.div>
           )}
+
+          {/* Social Share Buttons - shown after a game */}
+          {submissionResult && submissionResult.rank > 0 && (() => {
+            const shareText = submissionResult.isTop100
+              ? `🐉 I ranked #${submissionResult.rank} in Delve & Dash (${submissionResult.gameMode === 'solo' ? 'Solo Quest' : 'Two Warriors'} / ${submissionResult.gameResult === 'win' ? 'Wins' : 'Losses'})! Can you beat me?`
+              : `🐉 Just played Delve & Dash - a dungeon crawler where you hunt treasure and flee a dragon!`;
+            const shareUrl = 'https://delvedash.com';
+            const fullShareText = `${shareText} ${shareUrl}`;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+            const handleCopy = () => {
+              navigator.clipboard.writeText(fullShareText).then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              });
+            };
+            const handleNativeShare = () => {
+              navigator.share({ title: 'Delve & Dash', text: shareText, url: shareUrl });
+            };
+            return (
+              <div id="leaderboard-share-section" className="mb-4 flex-shrink-0 text-center">
+                <p className="text-gray-400 text-xs mb-2 font-medieval">Share your adventure!</p>
+                <div className="flex justify-center gap-2 flex-wrap">
+                  <a href={twitterUrl} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold text-white transition-all hover:scale-105 active:scale-95"
+                    style={{ background: '#000', border: '1px solid #333' }}>
+                    𝕏 Post
+                  </a>
+                  <a href={facebookUrl} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold text-white transition-all hover:scale-105 active:scale-95"
+                    style={{ background: '#1877F2', border: '1px solid #1455b3' }}>
+                    f Share
+                  </a>
+                  {'share' in navigator && (
+                    <button onClick={handleNativeShare}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold text-white transition-all hover:scale-105 active:scale-95"
+                      style={{ background: '#6b21a8', border: '1px solid #581c87' }}>
+                      ↑ Share
+                    </button>
+                  )}
+                  <button onClick={handleCopy}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold transition-all hover:scale-105 active:scale-95"
+                    style={{ background: copied ? '#065f46' : '#1c1917', border: `1px solid ${copied ? '#10b981' : '#57534e'}`, color: copied ? '#10b981' : '#d1d5db' }}>
+                    {copied ? '✓ Copied!' : '⧉ Copy Link'}
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Mobile Mode Toggle (Solo/Multiplayer) - Only visible in landscape */}
           <div id="leaderboard-mode-toggle" className="hidden grid-cols-2 gap-2 mb-2 flex-shrink-0">
@@ -437,7 +518,12 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
               </h4>
               {/* Solo Quest Entry List */}
               <div id="leaderboard-solo-list" className="flex-1 min-h-0 overflow-y-auto" style={{ scrollbarGutter: 'stable' }}>
-                {renderLeaderboardList(currentBoards.solo, 'solo')}
+                {renderLeaderboardList(currentBoards.solo, 'solo',
+                submissionResult?.isTop100 && submissionResult.gameMode === 'solo' &&
+                ((submissionResult.gameResult === 'win' && selectedCategory === 'fastest-win') ||
+                 (submissionResult.gameResult === 'loss' && selectedCategory === 'fastest-loss'))
+                  ? submissionResult.rank : undefined
+              )}
               </div>
             </div>
 
@@ -450,7 +536,12 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
               </h4>
               {/* Multiplayer Entry List */}
               <div id="leaderboard-multiplayer-list" className="flex-1 min-h-0 overflow-y-auto" style={{ scrollbarGutter: 'stable' }}>
-                {renderLeaderboardList(currentBoards.multiplayer, 'multiplayer')}
+                {renderLeaderboardList(currentBoards.multiplayer, 'multiplayer',
+                submissionResult?.isTop100 && submissionResult.gameMode === 'multiplayer' &&
+                ((submissionResult.gameResult === 'win' && selectedCategory === 'fastest-win') ||
+                 (submissionResult.gameResult === 'loss' && selectedCategory === 'fastest-loss'))
+                  ? submissionResult.rank : undefined
+              )}
               </div>
             </div>
           </div>
