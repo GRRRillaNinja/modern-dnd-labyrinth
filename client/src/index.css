@@ -167,7 +167,7 @@
   div[id^="leaderboard-solo-entry-"],
   div[id^="leaderboard-multiplayer-entry-"] {
     padding: 8px 6px !important;
-    line-height: 0.5rem !important;
+    line-height: 1.2 !important;
   }
 
   /* Top row: evenly distributed */
@@ -177,11 +177,10 @@
     gap: 6px !important;
     flex-wrap: nowrap !important;
     margin-bottom: 0 !important;
-    line-height: 0.5rem !important;
   }
 
   div[id$="-top"] span {
-    line-height: 0.5rem !important;
+    line-height: 1.2 !important;
   }
 
   /* Rank: larger and more prominent */
@@ -220,18 +219,18 @@
   div[id$="-stats"] {
     display: flex !important;
     gap: 8px !important;
-    margin-top: 4px !important;
+    margin-top: 2px !important;
     margin-bottom: 0 !important;
     margin-left: 0 !important;
     padding-top: 0 !important;
     font-size: 0.875rem !important;
     flex-wrap: wrap !important;
     justify-content: flex-start !important;
-    line-height: 0.5rem !important;
+    line-height: 1.2 !important;
   }
 
   div[id$="-stats"] span {
-    line-height: 0.5rem !important;
+    line-height: 1.2 !important;
   }
 
   /* Individual metrics with distinct colors */
