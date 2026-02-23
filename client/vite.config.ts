@@ -18,5 +18,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false, // Disabled for production to protect source code
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react':   ['react', 'react-dom'],
+          'vendor-motion':  ['framer-motion'],
+          'vendor-supabase': ['@supabase/supabase-js'],
+          'vendor-misc':    ['howler', 'zustand', 'socket.io-client'],
+        },
+      },
+    },
   },
 });
