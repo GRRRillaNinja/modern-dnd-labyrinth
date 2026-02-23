@@ -143,11 +143,11 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
             id={`leaderboard-${listId}-entry-${index}`}
             initial={{ opacity: 0, x: -20 }}
             animate={isPlayerEntry
-              ? { opacity: 1, x: 0, scale: [1, 1.02, 1] }
+              ? { opacity: 1, x: 0, boxShadow: ['0 0 10px rgba(16, 185, 129, 0.4)', '0 0 22px rgba(16, 185, 129, 0.85)', '0 0 10px rgba(16, 185, 129, 0.4)'] }
               : { opacity: 1, x: 0 }
             }
             transition={isPlayerEntry
-              ? { delay: index * 0.05, scale: { repeat: Infinity, duration: 1.5, ease: 'easeInOut' } }
+              ? { delay: index * 0.05, boxShadow: { repeat: Infinity, duration: 1.5, ease: 'easeInOut' } }
               : { delay: index * 0.05 }
             }
             className={`
@@ -157,7 +157,6 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
             style={isPlayerEntry ? {
               background: 'linear-gradient(135deg, rgba(6, 78, 59, 0.5) 0%, rgba(4, 120, 87, 0.3) 50%, rgba(6, 78, 59, 0.5) 100%)',
               border: '2px solid #10b981',
-              boxShadow: '0 0 16px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(16, 185, 129, 0.2)',
             } : index === 0 ? {
               background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.25) 0%, rgba(218, 165, 32, 0.15) 50%, rgba(184, 134, 11, 0.25) 100%)',
               border: '2px solid #b8860b',
