@@ -69,7 +69,8 @@
       "mcp__claude_ai_Supabase__execute_sql",
       "mcp__claude_ai_Supabase__apply_migration",
       "mcp__claude_ai_Supabase__get_logs",
-      "Bash(/c/Python313/python.exe:*)"
+      "Bash(/c/Python313/python.exe:*)",
+      "mcp__claude_ai_Vercel__deploy_to_vercel"
     ]
   },
   "outputStyle": "default"
