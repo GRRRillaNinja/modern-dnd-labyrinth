@@ -319,6 +319,22 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
       </motion.div>
 
       {/* Walls - Brick texture */}
+      {/* North wall */}
+      {paths[Direction.North] === PathType.Wall && row === 0 && isWallDiscovered(Direction.North) && (
+        <motion.div
+          id={`chamber-${row}-${col}-wall-north`}
+          initial={{ opacity: 0, scaleY: 0 }}
+          animate={{ opacity: 1, scaleY: 1 }}
+          className="absolute -top-1 left-0 right-0 h-2 rounded-sm"
+          style={{
+            backgroundImage: 'url(/textures/brick-wall.png)',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'repeat-x',
+            boxShadow: '0 -2px 4px rgba(0,0,0,0.6)',
+          }}
+        />
+      )}
+
       {/* South wall */}
       {paths[Direction.South] === PathType.Wall && row < maxIdx && isWallDiscovered(Direction.South) && (
         <motion.div
@@ -331,6 +347,22 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
             backgroundSize: 'cover',
             backgroundRepeat: 'repeat-x',
             boxShadow: '0 2px 4px rgba(0,0,0,0.6)',
+          }}
+        />
+      )}
+
+      {/* West wall */}
+      {paths[Direction.West] === PathType.Wall && col === 0 && isWallDiscovered(Direction.West) && (
+        <motion.div
+          id={`chamber-${row}-${col}-wall-west`}
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          className="absolute -left-1 top-0 bottom-0 w-2 rounded-sm"
+          style={{
+            backgroundImage: 'url(/textures/brick-wall-v.png)',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'repeat-y',
+            boxShadow: '-2px 0 4px rgba(0,0,0,0.6)',
           }}
         />
       )}
