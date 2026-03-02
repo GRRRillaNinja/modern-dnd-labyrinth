@@ -149,9 +149,9 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
 
         {/* D-Pad Movement Control - For mouse/touch players on larger dungeons */}
         {(gameState.state === GameState.WarriorOneTurn || gameState.state === GameState.WarriorTwoTurn) && (
-          <div id={`right-sidebar-${v}-dpad-container`} className="mt-4 lg:mt-3">
+          <div id={`right-sidebar-${v}-dpad-container`} className="mt-4 lg:mt-3 px-2">
             <div id={`right-sidebar-${v}-dpad-label`} className="text-center text-xs text-gray-400 mb-2 lg:mb-1">Movement</div>
-            <div id={`right-sidebar-${v}-dpad`} className="flex flex-col items-center gap-1 lg:gap-0.5" style={{ width: '100px', margin: '0 auto' }}>
+            <div id={`right-sidebar-${v}-dpad`} className="flex flex-col items-center gap-1 lg:gap-0.5 w-fit mx-auto">
               {/* Up Button */}
               <button
                 id={`right-sidebar-${v}-dpad-up`}
