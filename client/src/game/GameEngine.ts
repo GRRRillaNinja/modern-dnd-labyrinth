@@ -254,11 +254,20 @@ export class GameEngine {
     // Mark this side as discovered
     const key = `${position[0]}-${position[1]}-${direction}`;
     this.gameState.discoveredWalls[key] = true;
-    
+
+    const dirNames = ['North', 'East', 'South', 'West'];
+    console.log(`🧱 Wall discovered at [${position[0]},${position[1]}] ${dirNames[direction]}`, {
+      position,
+      direction,
+      dirName: dirNames[direction],
+      key,
+      isBoundary: position[0] === 0 || position[1] === 0 || position[0] === this.gridSize - 1 || position[1] === this.gridSize - 1
+    });
+
     // Also mark the opposite side as discovered (same physical wall)
     const adjacentPos = this.getAdjacentPosition(position, direction);
     const oppositeDir = this.getOppositeDirection(direction);
-    
+
     if (adjacentPos) {
       const oppositeKey = `${adjacentPos[0]}-${adjacentPos[1]}-${oppositeDir}`;
       this.gameState.discoveredWalls[oppositeKey] = true;
