@@ -73,6 +73,7 @@ export class GameEngine {
       mode: GameMode.SinglePlayer,
       discoveredWalls: {},
       lockedDoors: {},
+      visitedTiles: {},
       dungeonSize: this.settings.dungeonSize,
     };
   }
@@ -172,6 +173,10 @@ export class GameEngine {
 
     this.gameState.warriors[warriorNumber].secretRoom = position;
     this.gameState.warriors[warriorNumber].position = position;
+
+    // Mark secret room as visited
+    const visitKey = `${position[0]},${position[1]}`;
+    this.gameState.visitedTiles[visitKey] = true;
 
     // Move to next state
     if (this.gameState.state === GameState.WarriorOneSelectRoom) {
@@ -379,6 +384,11 @@ export class GameEngine {
 
     // Move successful
     warrior.position = position;
+
+    // Mark tile as visited
+    const visitKey = `${position[0]},${position[1]}`;
+    this.gameState.visitedTiles[visitKey] = true;
+
     this.emitEvent({ type: 'WARRIOR_MOVED', warriorNumber, position });
 
     // Check if warrior moved ONTO dragon's tile (suicide move)

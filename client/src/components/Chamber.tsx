@@ -47,6 +47,12 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
     return gameState.lockedDoors[key] || false;
   };
 
+  // Check if this tile has been visited
+  const isTileVisited = (): boolean => {
+    const key = `${row},${col}`;
+    return gameState.visitedTiles[key] || false;
+  };
+
   // Check if this is a secret room
   const isWarrior0Secret =
     gameState.warriors[0].secretRoom &&
@@ -124,6 +130,13 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
               isWestEdge ? 'inset 3px 0 6px rgba(139, 92, 246, 0.5)' : '',
               isEastEdge ? 'inset -3px 0 6px rgba(139, 92, 246, 0.5)' : '',
             ].filter(Boolean).join(', '),
+          }} />
+        )}
+
+        {/* Visited tile tint (subtle darkening) */}
+        {isTileVisited() && (
+          <div id={`chamber-${row}-${col}-visited`} className="absolute inset-0 rounded-sm pointer-events-none" style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.15)',
           }} />
         )}
 

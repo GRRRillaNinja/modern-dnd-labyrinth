@@ -103,6 +103,7 @@ export interface GameStateData {
   mode: GameMode;
   discoveredWalls: DiscoveredWalls;
   lockedDoors: LockedDoors;
+  visitedTiles: VisitedTiles;
   dungeonSize: number;
 }
 
@@ -120,6 +121,11 @@ export interface DiscoveredWalls {
 // Locked doors tracking
 export interface LockedDoors {
   [key: string]: boolean; // Format: "row-col-direction"
+}
+
+// Visited tiles tracking
+export interface VisitedTiles {
+  [key: string]: boolean; // Format: "row,col"
 }
 
 // Move action
