@@ -102,7 +102,7 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
 
   return (
     /* Root wrapper div */
-    <div id={`chamber-${row}-${col}-root`} className="relative w-full h-full">
+    <div id={`chamber-${row}-${col}-root`} className="relative w-full h-full" style={{ overflow: 'visible' }}>
       {/* Chamber cell - Stone floor tile */}
       <motion.div
         id={`chamber-${row}-${col}-floor`}
