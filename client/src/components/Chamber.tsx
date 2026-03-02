@@ -332,8 +332,8 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
       </motion.div>
 
       {/* Walls - Brick texture */}
-      {/* North wall */}
-      {paths[Direction.North] === PathType.Wall && row === 0 && isWallDiscovered(Direction.North) && (
+      {/* North wall - renders on all chambers so walls at viewport edges are visible */}
+      {paths[Direction.North] === PathType.Wall && isWallDiscovered(Direction.North) && (
         <motion.div
           id={`chamber-${row}-${col}-wall-north`}
           initial={{ opacity: 0, scaleY: 0 }}
@@ -349,7 +349,7 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
       )}
 
       {/* South wall */}
-      {paths[Direction.South] === PathType.Wall && row < maxIdx && isWallDiscovered(Direction.South) && (
+      {paths[Direction.South] === PathType.Wall && isWallDiscovered(Direction.South) && (
         <motion.div
           id={`chamber-${row}-${col}-wall-south`}
           initial={{ opacity: 0, scaleY: 0 }}
@@ -364,8 +364,8 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
         />
       )}
 
-      {/* West wall */}
-      {paths[Direction.West] === PathType.Wall && col === 0 && isWallDiscovered(Direction.West) && (
+      {/* West wall - renders on all chambers so walls at viewport edges are visible */}
+      {paths[Direction.West] === PathType.Wall && isWallDiscovered(Direction.West) && (
         <motion.div
           id={`chamber-${row}-${col}-wall-west`}
           initial={{ opacity: 0, scaleX: 0 }}
@@ -381,7 +381,7 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
       )}
 
       {/* East wall */}
-      {paths[Direction.East] === PathType.Wall && col < maxIdx && isWallDiscovered(Direction.East) && (
+      {paths[Direction.East] === PathType.Wall && isWallDiscovered(Direction.East) && (
         <motion.div
           id={`chamber-${row}-${col}-wall-east`}
           initial={{ opacity: 0, scaleX: 0 }}
@@ -397,11 +397,11 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
       )}
 
       {/* Doors (level 2) - Locked doors are solid, unlocked doors have gap */}
-      {/* Only render South and East doors to avoid duplicates with adjacent chambers */}
+      {/* Render all 4 sides so doors at viewport edges are visible */}
       {gameState.level === 2 && (
         <>
           {/* South Door - horizontal */}
-          {paths[Direction.South] === PathType.Door && row < maxIdx && (
+          {paths[Direction.South] === PathType.Door && (
             <>
               {/* South door left wall segment */}
               <div
@@ -464,7 +464,7 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
             </>
           )}
           {/* East Door - vertical */}
-          {paths[Direction.East] === PathType.Door && col < maxIdx && (
+          {paths[Direction.East] === PathType.Door && (
             <>
               {/* East door top wall segment */}
               <div
@@ -522,6 +522,120 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
                   backgroundSize: 'cover',
                   backgroundRepeat: 'repeat-y',
                   boxShadow: '2px 0 4px rgba(0,0,0,0.6)',
+                }}
+              />
+            </>
+          )}
+          {/* North Door - horizontal (mirror of South) */}
+          {paths[Direction.North] === PathType.Door && (
+            <>
+              <div
+                id={`chamber-${row}-${col}-door-north-wall-left`}
+                className="absolute -top-1 left-0 h-2 rounded-sm"
+                style={{
+                  width: '30%',
+                  backgroundImage: 'url(/textures/brick-wall.png)',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'repeat-x',
+                  boxShadow: '0 -2px 4px rgba(0,0,0,0.6)',
+                }}
+              />
+              {isDoorLocked(Direction.North) ? (
+                <div
+                  id={`chamber-${row}-${col}-door-north-locked`}
+                  className="absolute -top-1 left-[30%] h-2 rounded-sm"
+                  style={{
+                    width: '40%',
+                    background: 'linear-gradient(0deg, #b8860b 0%, #8B6914 50%, #6B4f0a 100%)',
+                    boxShadow: '0 -2px 4px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(200,180,100,0.3)',
+                  }}
+                />
+              ) : (
+                <>
+                  <div
+                    id={`chamber-${row}-${col}-door-north-open-left`}
+                    className="absolute -top-1 left-[30%] h-2 rounded-sm"
+                    style={{
+                      width: '8%',
+                      background: 'linear-gradient(0deg, #b8860b 0%, #8B6914 100%)',
+                    }}
+                  />
+                  <div
+                    id={`chamber-${row}-${col}-door-north-open-right`}
+                    className="absolute -top-1 left-[62%] h-2 rounded-sm"
+                    style={{
+                      width: '8%',
+                      background: 'linear-gradient(0deg, #b8860b 0%, #8B6914 100%)',
+                    }}
+                  />
+                </>
+              )}
+              <div
+                id={`chamber-${row}-${col}-door-north-wall-right`}
+                className="absolute -top-1 right-0 h-2 rounded-sm"
+                style={{
+                  width: '30%',
+                  backgroundImage: 'url(/textures/brick-wall.png)',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'repeat-x',
+                  boxShadow: '0 -2px 4px rgba(0,0,0,0.6)',
+                }}
+              />
+            </>
+          )}
+          {/* West Door - vertical (mirror of East) */}
+          {paths[Direction.West] === PathType.Door && (
+            <>
+              <div
+                id={`chamber-${row}-${col}-door-west-wall-top`}
+                className="absolute -left-1 top-0 w-2 rounded-sm"
+                style={{
+                  height: '30%',
+                  backgroundImage: 'url(/textures/brick-wall-v.png)',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'repeat-y',
+                  boxShadow: '-2px 0 4px rgba(0,0,0,0.6)',
+                }}
+              />
+              {isDoorLocked(Direction.West) ? (
+                <div
+                  id={`chamber-${row}-${col}-door-west-locked`}
+                  className="absolute -left-1 top-[30%] w-2 rounded-sm"
+                  style={{
+                    height: '40%',
+                    background: 'linear-gradient(90deg, #b8860b 0%, #8B6914 50%, #6B4f0a 100%)',
+                    boxShadow: '-2px 0 4px rgba(0,0,0,0.5), inset 1px 0 0 rgba(200,180,100,0.3)',
+                  }}
+                />
+              ) : (
+                <>
+                  <div
+                    id={`chamber-${row}-${col}-door-west-open-top`}
+                    className="absolute -left-1 top-[30%] w-2 rounded-sm"
+                    style={{
+                      height: '8%',
+                      background: 'linear-gradient(90deg, #b8860b 0%, #8B6914 100%)',
+                    }}
+                  />
+                  <div
+                    id={`chamber-${row}-${col}-door-west-open-bottom`}
+                    className="absolute -left-1 top-[62%] w-2 rounded-sm"
+                    style={{
+                      height: '8%',
+                      background: 'linear-gradient(90deg, #b8860b 0%, #8B6914 100%)',
+                    }}
+                  />
+                </>
+              )}
+              <div
+                id={`chamber-${row}-${col}-door-west-wall-bottom`}
+                className="absolute -left-1 bottom-0 w-2 rounded-sm"
+                style={{
+                  height: '30%',
+                  backgroundImage: 'url(/textures/brick-wall-v.png)',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'repeat-y',
+                  boxShadow: '-2px 0 4px rgba(0,0,0,0.6)',
                 }}
               />
             </>
