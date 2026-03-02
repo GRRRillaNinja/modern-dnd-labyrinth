@@ -883,6 +883,9 @@ export class GameEngine {
    * Set treasure room location
    */
   private setTreasureRoom(): void {
+    // Scale treasure room distance based on dungeon size (maintain 3/8 ratio from 8x8 default)
+    const scaledTreasureDistance = Math.round(this.gridSize * (3 / 8));
+
     const opts: Position[] = [];
 
     for (let row = 0; row < this.gridSize; row++) {
@@ -890,12 +893,12 @@ export class GameEngine {
         const pos: Position = [row, col];
         const validForWarrior0 =
           this.getDistance(pos, this.gameState.warriors[0].secretRoom!) >
-          this.settings.treasureRoomDistance;
+          scaledTreasureDistance;
 
         const validForWarrior1 =
           this.gameState.numberOfWarriors === 1 ||
           this.getDistance(pos, this.gameState.warriors[1].secretRoom!) >
-            this.settings.treasureRoomDistance;
+            scaledTreasureDistance;
 
         if (validForWarrior0 && validForWarrior1) {
           opts.push(pos);
