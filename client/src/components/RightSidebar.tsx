@@ -11,6 +11,7 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
     skipWarriorTwo,
     isDragonTurn,
     isCPUMode,
+    moveWarrior,
   } = useGameStore();
 
   // Variant suffix for unique IDs when component is rendered multiple times
@@ -64,6 +65,39 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
     return 'Next Turn';
   };
 
+  const handleDpadMove = (direction: 'up' | 'down' | 'left' | 'right') => {
+    if (!gameState) return;
+    const state = gameState.state;
+    const currentWarrior = state === GameState.WarriorOneTurn ? 0 : state === GameState.WarriorTwoTurn ? 1 : -1;
+
+    if (currentWarrior === -1) return; // Not in a turn
+
+    const warrior = gameState.warriors[currentWarrior];
+    if (!warrior.position) return;
+
+    const [row, col] = warrior.position;
+    let newPos: [number, number] | null = null;
+
+    switch (direction) {
+      case 'up':
+        newPos = [row - 1, col];
+        break;
+      case 'down':
+        newPos = [row + 1, col];
+        break;
+      case 'left':
+        newPos = [row, col - 1];
+        break;
+      case 'right':
+        newPos = [row, col + 1];
+        break;
+    }
+
+    if (newPos && newPos[0] >= 0 && newPos[1] >= 0 && newPos[0] < gameState.dungeonSize && newPos[1] < gameState.dungeonSize) {
+      moveWarrior(currentWarrior, newPos);
+    }
+  };
+
   return (
     <div id={`right-sidebar-${v}-root`} className={`w-full flex-shrink-0 flex flex-col gap-2 lg:gap-4 ${!onlyControls && !onlySounds ? 'md:h-full md:overflow-hidden' : ''}`}>
       {/* Controls Panel */}
@@ -112,6 +146,77 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
             <span className="sm:hidden">Reset</span>
           </button>
         </div>
+
+        {/* D-Pad Movement Control - For mouse/touch players on larger dungeons */}
+        {(gameState.state === GameState.WarriorOneTurn || gameState.state === GameState.WarriorTwoTurn) && (
+          <div id={`right-sidebar-${v}-dpad-container`} className="mt-4 lg:mt-6">
+            <div id={`right-sidebar-${v}-dpad-label`} className="text-center text-xs text-gray-400 mb-2">Movement</div>
+            <div id={`right-sidebar-${v}-dpad`} className="flex flex-col items-center gap-1" style={{ width: '100px', margin: '0 auto' }}>
+              {/* Up Button */}
+              <button
+                id={`right-sidebar-${v}-dpad-up`}
+                onClick={() => handleDpadMove('up')}
+                disabled={isDragonTurn}
+                className="w-12 h-10 text-white rounded font-medieval transition-all disabled:opacity-50 active:translate-y-0.5"
+                style={{
+                  background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
+                  border: '2px solid #5a7be8',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+                }}
+              >
+                ↑
+              </button>
+
+              {/* Left, Down, Right Row */}
+              <div className="flex gap-1">
+                {/* Left Button */}
+                <button
+                  id={`right-sidebar-${v}-dpad-left`}
+                  onClick={() => handleDpadMove('left')}
+                  disabled={isDragonTurn}
+                  className="w-10 h-10 text-white rounded font-medieval transition-all disabled:opacity-50 active:translate-y-0.5"
+                  style={{
+                    background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
+                    border: '2px solid #5a7be8',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+                  }}
+                >
+                  ←
+                </button>
+
+                {/* Down Button */}
+                <button
+                  id={`right-sidebar-${v}-dpad-down`}
+                  onClick={() => handleDpadMove('down')}
+                  disabled={isDragonTurn}
+                  className="w-10 h-10 text-white rounded font-medieval transition-all disabled:opacity-50 active:translate-y-0.5"
+                  style={{
+                    background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
+                    border: '2px solid #5a7be8',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+                  }}
+                >
+                  ↓
+                </button>
+
+                {/* Right Button */}
+                <button
+                  id={`right-sidebar-${v}-dpad-right`}
+                  onClick={() => handleDpadMove('right')}
+                  disabled={isDragonTurn}
+                  className="w-10 h-10 text-white rounded font-medieval transition-all disabled:opacity-50 active:translate-y-0.5"
+                  style={{
+                    background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
+                    border: '2px solid #5a7be8',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+                  }}
+                >
+                  →
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Warrior Info - Compact on Mobile, Full on Desktop */}
         {(gameState.state === GameState.WarriorOneTurn || gameState.state === GameState.WarriorTwoTurn) && (
