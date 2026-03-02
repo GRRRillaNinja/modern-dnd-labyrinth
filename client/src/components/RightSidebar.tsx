@@ -147,77 +147,6 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
           </button>
         </div>
 
-        {/* D-Pad Movement Control - For mouse/touch players on larger dungeons */}
-        {(gameState.state === GameState.WarriorOneTurn || gameState.state === GameState.WarriorTwoTurn) && (
-          <div id={`right-sidebar-${v}-dpad-container`} className="mt-4 lg:mt-3 px-2">
-            <div id={`right-sidebar-${v}-dpad-label`} className="text-center text-xs text-gray-400 mb-2 lg:mb-1">Movement</div>
-            <div id={`right-sidebar-${v}-dpad`} className="flex flex-col items-center gap-1 lg:gap-0.5 w-fit mx-auto">
-              {/* Up Button */}
-              <button
-                id={`right-sidebar-${v}-dpad-up`}
-                onClick={() => handleDpadMove('up')}
-                disabled={isDragonTurn}
-                className="w-12 h-10 lg:w-6 lg:h-5 text-white rounded font-medieval text-lg lg:text-sm transition-all disabled:opacity-50 active:translate-y-0.5"
-                style={{
-                  background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
-                  border: '2px solid #5a7be8',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
-                }}
-              >
-                ↑
-              </button>
-
-              {/* Left, Down, Right Row */}
-              <div className="flex gap-1 lg:gap-0.5">
-                {/* Left Button */}
-                <button
-                  id={`right-sidebar-${v}-dpad-left`}
-                  onClick={() => handleDpadMove('left')}
-                  disabled={isDragonTurn}
-                  className="w-10 h-10 lg:w-5 lg:h-5 text-white rounded font-medieval text-lg lg:text-sm transition-all disabled:opacity-50 active:translate-y-0.5"
-                  style={{
-                    background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
-                    border: '2px solid #5a7be8',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
-                  }}
-                >
-                  ←
-                </button>
-
-                {/* Down Button */}
-                <button
-                  id={`right-sidebar-${v}-dpad-down`}
-                  onClick={() => handleDpadMove('down')}
-                  disabled={isDragonTurn}
-                  className="w-10 h-10 lg:w-5 lg:h-5 text-white rounded font-medieval text-lg lg:text-sm transition-all disabled:opacity-50 active:translate-y-0.5"
-                  style={{
-                    background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
-                    border: '2px solid #5a7be8',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
-                  }}
-                >
-                  ↓
-                </button>
-
-                {/* Right Button */}
-                <button
-                  id={`right-sidebar-${v}-dpad-right`}
-                  onClick={() => handleDpadMove('right')}
-                  disabled={isDragonTurn}
-                  className="w-10 h-10 lg:w-5 lg:h-5 text-white rounded font-medieval text-lg lg:text-sm transition-all disabled:opacity-50 active:translate-y-0.5"
-                  style={{
-                    background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
-                    border: '2px solid #5a7be8',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
-                  }}
-                >
-                  →
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Warrior Info - Compact on Mobile, Full on Desktop */}
         {(gameState.state === GameState.WarriorOneTurn || gameState.state === GameState.WarriorTwoTurn) && (
           <div id={`right-sidebar-${v}-warrior-info`} className="mt-4 lg:mt-6 pt-3 lg:pt-4 border-t border-stone-700">
@@ -334,6 +263,79 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
         )}
         </div>
       </div>
+      )}
+
+      {/* D-Pad Movement Control - Separate from controls panel so it's always visible */}
+      {(gameState.state === GameState.WarriorOneTurn || gameState.state === GameState.WarriorTwoTurn) && !onlySounds && (
+        <div id={`right-sidebar-${v}-dpad-standalone`} className="dungeon-panel">
+          <div id={`right-sidebar-${v}-dpad-standalone-content`} className="dungeon-content">
+            <div id={`right-sidebar-${v}-dpad-label-standalone`} className="text-center text-xs text-gray-400 mb-2 lg:mb-1">Movement</div>
+            <div id={`right-sidebar-${v}-dpad-standalone`} className="flex flex-col items-center gap-1 lg:gap-0.5 w-fit mx-auto">
+              {/* Up Button */}
+              <button
+                id={`right-sidebar-${v}-dpad-up-standalone`}
+                onClick={() => handleDpadMove('up')}
+                disabled={isDragonTurn}
+                className="w-12 h-10 lg:w-6 lg:h-5 text-white rounded font-medieval text-lg lg:text-sm transition-all disabled:opacity-50 active:translate-y-0.5"
+                style={{
+                  background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
+                  border: '2px solid #5a7be8',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+                }}
+              >
+                ↑
+              </button>
+
+              {/* Left, Down, Right Row */}
+              <div className="flex gap-1 lg:gap-0.5">
+                {/* Left Button */}
+                <button
+                  id={`right-sidebar-${v}-dpad-left-standalone`}
+                  onClick={() => handleDpadMove('left')}
+                  disabled={isDragonTurn}
+                  className="w-10 h-10 lg:w-5 lg:h-5 text-white rounded font-medieval text-lg lg:text-sm transition-all disabled:opacity-50 active:translate-y-0.5"
+                  style={{
+                    background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
+                    border: '2px solid #5a7be8',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+                  }}
+                >
+                  ←
+                </button>
+
+                {/* Down Button */}
+                <button
+                  id={`right-sidebar-${v}-dpad-down-standalone`}
+                  onClick={() => handleDpadMove('down')}
+                  disabled={isDragonTurn}
+                  className="w-10 h-10 lg:w-5 lg:h-5 text-white rounded font-medieval text-lg lg:text-sm transition-all disabled:opacity-50 active:translate-y-0.5"
+                  style={{
+                    background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
+                    border: '2px solid #5a7be8',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+                  }}
+                >
+                  ↓
+                </button>
+
+                {/* Right Button */}
+                <button
+                  id={`right-sidebar-${v}-dpad-right-standalone`}
+                  onClick={() => handleDpadMove('right')}
+                  disabled={isDragonTurn}
+                  className="w-10 h-10 lg:w-5 lg:h-5 text-white rounded font-medieval text-lg lg:text-sm transition-all disabled:opacity-50 active:translate-y-0.5"
+                  style={{
+                    background: 'linear-gradient(180deg, #4169E1 0%, #3456d0 50%, #2a46b8 100%)',
+                    border: '2px solid #5a7be8',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
+                  }}
+                >
+                  →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Sound Preview Panel */}
