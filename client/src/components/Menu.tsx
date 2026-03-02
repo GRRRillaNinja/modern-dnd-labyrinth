@@ -38,7 +38,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
 
   // Root wrapper
   return (
-    <div id="menu-root" className="h-screen flex items-center justify-center p-2 md:p-4 overflow-hidden">
+    <div id="menu-root" className="h-screen flex items-center justify-center p-2 md:p-4 overflow-hidden" style={{ maxHeight: '100vh' }}>
       {/* Outer animated wrapper */}
       <motion.div
         id="menu-container"
@@ -52,30 +52,25 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-center mb-3 lg:mb-4"
+          className="text-center mb-2"
         >
           {/* Main h1 title */}
-          <h1 id="menu-title-main" className="text-4xl md:text-6xl font-medieval text-red-500 mb-2 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+          <h1 id="menu-title-main" className="text-4xl md:text-5xl font-medieval text-red-500 mb-1 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">
             DELVE & DASH
           </h1>
           {/* Subtitle h2 */}
-          <h2 id="menu-title-subtitle" className="text-xl md:text-2xl font-medieval text-amber-500">
+          <h2 id="menu-title-subtitle" className="text-lg md:text-xl font-medieval text-amber-500">
             The Dungeon Crawler
           </h2>
-          {/* Attribution div */}
-          <div id="menu-title-attribution" className="mt-2 text-gray-400 text-xs">
-            Heavily inspired by {/* Attribution link (Bob Whitley) */}<a id="menu-title-attribution-link" href="https://github.com/bobwhitley/dndlabyrinth" className="text-amber-500 hover:text-amber-400 text-xs underline transition-colors">Bob Whitley's classic dungeon crawler</a>.
-          </div>
-          {/* Manual link wrapper */}
-          <div id="menu-title-manual-wrapper" className="mt-1">
-            {/* Manual link anchor */}
+          {/* Attribution + Manual on same line */}
+          <div id="menu-title-attribution" className="mt-1 text-gray-400 text-xs">
+            Inspired by <a id="menu-title-attribution-link" href="https://github.com/bobwhitley/dndlabyrinth" className="text-amber-500 hover:text-amber-400 text-xs underline transition-colors">Bob Whitley's classic</a>
+            <span className="mx-2 text-stone-600">|</span>
             <a id="menu-title-manual-link" href="/game-manual.html"
               target="_blank"
               rel="noopener noreferrer"
               className="text-amber-500 hover:text-amber-400 text-xs underline transition-colors"
-            >
-              View Game Manual
-            </a>
+            >Game Manual</a>
           </div>
         </motion.div>
 
@@ -88,14 +83,14 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           className="dungeon-panel shadow-2xl flex justify-center max-w-lg mx-auto"
         >
           {/* Quest content (dungeon-content) */}
-          <div id="menu-quest-content" className="dungeon-content w-auto px-8 py-4 rounded-lg">
+          <div id="menu-quest-content" className="dungeon-content w-auto px-6 py-3 rounded-lg">
             {/* "Choose Your Quest" heading */}
-            <h3 id="menu-quest-title" className="text-xl font-medieval text-center text-amber-500 mb-4">
+            <h3 id="menu-quest-title" className="text-lg font-medieval text-center text-amber-500 mb-3">
               Choose Your Quest
             </h3>
 
           {/* Player count section */}
-          <div id="menu-players-section" className="mb-4">
+          <div id="menu-players-section" className="mb-3">
             {/* Player count label */}
             <label id="menu-players-label" className="block text-gray-300 mb-2 text-center text-sm">
               Number of Warriors
@@ -107,7 +102,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
                 id="menu-players-solo-btn"
                 onClick={() => setPlayers(1)}
                 className={`
-                  px-4 sm:px-6 py-3 rounded-lg border-2 transition-all font-medieval text-sm sm:text-base
+                  px-4 sm:px-5 py-2 rounded-lg border-2 transition-all font-medieval text-sm
                   ${
                     players === 1
                       ? 'bg-red-900 border-red-700 text-white shadow-lg shadow-red-900/50'
@@ -122,7 +117,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
                 id="menu-players-cpu-btn"
                 onClick={() => setPlayers(3)}
                 className={`
-                  px-4 sm:px-6 py-3 rounded-lg border-2 transition-all font-medieval text-sm sm:text-base
+                  px-4 sm:px-5 py-2 rounded-lg border-2 transition-all font-medieval text-sm
                   ${
                     players === 3
                       ? 'bg-red-900 border-red-700 text-white shadow-lg shadow-red-900/50'
@@ -137,7 +132,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
                 id="menu-players-two-btn"
                 onClick={() => setPlayers(2)}
                 className={`
-                  px-4 sm:px-6 py-3 rounded-lg border-2 transition-all font-medieval text-sm sm:text-base
+                  px-4 sm:px-5 py-2 rounded-lg border-2 transition-all font-medieval text-sm
                   ${
                     players === 2
                       ? 'bg-red-900 border-red-700 text-white shadow-lg shadow-red-900/50'
@@ -151,7 +146,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           </div>
 
           {/* Level section */}
-          <div id="menu-level-section" className="mb-4">
+          <div id="menu-level-section" className="mb-3">
             {/* Level label */}
             <label id="menu-level-label" className="block text-gray-300 mb-2 text-center text-sm">
               Difficulty Level
@@ -163,7 +158,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
                 id="menu-level-1-btn"
                 onClick={() => setLevel(1)}
                 className={`
-                  px-4 sm:px-6 py-3 rounded-lg border-2 transition-all font-medieval text-sm sm:text-base flex-1 sm:flex-none
+                  px-4 sm:px-5 py-2 rounded-lg border-2 transition-all font-medieval text-sm flex-1 sm:flex-none
                   ${
                     level === 1
                       ? 'bg-amber-900 border-amber-700 text-white shadow-lg shadow-amber-900/50'
@@ -179,7 +174,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
                 id="menu-level-2-btn"
                 onClick={() => setLevel(2)}
                 className={`
-                  px-4 sm:px-6 py-3 rounded-lg border-2 transition-all font-medieval text-sm sm:text-base flex-1 sm:flex-none
+                  px-4 sm:px-5 py-2 rounded-lg border-2 transition-all font-medieval text-sm flex-1 sm:flex-none
                   ${
                     level === 2
                       ? 'bg-amber-900 border-amber-700 text-white shadow-lg shadow-amber-900/50'
@@ -194,7 +189,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           </div>
 
           {/* Dungeon size section */}
-          <div id="menu-dungeon-size-section" className="mb-4">
+          <div id="menu-dungeon-size-section" className="mb-3">
             <label id="menu-dungeon-size-label" className="block text-gray-300 mb-2 text-center text-sm">
               Dungeon Size: <span className="text-amber-400 font-medieval">{dungeonSize}x{dungeonSize}</span>
             </label>
@@ -220,14 +215,14 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           </div>
 
           {/* Start button wrapper */}
-          <div id="menu-start-wrapper" className="text-center mb-3">
+          <div id="menu-start-wrapper" className="text-center mb-2">
             {/* Begin Adventure button */}
             <motion.button
               id="menu-start-btn"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={handleStartGame}
-              className="px-10 py-3 text-white rounded-lg font-medieval text-lg transition-all"
+              className="px-8 py-2.5 text-white rounded-lg font-medieval text-base transition-all"
               style={{
                 background: 'linear-gradient(180deg, #7a1f1f 0%, #5c1818 50%, #3d1010 100%)',
                 border: '3px solid #8f2828',
@@ -239,7 +234,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           </div>
 
           {/* Leaderboard button wrapper */}
-          <div id="menu-leaderboard-wrapper" className="text-center mb-3">
+          <div id="menu-leaderboard-wrapper" className="text-center mb-2">
             {/* View Leaderboards button */}
             <button
               id="menu-leaderboard-btn"
@@ -256,13 +251,13 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           </div>
 
           {/* Instructions section */}
-          <div id="menu-instructions-section" className="pt-3 border-t border-stone-700">
+          <div id="menu-instructions-section" className="pt-2 border-t border-stone-700">
             {/* Instructions title */}
-            <h4 id="menu-instructions-title" className="text-amber-500 font-medieval mb-2 text-center text-sm">
+            <h4 id="menu-instructions-title" className="text-amber-500 font-medieval mb-1 text-center text-xs">
               How to Play
             </h4>
             {/* Instructions list */}
-            <ul id="menu-instructions-list" className="text-gray-400 text-xs space-y-1 text-center list-none">
+            <ul id="menu-instructions-list" className="text-gray-400 text-xs space-y-0.5 text-center list-none">
               <li>• Pick your Waystone location (secret safe room) to start</li>
               <li>• Navigate the labyrinth to find the dragon's treasure</li>
               <li>• Dragon wakes when you get within 3 tiles - avoid it!</li>
@@ -288,9 +283,9 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="mt-2 text-center"
+          className="mt-1 text-center"
         >
-          <p className="text-gray-500 text-xs mb-2">Share the adventure!</p>
+          <p className="text-gray-500 text-xs mb-1">Share the adventure!</p>
           <div id="menu-footer-share" className="flex justify-center gap-2 flex-wrap">
             <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('🐉 Delve & Dash - hunt treasure and flee a dragon! delvedash.com')}`}
               target="_blank" rel="noopener noreferrer"

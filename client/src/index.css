@@ -8,6 +8,7 @@
   body {
     @apply text-gray-300;
     font-family: 'Arial', sans-serif;
+    overflow: hidden;
     background-color: #0d0b09;
     background-image:
       /* Vignette overlay - darker edges */
@@ -32,15 +33,32 @@
 /* Dungeon panel frame styling using border-image for proper scaling */
 /* Mobile portrait (<768px): compact borders */
 .dungeon-panel {
+  position: relative;
   background: transparent;
   border: 20px solid transparent;
   border-image: url('/textures/panel-frame.png') 80 fill / 20px / 0 stretch;
   border-radius: 0;
 }
 
+/* Frame overlay: renders the border frame ABOVE all content */
+.dungeon-panel::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border: 20px solid transparent;
+  border-image: url('/textures/panel-frame.png') 80 / 20px / 0 stretch;
+  pointer-events: none;
+  z-index: 10;
+}
+
 /* Tablet/landscape (768px+): compact borders for narrow sidebar */
 @media (min-width: 768px) {
   .dungeon-panel {
+    border-width: 14px;
+    border-image-width: 14px;
+  }
+  .dungeon-panel::after {
+    inset: -14px;
     border-width: 14px;
     border-image-width: 14px;
   }
@@ -52,13 +70,24 @@
     border-width: 40px;
     border-image-width: 40px;
   }
+  .dungeon-panel::after {
+    inset: -40px;
+    border-width: 40px;
+    border-image-width: 40px;
+  }
 }
 
 /* Semi-transparent content background for readability */
 .dungeon-content {
-  background: rgba(10, 8, 6, 0.6);
+  width: 100%;
   border-radius: 8px;
   padding: 12px;
+}
+
+/* Content stays below the frame overlay */
+.dungeon-panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 @media (min-width: 768px) {
@@ -71,6 +100,22 @@
   .dungeon-content {
     border-radius: 12px;
     padding: 20px;
+  }
+}
+
+/* Menu quest panel: reduced borders on desktop to fit viewport */
+@media (min-width: 1024px) {
+  #menu-quest-panel.dungeon-panel {
+    border-width: 24px;
+    border-image-width: 24px;
+  }
+  #menu-quest-panel.dungeon-panel::after {
+    inset: -24px;
+    border-width: 24px;
+    border-image-width: 24px;
+  }
+  #menu-quest-panel .dungeon-content {
+    padding: 14px 20px;
   }
 }
 
@@ -155,6 +200,12 @@
   /* Reduce dungeon-panel borders for more space */
   #leaderboard-solo-column.dungeon-panel,
   #leaderboard-multiplayer-column.dungeon-panel {
+    border-width: 12px !important;
+    border-image-width: 12px !important;
+  }
+  #leaderboard-solo-column.dungeon-panel::after,
+  #leaderboard-multiplayer-column.dungeon-panel::after {
+    inset: -12px !important;
     border-width: 12px !important;
     border-image-width: 12px !important;
   }
