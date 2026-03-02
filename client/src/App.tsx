@@ -124,8 +124,8 @@ function App() {
         {/* Layout Container */}
         <div id="app-layout" className="flex flex-col md:flex-row gap-2 sm:gap-4 md:h-full">
 
-          {/* Mobile portrait: Controls above board */}
-          <div id="app-mobile-controls" className="md:hidden order-1">
+          {/* Mobile portrait: Controls below board */}
+          <div id="app-mobile-controls" className="md:hidden order-3">
             <RightSidebar onlyControls />
           </div>
 
@@ -150,13 +150,13 @@ function App() {
             <RightSidebar />
           </div>
 
-          {/* Mobile portrait: Help below board */}
-          <div id="app-mobile-help" className="md:hidden order-3">
+          {/* Mobile portrait: Help below controls */}
+          <div id="app-mobile-help" className="md:hidden order-4">
             <HelpSidebar />
           </div>
 
           {/* Mobile portrait: Sound preview */}
-          <div id="app-mobile-sounds" className="md:hidden order-4">
+          <div id="app-mobile-sounds" className="md:hidden order-5">
             <RightSidebar onlySounds />
           </div>
         </div>

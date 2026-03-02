@@ -63,7 +63,13 @@
       "Bash(taskkill:*)",
       "Bash(npx vercel --prod)",
       "Bash(npx --yes playwright screenshot:*)",
-      "Bash(npx --yes @resvg/resvg-js-cli:*)"
+      "Bash(npx --yes @resvg/resvg-js-cli:*)",
+      "mcp__claude_ai_Supabase__list_projects",
+      "mcp__claude_ai_Supabase__get_advisors",
+      "mcp__claude_ai_Supabase__execute_sql",
+      "mcp__claude_ai_Supabase__apply_migration",
+      "mcp__claude_ai_Supabase__get_logs",
+      "Bash(/c/Python313/python.exe:*)"
     ]
   },
   "outputStyle": "default"
