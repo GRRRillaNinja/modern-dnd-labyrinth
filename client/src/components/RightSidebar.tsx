@@ -3,7 +3,7 @@ import { useGameStore } from '../store/gameStore';
 import { GameState, DragonState } from '@shared/types';
 import { audioService } from '../services/AudioService';
 
-export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boolean }> = ({ onlyControls, onlySounds }) => {
+export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boolean; onlyDpad?: boolean }> = ({ onlyControls, onlySounds, onlyDpad }) => {
   const {
     gameState,
     resetGame,
@@ -15,7 +15,7 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
   } = useGameStore();
 
   // Variant suffix for unique IDs when component is rendered multiple times
-  const v = onlyControls ? 'mobile-controls' : onlySounds ? 'mobile-sounds' : 'desktop';
+  const v = onlyControls ? 'mobile-controls' : onlyDpad ? 'mobile-dpad' : onlySounds ? 'mobile-sounds' : 'desktop';
   
   const sounds = [
     { id: 'defeat', name: 'Defeat', description: 'Warrior is defeated' },
@@ -265,8 +265,8 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
       </div>
       )}
 
-      {/* D-Pad Movement Control - Separate from controls panel so it's always visible */}
-      {(gameState.state === GameState.WarriorOneTurn || gameState.state === GameState.WarriorTwoTurn) && !onlySounds && (
+      {/* D-Pad Movement Control - Show when onlyDpad is true, or on desktop when not onlyControls/onlySounds */}
+      {(gameState.state === GameState.WarriorOneTurn || gameState.state === GameState.WarriorTwoTurn) && !onlySounds && (onlyDpad || (!onlyControls && !onlyDpad && !onlySounds)) && (
         <div id={`right-sidebar-${v}-dpad-standalone`} className="dungeon-panel">
           <div id={`right-sidebar-${v}-dpad-standalone-content`} className="dungeon-content">
             <div id={`right-sidebar-${v}-dpad-label-standalone`} className="text-center text-xs text-gray-400 mb-2 lg:mb-1">Movement</div>

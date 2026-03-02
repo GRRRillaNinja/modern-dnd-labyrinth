@@ -124,11 +124,6 @@ function App() {
         {/* Layout Container */}
         <div id="app-layout" className="flex flex-col md:flex-row gap-2 sm:gap-4 md:h-full">
 
-          {/* Mobile portrait: Controls below board */}
-          <div id="app-mobile-controls" className="md:hidden order-3">
-            <RightSidebar onlyControls />
-          </div>
-
           {/* Desktop: Help Sidebar (left column) */}
           <div id="app-help-sidebar-wrapper" className="hidden lg:block lg:w-80 lg:flex-shrink-0 lg:overflow-y-auto lg:order-1">
             <HelpSidebar />
@@ -137,6 +132,16 @@ function App() {
           {/* Board (always visible) */}
           <div id="app-board-wrapper" className="flex-1 order-2 md:order-1 lg:order-2 flex items-center justify-center" style={{ minHeight: '300px' }}>
             <Board />
+          </div>
+
+          {/* Mobile portrait: D-Pad directly below board */}
+          <div id="app-mobile-dpad" className="md:hidden order-3">
+            <RightSidebar onlyDpad />
+          </div>
+
+          {/* Mobile portrait: Controls below D-Pad */}
+          <div id="app-mobile-controls" className="md:hidden order-4">
+            <RightSidebar onlyControls />
           </div>
 
           {/* Tablet landscape: Combined sidebar (Controls + Help) */}
@@ -150,13 +155,13 @@ function App() {
             <RightSidebar />
           </div>
 
-          {/* Mobile portrait: Help below controls */}
-          <div id="app-mobile-help" className="md:hidden order-4">
+          {/* Mobile portrait: Help below D-Pad and controls */}
+          <div id="app-mobile-help" className="md:hidden order-5">
             <HelpSidebar />
           </div>
 
           {/* Mobile portrait: Sound preview */}
-          <div id="app-mobile-sounds" className="md:hidden order-5">
+          <div id="app-mobile-sounds" className="md:hidden order-6">
             <RightSidebar onlySounds />
           </div>
         </div>
