@@ -73,8 +73,8 @@ function App() {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const handleStartGame = (mode: GameMode, players: number, level: number) => {
-    initGame(mode, players, level);
+  const handleStartGame = (mode: GameMode, players: number, level: number, dungeonSize?: number) => {
+    initGame(mode, players, level, dungeonSize);
     setGameStarted(true);
   };
 

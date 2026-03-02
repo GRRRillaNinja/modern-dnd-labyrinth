@@ -13,6 +13,7 @@ export interface LeaderboardEntry {
   total_deaths?: number | null;
   walls_discovered_pct?: number | null;
   vs_cpu?: boolean | null;
+  dungeon_size?: number | null;
   created_at?: string;
 }
 
@@ -91,7 +92,8 @@ export class SupabaseService {
     totalMoves?: number,
     totalDeaths?: number,
     wallsDiscoveredPct?: number,
-    vsCpu?: boolean
+    vsCpu?: boolean,
+    dungeonSize?: number
   ): Promise<boolean> {
     if (!this.client) {
       console.warn('Cannot submit score: Supabase not configured');
@@ -110,6 +112,7 @@ export class SupabaseService {
         total_deaths: totalDeaths ?? null,
         walls_discovered_pct: wallsDiscoveredPct ?? null,
         vs_cpu: vsCpu ?? null,
+        dungeon_size: dungeonSize ?? null,
       };
 
       const { error } = await this.client

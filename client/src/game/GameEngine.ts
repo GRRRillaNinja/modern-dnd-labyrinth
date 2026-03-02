@@ -25,6 +25,10 @@ export class GameEngine {
     this.gameState = this.createInitialState();
   }
 
+  private get gridSize(): number {
+    return this.settings.dungeonSize;
+  }
+
   /** Structured one-line action log for debugging turn flow */
   private logAction(_actor: string, _action: string, _extra?: string): void {
     // Debug logging disabled for production
@@ -69,6 +73,7 @@ export class GameEngine {
       mode: GameMode.SinglePlayer,
       discoveredWalls: {},
       lockedDoors: {},
+      dungeonSize: this.settings.dungeonSize,
     };
   }
 
@@ -115,8 +120,8 @@ export class GameEngine {
     this.gameState.lockedDoors = {};
     
     // Go through all chambers and their doors
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
+    for (let row = 0; row < this.gridSize; row++) {
+      for (let col = 0; col < this.gridSize; col++) {
         const chamberPath = this.chamberPaths[row][col];
         
         // Check each direction for doors
@@ -260,14 +265,15 @@ export class GameEngine {
    */
   private getAdjacentPosition(position: Position, direction: Direction): Position | null {
     const [row, col] = position;
-    
+    const max = this.gridSize - 1;
+
     switch (direction) {
       case Direction.North:
         return row > 0 ? [row - 1, col] : null;
       case Direction.South:
-        return row < 7 ? [row + 1, col] : null;
+        return row < max ? [row + 1, col] : null;
       case Direction.East:
-        return col < 7 ? [row, col + 1] : null;
+        return col < max ? [row, col + 1] : null;
       case Direction.West:
         return col > 0 ? [row, col - 1] : null;
       default:
@@ -746,10 +752,10 @@ export class GameEngine {
   private getRandomRespawnPosition(): Position {
     const validPositions: Position[] = [];
     
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
+    for (let row = 0; row < this.gridSize; row++) {
+      for (let col = 0; col < this.gridSize; col++) {
         const pos: Position = [row, col];
-        
+
         // Skip if it's a secret room
         if (this.isSecretRoom(pos, 0) || this.isSecretRoom(pos, 1)) {
           continue;
@@ -869,8 +875,8 @@ export class GameEngine {
   private setTreasureRoom(): void {
     const opts: Position[] = [];
 
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
+    for (let row = 0; row < this.gridSize; row++) {
+      for (let col = 0; col < this.gridSize; col++) {
         const pos: Position = [row, col];
         const validForWarrior0 =
           this.getDistance(pos, this.gameState.warriors[0].secretRoom!) >
@@ -894,8 +900,8 @@ export class GameEngine {
     // Now find treasure room within 2 tiles of dragon (but not at dragon's position)
     const nearbyPositions: Position[] = [];
     
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
+    for (let row = 0; row < this.gridSize; row++) {
+      for (let col = 0; col < this.gridSize; col++) {
         const pos: Position = [row, col];
         const distanceToDragon = this.getDistance(pos, dragonPos);
         

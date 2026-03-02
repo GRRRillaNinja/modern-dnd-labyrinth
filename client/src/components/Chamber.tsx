@@ -26,6 +26,14 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
   isDragonTurn,
 }) => {
   const [row, col] = position;
+  const maxIdx = gameState.dungeonSize - 1;
+  const isLargerDungeon = gameState.dungeonSize > 8;
+
+  // Check if this chamber is on the dungeon boundary
+  const isNorthEdge = row === 0;
+  const isSouthEdge = row === maxIdx;
+  const isWestEdge = col === 0;
+  const isEastEdge = col === maxIdx;
 
   // Check if a wall has been discovered
   const isWallDiscovered = (dir: Direction): boolean => {
@@ -107,6 +115,18 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
         transition={{ duration: 0.15 }}
         onClick={isDragonTurn ? undefined : onClick}
       >
+        {/* Dungeon boundary edge glow (only on larger dungeons) */}
+        {isLargerDungeon && (isNorthEdge || isSouthEdge || isWestEdge || isEastEdge) && (
+          <div className="absolute inset-0 rounded-sm pointer-events-none" style={{
+            boxShadow: [
+              isNorthEdge ? 'inset 0 3px 6px rgba(139, 92, 246, 0.5)' : '',
+              isSouthEdge ? 'inset 0 -3px 6px rgba(139, 92, 246, 0.5)' : '',
+              isWestEdge ? 'inset 3px 0 6px rgba(139, 92, 246, 0.5)' : '',
+              isEastEdge ? 'inset -3px 0 6px rgba(139, 92, 246, 0.5)' : '',
+            ].filter(Boolean).join(', '),
+          }} />
+        )}
+
         {/* Secret room background for warrior 0 */}
         {isWarrior0Secret && (
           <div id={`chamber-${row}-${col}-secret-bg-w0`} className="absolute inset-0 rounded-sm overflow-hidden">
@@ -300,7 +320,7 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
 
       {/* Walls - Brick texture */}
       {/* South wall */}
-      {paths[Direction.South] === PathType.Wall && row < 7 && isWallDiscovered(Direction.South) && (
+      {paths[Direction.South] === PathType.Wall && row < maxIdx && isWallDiscovered(Direction.South) && (
         <motion.div
           id={`chamber-${row}-${col}-wall-south`}
           initial={{ opacity: 0, scaleY: 0 }}
@@ -316,7 +336,7 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
       )}
 
       {/* East wall */}
-      {paths[Direction.East] === PathType.Wall && col < 7 && isWallDiscovered(Direction.East) && (
+      {paths[Direction.East] === PathType.Wall && col < maxIdx && isWallDiscovered(Direction.East) && (
         <motion.div
           id={`chamber-${row}-${col}-wall-east`}
           initial={{ opacity: 0, scaleX: 0 }}
@@ -336,7 +356,7 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
       {gameState.level === 2 && (
         <>
           {/* South Door - horizontal */}
-          {paths[Direction.South] === PathType.Door && row < 7 && (
+          {paths[Direction.South] === PathType.Door && row < maxIdx && (
             <>
               {/* South door left wall segment */}
               <div
@@ -399,7 +419,7 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
             </>
           )}
           {/* East Door - vertical */}
-          {paths[Direction.East] === PathType.Door && col < 7 && (
+          {paths[Direction.East] === PathType.Door && col < maxIdx && (
             <>
               {/* East door top wall segment */}
               <div

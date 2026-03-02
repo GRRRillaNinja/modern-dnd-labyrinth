@@ -1,3 +1,6 @@
+// Viewport is always 8x8 tiles visually
+export const VIEWPORT_SIZE = 8;
+
 // Enums and Constants
 export enum Direction {
   North = 0,
@@ -58,6 +61,7 @@ export interface GameSettings {
   dragonWakeDistance: number;
   dragonVisibilityDistance: number;
   dragonFollows: number;
+  dungeonSize: number;
 }
 
 // Warrior state
@@ -99,6 +103,7 @@ export interface GameStateData {
   mode: GameMode;
   discoveredWalls: DiscoveredWalls;
   lockedDoors: LockedDoors;
+  dungeonSize: number;
 }
 
 // Maze state
@@ -156,4 +161,5 @@ export const DEFAULT_SETTINGS: GameSettings = {
   dragonWakeDistance: 3, // Multiplayer wake distance
   dragonVisibilityDistance: 5, // Single player visibility distance
   dragonFollows: 1,
+  dungeonSize: 8,
 };

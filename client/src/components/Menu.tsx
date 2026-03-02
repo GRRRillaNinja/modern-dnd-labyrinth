@@ -5,13 +5,14 @@ import { audioService } from '../services/AudioService';
 import { Leaderboard } from './Leaderboard';
 
 interface MenuProps {
-  onStart: (mode: GameMode, players: number, level: number) => void;
+  onStart: (mode: GameMode, players: number, level: number, dungeonSize: number) => void;
   onShowLeaderboard: () => void;
 }
 
 export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowLeaderboard }) => {
   const [players, setPlayers] = useState<number>(1);
   const [level, setLevel] = useState<number>(1);
+  const [dungeonSize, setDungeonSize] = useState<number>(8);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   // Play intro sound on mount
@@ -32,7 +33,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
     audioService.stopCurrent();
     const mode = players === 1 ? GameMode.SinglePlayer : players === 3 ? GameMode.VsCPU : GameMode.LocalMultiplayer;
     const actualPlayers = players === 3 ? 2 : players; // vs CPU uses 2 warriors
-    onStart(mode, actualPlayers, level);
+    onStart(mode, actualPlayers, level, dungeonSize);
   };
 
   // Root wrapper
@@ -190,6 +191,32 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
                 <div className="text-xs font-normal mt-0.5">Locked Doors</div>
               </button>
             </div>
+          </div>
+
+          {/* Dungeon size section */}
+          <div id="menu-dungeon-size-section" className="mb-4">
+            <label id="menu-dungeon-size-label" className="block text-gray-300 mb-2 text-center text-sm">
+              Dungeon Size: <span className="text-amber-400 font-medieval">{dungeonSize}x{dungeonSize}</span>
+            </label>
+            <div className="flex items-center gap-3 justify-center px-4">
+              <span className="text-gray-500 text-xs">8</span>
+              <input
+                id="menu-dungeon-size-slider"
+                type="range"
+                min={8}
+                max={20}
+                step={2}
+                value={dungeonSize}
+                onChange={(e) => setDungeonSize(Number(e.target.value))}
+                className="w-full max-w-[200px] accent-amber-600 cursor-pointer"
+              />
+              <span className="text-gray-500 text-xs">20</span>
+            </div>
+            {dungeonSize > 8 && (
+              <p className="text-gray-500 text-xs text-center mt-1">
+                Board scrolls to follow your warrior
+              </p>
+            )}
           </div>
 
           {/* Start button wrapper */}

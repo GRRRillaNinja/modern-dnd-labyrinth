@@ -35,14 +35,16 @@ export function calculateWallsDiscoveredPct(
   chamberPaths: ChamberPath[][],
   discoveredWalls: DiscoveredWalls
 ): number {
-  if (chamberPaths.length === 0) return 0;
+  const size = chamberPaths.length;
+  if (size === 0) return 0;
+  const max = size - 1;
 
-  // Count total internal walls (East where col<7, South where row<7)
+  // Count total internal walls (East where col<max, South where row<max)
   let totalWalls = 0;
-  for (let r = 0; r < 8; r++) {
-    for (let c = 0; c < 8; c++) {
-      if (c < 7 && chamberPaths[r][c][Direction.East] === PathType.Wall) totalWalls++;
-      if (r < 7 && chamberPaths[r][c][Direction.South] === PathType.Wall) totalWalls++;
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (c < max && chamberPaths[r][c][Direction.East] === PathType.Wall) totalWalls++;
+      if (r < max && chamberPaths[r][c][Direction.South] === PathType.Wall) totalWalls++;
     }
   }
 
@@ -55,8 +57,8 @@ export function calculateWallsDiscoveredPct(
     const col = parseInt(parts[1], 10);
     const row = parseInt(parts[0], 10);
     const dir = parseInt(parts[2], 10);
-    if (dir === Direction.East && col < 7) discoveredCount++;
-    if (dir === Direction.South && row < 7) discoveredCount++;
+    if (dir === Direction.East && col < max) discoveredCount++;
+    if (dir === Direction.South && row < max) discoveredCount++;
   }
 
   return Math.round((discoveredCount / totalWalls) * 100);
@@ -89,7 +91,7 @@ interface GameStore {
   isAIThinking: boolean; // Whether AI is currently executing its turn
 
   // Actions
-  initGame: (mode: GameMode, numberOfWarriors: number, level: number) => void;
+  initGame: (mode: GameMode, numberOfWarriors: number, level: number, dungeonSize?: number) => void;
   setWarriorRoom: (warriorNumber: number, position: Position) => void;
   skipWarriorTwo: () => void;
   moveWarrior: (warriorNumber: number, position: Position) => void;
@@ -131,12 +133,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
   isAIThinking: false,
 
   // Initialize game
-  initGame: (mode: GameMode, numberOfWarriors: number, level: number) => {
+  initGame: (mode: GameMode, numberOfWarriors: number, level: number, dungeonSize?: number) => {
     // Abort any running AI turn from a previous game
     const prevAI = get().aiController;
     if (prevAI) prevAI.abort();
 
-    const { settings } = get();
+    const { settings: baseSettings } = get();
+    const settings = { ...baseSettings, dungeonSize: dungeonSize ?? baseSettings.dungeonSize };
 
     // Create game engine
     const engine = new GameEngine(settings);
@@ -537,7 +540,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (aiController) aiController.abort();
     if (gameState) {
       const mode = isCPUMode ? GameMode.VsCPU : gameState.mode;
-      get().initGame(mode, gameState.numberOfWarriors, gameState.level);
+      get().initGame(mode, gameState.numberOfWarriors, gameState.level, gameState.dungeonSize);
     }
   },
 
@@ -831,6 +834,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const difficultyLevel = gameState.level as 1 | 2;
     const wallsDiscoveredPct = calculateWallsDiscoveredPct(chamberPaths, gameState.discoveredWalls);
     const vsCpu = gameState.mode === GameMode.VsCPU;
+    const dungeonSize = gameState.dungeonSize;
 
     const success = await supabaseService.submitScore(
       gameTime,
@@ -841,7 +845,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       totalMoves,
       totalDeaths,
       wallsDiscoveredPct,
-      vsCpu
+      vsCpu,
+      dungeonSize
     );
 
     if (success) {

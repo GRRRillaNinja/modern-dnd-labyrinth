@@ -219,6 +219,24 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ gameMode: _gameMode, d
               `}>
                 L{entry.difficulty_level}
               </span>
+              {/* Dungeon Size Badge */}
+              {entry.dungeon_size != null && (() => {
+                const sizeColors: Record<number, string> = {
+                  8:  'bg-sky-900/50 text-sky-300 border-sky-500',
+                  10: 'bg-emerald-900/50 text-emerald-300 border-emerald-500',
+                  12: 'bg-violet-900/50 text-violet-300 border-violet-500',
+                  14: 'bg-amber-900/50 text-amber-300 border-amber-500',
+                  16: 'bg-rose-900/50 text-rose-300 border-rose-500',
+                  18: 'bg-cyan-900/50 text-cyan-300 border-cyan-500',
+                  20: 'bg-fuchsia-900/50 text-fuchsia-300 border-fuchsia-500',
+                };
+                const colorClass = sizeColors[entry.dungeon_size] ?? 'bg-sky-900/50 text-sky-300 border-sky-500';
+                return (
+                  <span className={`px-1.5 sm:px-2 py-0.5 rounded font-bold flex-shrink-0 text-[10px] sm:text-xs ${colorClass}`}>
+                    {entry.dungeon_size}x{entry.dungeon_size}
+                  </span>
+                );
+              })()}
               {/* vs CPU / PvP Badge (multiplayer only) */}
               {entry.game_mode === 'multiplayer' && (
                 <span id={`leaderboard-${listId}-entry-${index}-gametype`} className={`

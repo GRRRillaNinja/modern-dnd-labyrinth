@@ -17,6 +17,10 @@ export class MazeGenerator {
     this.settings = settings;
   }
 
+  private get size(): number {
+    return this.settings.dungeonSize;
+  }
+
   /**
    * Generate a new maze
    */
@@ -28,8 +32,8 @@ export class MazeGenerator {
 
     this.initializeMaze();
     const startPos: Position = [
-      Math.floor(Math.random() * 8),
-      Math.floor(Math.random() * 8),
+      Math.floor(Math.random() * this.size),
+      Math.floor(Math.random() * this.size),
     ];
     this.stack = [startPos];
     this.visited = {};
@@ -49,13 +53,14 @@ export class MazeGenerator {
    */
   private initializeMaze(): void {
     this.chamberPaths = [];
-    for (let r = 0; r < 8; r++) {
+    const max = this.size - 1;
+    for (let r = 0; r < this.size; r++) {
       this.chamberPaths.push([]);
-      for (let c = 0; c < 8; c++) {
+      for (let c = 0; c < this.size; c++) {
         this.chamberPaths[r].push([
           r === 0 ? PathType.Wall : PathType.Undefined, // North
-          c === 7 ? PathType.Wall : PathType.Undefined, // East
-          r === 7 ? PathType.Wall : PathType.Undefined, // South
+          c === max ? PathType.Wall : PathType.Undefined, // East
+          r === max ? PathType.Wall : PathType.Undefined, // South
           c === 0 ? PathType.Wall : PathType.Undefined, // West
         ]);
       }
@@ -104,8 +109,9 @@ export class MazeGenerator {
    * Apply wall bias near edges to keep exterior walls solid
    */
   private applyEdgeWallBias(row: number, col: number): void {
-    const _isEdgeCol = col === 0 || col === 7;
-    const _isEdgeRow = row === 0 || row === 7;
+    const max = this.size - 1;
+    const _isEdgeCol = col === 0 || col === max;
+    const _isEdgeRow = row === 0 || row === max;
 
     if (
       row > 0 &&
@@ -121,7 +127,7 @@ export class MazeGenerator {
     }
 
     if (
-      col < 7 &&
+      col < max &&
       this.chamberPaths[row][col][Direction.East] === PathType.Undefined &&
       this.visited[`${row}_${col + 1}`]
     ) {
@@ -134,7 +140,7 @@ export class MazeGenerator {
     }
 
     if (
-      row < 7 &&
+      row < max &&
       this.chamberPaths[row][col][Direction.South] === PathType.Undefined &&
       this.visited[`${row + 1}_${col}`]
     ) {
@@ -165,6 +171,7 @@ export class MazeGenerator {
    */
   private getAvailableDirections(row: number, col: number): Direction[] {
     const paths = this.chamberPaths[row][col];
+    const max = this.size - 1;
     const opts: Direction[] = [];
 
     if (paths[Direction.North] === PathType.Undefined) {
@@ -181,7 +188,7 @@ export class MazeGenerator {
       opts.push(Direction.East);
     } else if (
       this.settings.edgeWallBias &&
-      col === 7 &&
+      col === max &&
       paths[Direction.West] === PathType.Undefined
     ) {
       opts.push(Direction.West, Direction.West);
@@ -191,7 +198,7 @@ export class MazeGenerator {
       opts.push(Direction.South);
     } else if (
       this.settings.edgeWallBias &&
-      row === 7 &&
+      row === max &&
       paths[Direction.North] === PathType.Undefined
     ) {
       opts.push(Direction.North, Direction.North);
@@ -222,11 +229,12 @@ export class MazeGenerator {
     this.chamberPaths[row][col][dir] = type;
 
     // Update adjacent chamber
+    const max = this.size - 1;
     if (dir === Direction.North && row !== 0) {
       this.chamberPaths[row - 1][col][Direction.South] = type;
-    } else if (dir === Direction.East && col !== 7) {
+    } else if (dir === Direction.East && col !== max) {
       this.chamberPaths[row][col + 1][Direction.West] = type;
-    } else if (dir === Direction.South && row !== 7) {
+    } else if (dir === Direction.South && row !== max) {
       this.chamberPaths[row + 1][col][Direction.North] = type;
     } else if (dir === Direction.West && col !== 0) {
       this.chamberPaths[row][col - 1][Direction.East] = type;
@@ -241,8 +249,9 @@ export class MazeGenerator {
       this.settings.removeWallProb > 0 &&
       this.settings.removeWallThreshold < 4
     ) {
-      for (let r = 1; r < 7; r++) {
-        for (let c = 1; c < 7; c++) {
+      const max = this.size - 1;
+      for (let r = 1; r < max; r++) {
+        for (let c = 1; c < max; c++) {
           const wallDirs: Direction[] = [];
           for (let dir = 0; dir < 4; dir++) {
             if (this.chamberPaths[r][c][dir] === PathType.Wall) {

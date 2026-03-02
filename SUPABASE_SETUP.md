@@ -46,6 +46,7 @@ CREATE TABLE leaderboard (
   total_deaths INTEGER,
   walls_discovered_pct NUMERIC(5,2),
   vs_cpu BOOLEAN,
+  dungeon_size INTEGER,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

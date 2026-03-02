@@ -15,12 +15,13 @@ function tileKey(row: number, col: number): string {
   return `${row},${col}`;
 }
 
-function getAdjacentPosition(pos: Position, dir: Direction): Position | null {
+function getAdjacentPosition(pos: Position, dir: Direction, gridSize: number = 8): Position | null {
   const [row, col] = pos;
+  const max = gridSize - 1;
   switch (dir) {
     case Direction.North: return row > 0 ? [row - 1, col] : null;
-    case Direction.South: return row < 7 ? [row + 1, col] : null;
-    case Direction.East: return col < 7 ? [row, col + 1] : null;
+    case Direction.South: return row < max ? [row + 1, col] : null;
+    case Direction.East: return col < max ? [row, col + 1] : null;
     case Direction.West: return col > 0 ? [row, col - 1] : null;
     default: return null;
   }
@@ -75,9 +76,16 @@ export class AIController {
   private abortController: AbortController | null = null;
   /** Whether AI is currently executing a turn */
   private _isExecuting = false;
+  /** Current dungeon grid size (set from state at turn start) */
+  private _gridSize = 8;
 
   get isExecuting(): boolean {
     return this._isExecuting;
+  }
+
+  /** Get adjacent position using current grid size */
+  private adj(pos: Position, dir: Direction): Position | null {
+    return getAdjacentPosition(pos, dir, this._gridSize);
   }
 
   /** Reset AI state for a new game */
@@ -132,7 +140,7 @@ export class AIController {
   private frontierScore(pos: Position): number {
     let unvisitedNeighbors = 0;
     for (const dir of ALL_DIRS) {
-      const adj = getAdjacentPosition(pos, dir);
+      const adj = this.adj(pos, dir);
       if (adj && !this.visitedTiles.has(tileKey(adj[0], adj[1]))) {
         unvisitedNeighbors++;
       }
@@ -151,12 +159,13 @@ export class AIController {
     const waystoneKey = state.warriors[1].secretRoom
       ? tileKey(state.warriors[1].secretRoom[0], state.warriors[1].secretRoom[1])
       : null;
+    const size = this._gridSize;
 
     let changed = true;
     while (changed) {
       changed = false;
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
           const key = tileKey(r, c);
           if (this.deadEndTiles.has(key)) continue;
           if (key === waystoneKey) continue;
@@ -166,7 +175,7 @@ export class AIController {
           let unknowns = 0;
 
           for (const dir of ALL_DIRS) {
-            const neighbor = getAdjacentPosition(pos, dir);
+            const neighbor = this.adj(pos, dir);
             if (!neighbor) continue; // Board edge = no exit
 
             if (this.isEdgeKnownBlocked(state, pos, dir)) continue;
@@ -207,18 +216,22 @@ export class AIController {
    * Picks a tile far from center and far from warrior 1's Waystone, preferring corners.
    */
   selectRoom(gameState: GameStateData): Position {
+    this._gridSize = gameState.dungeonSize;
+    const size = this._gridSize;
+    const max = size - 1;
     const w1Room = gameState.warriors[0].secretRoom;
     const candidates: { pos: Position; score: number }[] = [];
+    const center: Position = [Math.floor(max / 2), Math.floor(max / 2)];
 
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
         if (w1Room && w1Room[0] === r && w1Room[1] === c) continue;
 
         const pos: Position = [r, c];
-        const centerDist = manhattanDistance(pos, [3, 3]);
+        const centerDist = manhattanDistance(pos, center);
         const w1Dist = w1Room ? manhattanDistance(pos, w1Room) : 0;
-        const isCorner = (r === 0 || r === 7) && (c === 0 || c === 7);
-        const isEdge = r === 0 || r === 7 || c === 0 || c === 7;
+        const isCorner = (r === 0 || r === max) && (c === 0 || c === max);
+        const isEdge = r === 0 || r === max || c === 0 || c === max;
 
         let score = centerDist + w1Dist * 1.5;
         if (isCorner) score += 3;
@@ -262,7 +275,10 @@ export class AIController {
 
       // Update board memory: scan for dead-end corridors before making decisions
       const initialState = getState();
-      if (initialState) this.updateDeadEnds(initialState);
+      if (initialState) {
+        this._gridSize = initialState.dungeonSize;
+        this.updateDeadEnds(initialState);
+      }
 
       await this.delay(800, signal);
 
@@ -554,7 +570,7 @@ export class AIController {
       // Try adjacent moves that get closer to the target but avoid the dragon
       const alternatives: { pos: Position; dist: number }[] = [];
       for (const dir of ALL_DIRS) {
-        const alt = getAdjacentPosition(warrior.position, dir);
+        const alt = this.adj(warrior.position, dir);
         if (!alt) continue;
         if (this.isEdgeKnownBlocked(state, warrior.position, dir)) continue;
         if (alt[0] === state.dragon.position[0] && alt[1] === state.dragon.position[1]) continue;
@@ -737,7 +753,7 @@ export class AIController {
       }
 
       for (const dir of ALL_DIRS) {
-        const neighbor = getAdjacentPosition(current, dir);
+        const neighbor = this.adj(current, dir);
         if (!neighbor) continue;
 
         const nKey = tileKey(neighbor[0], neighbor[1]);
@@ -776,7 +792,7 @@ export class AIController {
     const unknownToward: { pos: Position; dist: number; deadEnd: number }[] = [];
     const unknownAway: { pos: Position; dist: number; deadEnd: number }[] = [];
     for (const dir of ALL_DIRS) {
-      const neighbor = getAdjacentPosition(warrior.position, dir);
+      const neighbor = this.adj(warrior.position, dir);
       if (!neighbor) continue;
       if (this.isEdgeKnownBlocked(state, warrior.position, dir)) continue;
       if (!this.isEdgeUnknown(state, warrior.position, dir)) continue;
@@ -810,7 +826,7 @@ export class AIController {
       const stepsFromStart = manhattanDistance(warrior.position, current);
 
       for (const dir of ALL_DIRS) {
-        const neighbor = getAdjacentPosition(current, dir);
+        const neighbor = this.adj(current, dir);
         if (!neighbor) continue;
 
         if (this.isEdgeUnknown(state, current, dir) && !this.isEdgeKnownBlocked(state, current, dir)) {
@@ -891,7 +907,7 @@ export class AIController {
       }
 
       for (const dir of ALL_DIRS) {
-        const neighbor = getAdjacentPosition(current, dir);
+        const neighbor = this.adj(current, dir);
         if (!neighbor) continue;
 
         const nKey = tileKey(neighbor[0], neighbor[1]);
@@ -982,7 +998,7 @@ export class AIController {
 
       for (const dir of ALL_DIRS) {
         if (dir === cameFrom) continue;
-        const neighbor = getAdjacentPosition(current, dir);
+        const neighbor = this.adj(current, dir);
         if (!neighbor) continue; // Board edge = blocked
 
         if (this.isEdgeKnownBlocked(state, current, dir)) continue;
@@ -1031,7 +1047,7 @@ export class AIController {
     const candidates: { pos: Position; dist: number; unknown: boolean; recentPenalty: number; deadEnd: number }[] = [];
 
     for (const dir of ALL_DIRS) {
-      const neighbor = getAdjacentPosition(from, dir);
+      const neighbor = this.adj(from, dir);
       if (!neighbor) continue;
       if (this.isEdgeKnownBlocked(state, from, dir)) continue;
 
@@ -1140,7 +1156,7 @@ export class AIController {
     // (don't walk to another tile just to probe from there)
     const unknownNeighbors: { pos: Position; visited: boolean; hintBonus: number; entersEvade: boolean; deadEnd: number; frontier: number }[] = [];
     for (const dir of ALL_DIRS) {
-      const neighbor = getAdjacentPosition(warrior.position, dir);
+      const neighbor = this.adj(warrior.position, dir);
       if (!neighbor) continue;
       if (this.isEdgeKnownBlocked(state, warrior.position, dir)) continue;
       if (this.isEdgeUnknown(state, warrior.position, dir)) {
@@ -1228,7 +1244,7 @@ export class AIController {
       // Count unknown edges from this tile
       let unknownEdges = 0;
       for (const dir of ALL_DIRS) {
-        const neighbor = getAdjacentPosition(current, dir);
+        const neighbor = this.adj(current, dir);
         if (!neighbor) continue;
         if (this.isEdgeUnknown(state, current, dir)) unknownEdges++;
       }
@@ -1271,7 +1287,7 @@ export class AIController {
 
       // Expand BFS through known passable edges
       for (const dir of ALL_DIRS) {
-        const neighbor = getAdjacentPosition(current, dir);
+        const neighbor = this.adj(current, dir);
         if (!neighbor) continue;
         const nKey = tileKey(neighbor[0], neighbor[1]);
         if (visited.has(nKey)) continue;
@@ -1292,7 +1308,7 @@ export class AIController {
     // Fallback: try any adjacent tile through unknown edge
     const shuffled = [...ALL_DIRS].sort(() => Math.random() - 0.5);
     for (const dir of shuffled) {
-      const neighbor = getAdjacentPosition(from, dir);
+      const neighbor = this.adj(from, dir);
       if (!neighbor) continue;
       if (this.isEdgeKnownBlocked(state, from, dir)) continue;
       if (!this.visitedTiles.has(tileKey(neighbor[0], neighbor[1]))) {
@@ -1305,7 +1321,7 @@ export class AIController {
 
     // Log edge status for all adjacent directions to diagnose
     for (const dir of ALL_DIRS) {
-      const neighbor = getAdjacentPosition(from, dir);
+      const neighbor = this.adj(from, dir);
       if (!neighbor) { aiLog(`  ${dir}: out of bounds`); continue; }
       const blocked = this.isEdgeKnownBlocked(state, from, dir);
       const passable = this.isEdgeKnownPassable(state, from, dir);
@@ -1372,7 +1388,7 @@ export class AIController {
     const candidates: { pos: Position; cheby: number; known: boolean; deadEnd: number; lockedDoor: boolean }[] = [];
 
     for (const dir of ALL_DIRS) {
-      const neighbor = getAdjacentPosition(currentPos, dir);
+      const neighbor = this.adj(currentPos, dir);
       if (!neighbor) continue;
       if (this.isEdgeKnownBlocked(state, currentPos, dir)) continue;
 
@@ -1457,7 +1473,7 @@ export class AIController {
     const candidates: { pos: Position; dragonDist: number; known: boolean; recentCount: number; deadEnd: number }[] = [];
 
     for (const dir of ALL_DIRS) {
-      const neighbor = getAdjacentPosition(warrior.position, dir);
+      const neighbor = this.adj(warrior.position, dir);
       if (!neighbor) continue;
       if (this.isEdgeKnownBlocked(state, warrior.position, dir)) continue;
 
@@ -1503,7 +1519,7 @@ export class AIController {
     const candidates: { pos: Position; recentCount: number; unknown: boolean; deadEnd: number }[] = [];
 
     for (const dir of ALL_DIRS) {
-      const neighbor = getAdjacentPosition(warrior.position, dir);
+      const neighbor = this.adj(warrior.position, dir);
       if (!neighbor) continue;
       if (this.isEdgeKnownBlocked(state, warrior.position, dir)) continue;
       if (this.wouldTriggerEvade(neighbor, state)) continue; // Skip evade-zone tiles
@@ -1541,7 +1557,7 @@ export class AIController {
     const candidates: { pos: Position; hintDist: number; recentCount: number; unknown: boolean; deadEnd: number }[] = [];
 
     for (const dir of ALL_DIRS) {
-      const neighbor = getAdjacentPosition(warrior.position, dir);
+      const neighbor = this.adj(warrior.position, dir);
       if (!neighbor) continue;
       if (this.isEdgeKnownBlocked(state, warrior.position, dir)) continue;
       if (this.wouldTriggerEvade(neighbor, state)) continue; // Must be safe
@@ -1584,8 +1600,8 @@ export class AIController {
   private findHintAreaTarget(state: GameStateData, from: Position, hintPos: Position): Position | null {
     const candidates: { pos: Position; dist: number; reachable: boolean }[] = [];
 
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
+    for (let r = 0; r < this._gridSize; r++) {
+      for (let c = 0; c < this._gridSize; c++) {
         if (r === from[0] && c === from[1]) continue;
         const pos: Position = [r, c];
         if (manhattanDistance(pos, hintPos) > 2) continue;
@@ -1625,7 +1641,7 @@ export class AIController {
     const candidates: { pos: Position; recentCount: number; unknown: boolean; deadEnd: number }[] = [];
 
     for (const dir of ALL_DIRS) {
-      const neighbor = getAdjacentPosition(warrior.position, dir);
+      const neighbor = this.adj(warrior.position, dir);
       if (!neighbor) continue;
       if (this.isEdgeKnownBlocked(state, warrior.position, dir)) continue;
 
@@ -1662,7 +1678,7 @@ export class AIController {
 
     const shuffled = [...ALL_DIRS].sort(() => Math.random() - 0.5);
     for (const dir of shuffled) {
-      const neighbor = getAdjacentPosition(warrior.position, dir);
+      const neighbor = this.adj(warrior.position, dir);
       if (!neighbor) continue;
       if (this.isEdgeKnownBlocked(state, warrior.position, dir)) continue;
       return neighbor;
