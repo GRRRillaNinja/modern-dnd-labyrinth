@@ -228,6 +228,10 @@ export const Board: React.FC = () => {
             gameState={gameState}
             onClick={() => handleChamberClick(position)}
             isDragonTurn={isDragonTurn}
+            isViewportTop={vRow === 0}
+            isViewportLeft={vCol === 0}
+            isViewportBottom={vRow === VIEWPORT_SIZE - 1}
+            isViewportRight={vCol === VIEWPORT_SIZE - 1}
           />
         );
       })
