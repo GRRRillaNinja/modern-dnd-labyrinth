@@ -243,7 +243,8 @@ export const Board: React.FC = () => {
         className="relative"
         style={{
           width: 'min(100%, calc(100vh - 180px))',
-          aspectRatio: '1'
+          aspectRatio: '1',
+          overflow: 'visible'
         }}
       >
         {/* Background board with ornate frame */}
@@ -274,7 +275,7 @@ export const Board: React.FC = () => {
         </div>
 
         {/* 8x8 Chamber Grid (viewport into larger dungeon) */}
-        <div id="board-grid" className="relative w-full h-full p-[6%] grid grid-cols-8 grid-rows-8 gap-1">
+        <div id="board-grid" className="relative w-full h-full grid grid-cols-8 grid-rows-8 gap-1" style={{ overflow: 'visible', padding: 'max(6%, 1rem)' }}>
           {chambers}
         </div>
 
