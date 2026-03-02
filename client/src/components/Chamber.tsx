@@ -136,7 +136,7 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
         {/* Visited tile tint (subtle darkening) */}
         {isTileVisited() && (
           <div id={`chamber-${row}-${col}-visited`} className="absolute inset-0 rounded-sm pointer-events-none" style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.15)',
+            backgroundColor: 'rgba(0, 0, 0, 0.25)',
           }} />
         )}
 
