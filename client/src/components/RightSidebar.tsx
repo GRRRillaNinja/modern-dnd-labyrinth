@@ -101,7 +101,7 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
   return (
     <div id={`right-sidebar-${v}-root`} className={`w-full flex-shrink-0 flex flex-col gap-2 lg:gap-4 ${!onlyControls && !onlySounds ? 'md:h-full md:overflow-hidden' : ''}`}>
       {/* Controls Panel */}
-      {!onlySounds && (
+      {!onlySounds && !onlyDpad && (
       <div id={`right-sidebar-${v}-controls-panel`} className="dungeon-panel">
         <div id={`right-sidebar-${v}-controls-content`} className="dungeon-content">
           {/* Controls Title */}
