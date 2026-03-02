@@ -18,8 +18,6 @@ interface ChamberProps {
   isDragonTurn: boolean;
   isViewportTop?: boolean;
   isViewportLeft?: boolean;
-  isViewportBottom?: boolean;
-  isViewportRight?: boolean;
 }
 
 export const Chamber: React.FC<ChamberProps> = React.memo(({
@@ -30,8 +28,6 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
   isDragonTurn,
   isViewportTop,
   isViewportLeft,
-  isViewportBottom,
-  isViewportRight,
 }) => {
   const [row, col] = position;
   const maxIdx = gameState.dungeonSize - 1;
@@ -340,8 +336,8 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
       </motion.div>
 
       {/* Walls - Brick texture */}
-      {/* North wall - only at viewport top edge or dungeon boundary (otherwise rendered by neighbor's South) */}
-      {paths[Direction.North] === PathType.Wall && (isViewportTop || row === 0) && isWallDiscovered(Direction.North) && (
+      {/* North wall - only at viewport top (neighbor above isn't rendered) */}
+      {paths[Direction.North] === PathType.Wall && isViewportTop && isWallDiscovered(Direction.North) && (
         <motion.div
           id={`chamber-${row}-${col}-wall-north`}
           initial={{ opacity: 0, scaleY: 0 }}
@@ -356,8 +352,8 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
         />
       )}
 
-      {/* South wall - only when not at viewport bottom edge or at dungeon boundary (otherwise rendered by neighbor's North) */}
-      {paths[Direction.South] === PathType.Wall && (isViewportBottom || row < maxIdx) && isWallDiscovered(Direction.South) && (
+      {/* South wall - always renders (primary side for horizontal walls) */}
+      {paths[Direction.South] === PathType.Wall && isWallDiscovered(Direction.South) && (
         <motion.div
           id={`chamber-${row}-${col}-wall-south`}
           initial={{ opacity: 0, scaleY: 0 }}
@@ -372,8 +368,8 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
         />
       )}
 
-      {/* West wall - only at viewport left edge or dungeon boundary (otherwise rendered by neighbor's East) */}
-      {paths[Direction.West] === PathType.Wall && (isViewportLeft || col === 0) && isWallDiscovered(Direction.West) && (
+      {/* West wall - only at viewport left (neighbor left isn't rendered) */}
+      {paths[Direction.West] === PathType.Wall && isViewportLeft && isWallDiscovered(Direction.West) && (
         <motion.div
           id={`chamber-${row}-${col}-wall-west`}
           initial={{ opacity: 0, scaleX: 0 }}
@@ -388,8 +384,8 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
         />
       )}
 
-      {/* East wall - only when not at viewport right edge or at dungeon boundary */}
-      {paths[Direction.East] === PathType.Wall && (isViewportRight || col < maxIdx) && isWallDiscovered(Direction.East) && (
+      {/* East wall - always renders (primary side for vertical walls) */}
+      {paths[Direction.East] === PathType.Wall && isWallDiscovered(Direction.East) && (
         <motion.div
           id={`chamber-${row}-${col}-wall-east`}
           initial={{ opacity: 0, scaleX: 0 }}
@@ -408,8 +404,8 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
       {/* Render opposite side only at viewport edges to avoid duplication */}
       {gameState.level === 2 && (
         <>
-          {/* South Door - horizontal */}
-          {paths[Direction.South] === PathType.Door && (isViewportBottom || row < maxIdx) && (
+          {/* South Door - horizontal (always renders, primary side) */}
+          {paths[Direction.South] === PathType.Door && (
             <>
               {/* South door left wall segment */}
               <div
@@ -471,8 +467,8 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
               />
             </>
           )}
-          {/* East Door - vertical */}
-          {paths[Direction.East] === PathType.Door && (isViewportRight || col < maxIdx) && (
+          {/* East Door - vertical (always renders, primary side) */}
+          {paths[Direction.East] === PathType.Door && (
             <>
               {/* East door top wall segment */}
               <div
@@ -534,8 +530,8 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
               />
             </>
           )}
-          {/* North Door - horizontal (mirror of South, only at viewport top or dungeon boundary) */}
-          {paths[Direction.North] === PathType.Door && (isViewportTop || row === 0) && (
+          {/* North Door - horizontal (only at viewport top, neighbor above isn't rendered) */}
+          {paths[Direction.North] === PathType.Door && isViewportTop && (
             <>
               <div
                 id={`chamber-${row}-${col}-door-north-wall-left`}
@@ -591,8 +587,8 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
               />
             </>
           )}
-          {/* West Door - vertical (mirror of East, only at viewport left or dungeon boundary) */}
-          {paths[Direction.West] === PathType.Door && (isViewportLeft || col === 0) && (
+          {/* West Door - vertical (only at viewport left, neighbor left isn't rendered) */}
+          {paths[Direction.West] === PathType.Door && isViewportLeft && (
             <>
               <div
                 id={`chamber-${row}-${col}-door-west-wall-top`}
@@ -661,8 +657,6 @@ export const Chamber: React.FC<ChamberProps> = React.memo(({
     prevProps.gameState === nextProps.gameState &&
     prevProps.paths === nextProps.paths &&
     prevProps.isViewportTop === nextProps.isViewportTop &&
-    prevProps.isViewportLeft === nextProps.isViewportLeft &&
-    prevProps.isViewportBottom === nextProps.isViewportBottom &&
-    prevProps.isViewportRight === nextProps.isViewportRight
+    prevProps.isViewportLeft === nextProps.isViewportLeft
   );
 });
