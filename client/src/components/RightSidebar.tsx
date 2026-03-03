@@ -339,7 +339,7 @@ export const RightSidebar: React.FC<{ onlyControls?: boolean; onlySounds?: boole
       )}
 
       {/* Sound Preview Panel */}
-      {!onlyControls && (
+      {!onlyControls && !onlyDpad && (
       <div id={`right-sidebar-${v}-sound-panel`} className="dungeon-panel md:min-h-0 md:flex-1 md:flex md:flex-col">
         <div id={`right-sidebar-${v}-sound-content`} className="dungeon-content md:min-h-0 md:flex-1 md:flex md:flex-col">
           {/* Sound Preview Title */}
