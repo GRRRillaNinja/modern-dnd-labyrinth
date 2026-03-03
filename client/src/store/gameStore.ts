@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
 import {
   GameStateData,
   GameSettings,
@@ -11,6 +12,7 @@ import {
   PathType,
   DiscoveredWalls,
   DEFAULT_SETTINGS,
+  ReplayFrame,
 } from '@shared/types';
 import { GameEngine } from '../game/GameEngine';
 import { MazeGenerator } from '../game/MazeGenerator';
@@ -89,6 +91,12 @@ interface GameStore {
   aiController: AIController | null; // AI controller for CPU mode
   isCPUMode: boolean; // Whether warrior 2 is CPU-controlled
   isAIThinking: boolean; // Whether AI is currently executing its turn
+  // Replay recording
+  isRecording: boolean;
+  replayFrames: ReplayFrame[];
+  recordingStartTime: number | null;
+  pendingEvents: GameEvent[];
+  showPostGameOverlay: boolean; // Show post-game overlay with replay/score options
 
   // Actions
   initGame: (mode: GameMode, numberOfWarriors: number, level: number, dungeonSize?: number) => void;
@@ -104,9 +112,10 @@ interface GameStore {
   submitScore: (playerName: string) => Promise<void>;
   skipScoreSubmission: () => void;
   closeLeaderboard: () => void;
+  showScoreSubmission: () => void;
 }
 
-export const useGameStore = create<GameStore>((set, get) => ({
+export const useGameStore = create<GameStore>()(subscribeWithSelector((set, get) => ({
   // Initial state
   gameState: null,
   chamberPaths: [],
@@ -131,6 +140,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   aiController: null,
   isCPUMode: false,
   isAIThinking: false,
+  // Replay recording
+  isRecording: false,
+  replayFrames: [],
+  recordingStartTime: null,
+  pendingEvents: [],
+  showPostGameOverlay: false,
 
   // Initialize game
   initGame: (mode: GameMode, numberOfWarriors: number, level: number, dungeonSize?: number) => {
@@ -189,6 +204,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       aiController: ai,
       isCPUMode: isCPU,
       isAIThinking: false,
+      // Replay recording
+      isRecording: true,
+      replayFrames: [],
+      recordingStartTime: null,
+      pendingEvents: [],
+          showPostGameOverlay: false,
     });
 
     audioService.announceWarrior(0);
@@ -282,7 +303,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
         warrior.position[1] === warrior.secretRoom[1];
       
       if (isMovingFromWaystone) {
-        set({ gameStartTime: Date.now() });
+        const now = Date.now();
+        set({ gameStartTime: now });
+        if (!get().recordingStartTime) {
+          set({ recordingStartTime: now });
+        }
       }
     }
 
@@ -561,6 +586,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const { gameState } = get();
     if (!gameState) return;
 
+    // Buffer events for replay recording
+    if (get().isRecording) {
+      set(s => ({ pendingEvents: [...s.pendingEvents, event] }));
+    }
+
     let message = '';
 
     switch (event.type) {
@@ -669,32 +699,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const cpuWon = cpuGameWon && event.warriorNumber === 1;
 
         if (cpuWon) {
-          // CPU returned treasure to waystone — this is a loss for the player
           message = `💀 DEFEAT! The CPU has returned the treasure to its Waystone. You lose!`;
           set({ gameWon: false, gameEndTime: Date.now() });
-          if (supabaseService.isEnabled()) {
-            setTimeout(() => set({ showPlayerNameModal: true }), 2000);
-          }
         } else {
           message = `🏆 VICTORY! Warrior ${winnerName} has returned the treasure to The Waystone!`;
-          // Trigger victory fireworks
           set({ showVictoryFireworks: true, gameWon: true, gameEndTime: Date.now() });
-          setTimeout(() => {
-            set({ showVictoryFireworks: false });
-            if (supabaseService.isEnabled()) {
-              setTimeout(() => set({ showPlayerNameModal: true }), 500);
-            }
-          }, 5000);
+          setTimeout(() => set({ showVictoryFireworks: false }), 5000);
         }
+        // Stop recording after the final gameState is captured by the subscriber
+        // (the event fires synchronously before set({ gameState }) in moveWarrior)
+        setTimeout(() => set({ isRecording: false }), 0);
+        setTimeout(() => set({ showPostGameOverlay: true }), cpuWon ? 2000 : 5000);
         break;
       }
 
       case 'GAME_LOST':
         message = '💀 GAME OVER! All warriors have fallen to the dragon. The treasure remains lost forever...';
         set({ gameWon: false, gameEndTime: Date.now() });
-        if (supabaseService.isEnabled()) {
-          setTimeout(() => set({ showPlayerNameModal: true }), 2000);
-        }
+        setTimeout(() => set({ isRecording: false }), 0);
+        setTimeout(() => set({ showPostGameOverlay: true }), 2000);
         break;
 
       case 'WALL_HIT':
@@ -877,7 +900,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   closeLeaderboard: () => {
     set({ showLeaderboardAfterGame: false });
   },
-}));
+
+  // Transition from post-game overlay to score submission
+  showScoreSubmission: () => {
+    set({ showPostGameOverlay: false, showPlayerNameModal: true });
+  },
+})));
 
 /**
  * Trigger AI turn when it's warrior 2's turn in CPU mode.
@@ -906,3 +934,24 @@ function triggerAITurnIfNeeded(): void {
     useGameStore.setState({ isAIThinking: false });
   });
 }
+
+/**
+ * Replay frame subscriber.
+ * Captures a snapshot every time gameState changes while recording is active.
+ */
+useGameStore.subscribe(
+  (state) => state.gameState,
+  (gameState) => {
+    const store = useGameStore.getState();
+    if (!store.isRecording || !gameState) return;
+
+    const frame: ReplayFrame = {
+      gameState: JSON.parse(JSON.stringify(gameState)),
+      events: [...store.pendingEvents],
+      timestamp: store.recordingStartTime ? Date.now() - store.recordingStartTime : 0,
+      helpMessage: store.helpMessage,
+    };
+    store.replayFrames.push(frame);
+    useGameStore.setState({ pendingEvents: [] });
+  }
+);

@@ -246,7 +246,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -2px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.4)',
               }}
             >
-              🏆 View Leaderboards
+              View Leaderboards
             </button>
           </div>
 
@@ -319,6 +319,7 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
           onClose={() => setShowLeaderboard(false)}
         />
       )}
+
     </div>
   );
 };

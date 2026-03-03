@@ -149,6 +149,36 @@ export type GameEvent =
   | { type: 'DOOR_CLOSED'; warriorNumber: number }
   | { type: 'ILLEGAL_MOVE'; warriorNumber: number };
 
+// Replay types
+export interface ReplayFrame {
+  gameState: GameStateData;
+  events: GameEvent[];
+  timestamp: number;       // ms since recording started
+  helpMessage: string;
+}
+
+export interface ReplayMetadata {
+  id: string;
+  date: number;            // Date.now() when game ended
+  mode: GameMode;
+  level: number;
+  dungeonSize: number;
+  numberOfWarriors: number;
+  outcome: 'win' | 'loss';
+  winnerWarrior?: number;
+  duration: number;        // Total game time in ms
+  totalMoves: number;
+  totalDeaths: number;
+  totalFrames: number;
+}
+
+export interface ReplayData {
+  version: 1;
+  metadata: ReplayMetadata;
+  chamberPaths: ChamberPath[][];
+  frames: ReplayFrame[];
+}
+
 // Default settings
 export const DEFAULT_SETTINGS: GameSettings = {
   debug: false,

@@ -23,8 +23,10 @@ export type SoundType =
 
 export class AudioService {
   private sounds: Map<SoundType, Howl> = new Map();
+  private soundPaths: Map<SoundType, string> = new Map();
   private enabled: boolean = true;
   private currentSound: Howl | null = null;
+  private activeHtml5Audio: Set<HTMLAudioElement> = new Set();
   private audioUnlocked: boolean = false;
 
   constructor() {
@@ -83,6 +85,7 @@ export class AudioService {
 
     Object.entries(soundFiles).forEach(([key, src]) => {
       this.sounds.set(key as SoundType, new Howl({ src: [src] }));
+      this.soundPaths.set(key as SoundType, src);
     });
   }
 
@@ -111,7 +114,7 @@ export class AudioService {
         this.currentSound = null;
         resolve();
       });
-      
+
       // Ensure audio context is resumed before playing
       const ctx = Howler.ctx;
       if (ctx && ctx.state === 'suspended') {
@@ -169,6 +172,83 @@ export class AudioService {
         await this.play('illegalMove');
         break;
     }
+  }
+
+  /**
+   * Play a sound at a specific playback rate without pitch shift.
+   * Uses native HTML5 Audio with preservesPitch. Sounds overlap — nothing
+   * is stopped or awaited so multiple sounds can play simultaneously.
+   */
+  public playAtRate(sound: SoundType, rate: number): void {
+    if (!this.enabled) return;
+
+    const src = this.soundPaths.get(sound);
+    if (!src) return;
+
+    const audio = new Audio(src);
+    audio.preservesPitch = true;
+    audio.playbackRate = rate;
+
+    // Track it so stopAllHtml5Audio can clean up
+    this.activeHtml5Audio.add(audio);
+    audio.addEventListener('ended', () => this.activeHtml5Audio.delete(audio), { once: true });
+    audio.addEventListener('error', () => this.activeHtml5Audio.delete(audio), { once: true });
+
+    audio.play().catch(() => this.activeHtml5Audio.delete(audio));
+  }
+
+  /**
+   * Fire-and-forget: play sounds for a game event at the given rate.
+   * All sounds start immediately and overlap naturally.
+   */
+  public playForEventAtRate(event: GameEvent, rate: number): void {
+    switch (event.type) {
+      case 'WARRIOR_MOVED':
+        this.playAtRate('warriorMoves', rate);
+        break;
+      case 'DRAGON_MOVED':
+        this.playAtRate('dragonFlying', rate);
+        break;
+      case 'DRAGON_AWAKE':
+        this.playAtRate('dragonWakes', rate);
+        break;
+      case 'DRAGON_ATTACK':
+        this.playAtRate(event.warriorNumber === 0 ? 'warriorOne' : 'warriorTwo', rate);
+        this.playAtRate('dragonAttacks', rate);
+        break;
+      case 'TREASURE_FOUND':
+        this.playAtRate('treasure', rate);
+        break;
+      case 'WARRIOR_BATTLE':
+        this.playAtRate('scuffle', rate);
+        break;
+      case 'WARRIOR_KILLED':
+        this.playAtRate('defeat', rate);
+        break;
+      case 'GAME_WON':
+        this.playAtRate('winner', rate);
+        break;
+      case 'WALL_HIT':
+        this.playAtRate('wall', rate);
+        break;
+      case 'DOOR_CLOSED':
+        this.playAtRate('door', rate);
+        break;
+      case 'ILLEGAL_MOVE':
+        this.playAtRate('illegalMove', rate);
+        break;
+    }
+  }
+
+  /**
+   * Stop all currently playing HTML5 replay audio
+   */
+  public stopAllHtml5Audio(): void {
+    this.activeHtml5Audio.forEach((audio) => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+    this.activeHtml5Audio.clear();
   }
 
   /**

@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useMemo, useRef } from 'react';
 import { Chamber } from './Chamber';
 import { useGameStore } from '../store/gameStore';
+import { useReplayStore } from '../store/replayStore';
 import { Position, GameState, VIEWPORT_SIZE } from '@shared/types';
 
 const ARROW_KEY_OFFSETS: Record<string, [number, number]> = {
@@ -70,6 +71,8 @@ export const Board: React.FC = () => {
 
   const handleChamberClick = useCallback((position: Position) => {
     if (!gameState) return;
+    // Block all interaction during replay
+    if (useReplayStore.getState().isReplaying) return;
     const state = gameState.state;
 
     // Block clicks during AI turn in CPU mode
@@ -101,7 +104,7 @@ export const Board: React.FC = () => {
 
       const state = useGameStore.getState();
       const gs = state.gameState;
-      if (!gs || state.isDragonTurn) return;
+      if (!gs || state.isDragonTurn || useReplayStore.getState().isReplaying) return;
 
       const dSize = gs.dungeonSize;
 

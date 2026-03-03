@@ -6,29 +6,34 @@ import { HelpSidebar } from './components/HelpSidebar';
 import { RightSidebar } from './components/RightSidebar';
 import { Leaderboard } from './components/Leaderboard';
 import { PlayerNameModal } from './components/PlayerNameModal';
+import { PostGameOverlay } from './components/PostGameOverlay';
+import { ReplayViewer } from './components/ReplayViewer';
 import { useGameStore, calculateWallsDiscoveredPct } from './store/gameStore';
+import { useReplayStore } from './store/replayStore';
 import { GameMode } from '@shared/types';
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const { 
-    initGame, 
-    gameState, 
-    showTreasureFlash, 
-    showDoorFlash, 
-    showDeathFlash, 
-    showBattleShake, 
-    showVictoryFireworks, 
-    gameStartTime, 
+  const {
+    initGame,
+    gameState,
+    showTreasureFlash,
+    showDoorFlash,
+    showDeathFlash,
+    showBattleShake,
+    showVictoryFireworks,
+    gameStartTime,
     gameEndTime,
     showPlayerNameModal,
     showLeaderboardAfterGame,
+    showPostGameOverlay,
     submitScore,
     skipScoreSubmission,
     closeLeaderboard,
     submissionResult,
   } = useGameStore();
+  const { isReplaying } = useReplayStore();
 
   // Calculate game time for display
   const getGameTime = () => {
@@ -79,6 +84,9 @@ function App() {
   };
 
   const handleExit = () => {
+    if (isReplaying) {
+      useReplayStore.getState().exitReplay();
+    }
     setGameStarted(false);
   };
 
@@ -177,6 +185,9 @@ function App() {
         </div>
       </div>
 
+      {/* Post-Game Overlay - shown after game ends with replay/score options */}
+      <PostGameOverlay isVisible={showPostGameOverlay} />
+
       {/* Player Name Modal - shown after game ends */}
       <PlayerNameModal
         isVisible={showPlayerNameModal}
@@ -188,6 +199,9 @@ function App() {
         onSubmit={submitScore}
         onSkip={skipScoreSubmission}
       />
+
+      {/* Replay Viewer - transport controls at bottom */}
+      <ReplayViewer />
 
       {/* Treasure Found Flash Effect */}
       <AnimatePresence>
