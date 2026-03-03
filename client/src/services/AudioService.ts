@@ -27,7 +27,9 @@ export class AudioService {
   private enabled: boolean = true;
   private currentSound: Howl | null = null;
   private activeHtml5Audio: Set<HTMLAudioElement> = new Set();
+  private audioPool: Map<SoundType, HTMLAudioElement[]> = new Map();
   private audioUnlocked: boolean = false;
+  private static readonly POOL_SIZE = 3; // max concurrent instances per sound
 
   constructor() {
     this.loadSounds();
@@ -175,26 +177,63 @@ export class AudioService {
   }
 
   /**
+   * Get or create a pooled Audio element for a sound type.
+   * Reuses finished elements instead of creating new ones each time,
+   * which prevents mobile browsers from choking on too many Audio objects.
+   */
+  private getPooledAudio(sound: SoundType): HTMLAudioElement | null {
+    const src = this.soundPaths.get(sound);
+    if (!src) return null;
+
+    let pool = this.audioPool.get(sound);
+    if (!pool) {
+      pool = [];
+      this.audioPool.set(sound, pool);
+    }
+
+    // Find an idle element (paused or ended)
+    for (const audio of pool) {
+      if (audio.paused || audio.ended) {
+        audio.currentTime = 0;
+        return audio;
+      }
+    }
+
+    // Pool not full — create a new element
+    if (pool.length < AudioService.POOL_SIZE) {
+      const audio = new Audio(src);
+      audio.preservesPitch = true;
+      pool.push(audio);
+      return audio;
+    }
+
+    // Pool full and all busy — steal the oldest one
+    const oldest = pool[0];
+    oldest.pause();
+    oldest.currentTime = 0;
+    return oldest;
+  }
+
+  /**
    * Play a sound at a specific playback rate without pitch shift.
-   * Uses native HTML5 Audio with preservesPitch. Sounds overlap — nothing
-   * is stopped or awaited so multiple sounds can play simultaneously.
+   * Uses pooled HTML5 Audio elements with preservesPitch. Sounds overlap —
+   * nothing is stopped or awaited so multiple sounds can play simultaneously.
    */
   public playAtRate(sound: SoundType, rate: number): void {
     if (!this.enabled) return;
 
-    const src = this.soundPaths.get(sound);
-    if (!src) return;
+    const audio = this.getPooledAudio(sound);
+    if (!audio) return;
 
-    const audio = new Audio(src);
-    audio.preservesPitch = true;
     audio.playbackRate = rate;
 
     // Track it so stopAllHtml5Audio can clean up
     this.activeHtml5Audio.add(audio);
-    audio.addEventListener('ended', () => this.activeHtml5Audio.delete(audio), { once: true });
-    audio.addEventListener('error', () => this.activeHtml5Audio.delete(audio), { once: true });
+    const cleanup = () => this.activeHtml5Audio.delete(audio);
+    audio.addEventListener('ended', cleanup, { once: true });
+    audio.addEventListener('error', cleanup, { once: true });
 
-    audio.play().catch(() => this.activeHtml5Audio.delete(audio));
+    audio.play().catch(cleanup);
   }
 
   /**
@@ -249,6 +288,14 @@ export class AudioService {
       audio.currentTime = 0;
     });
     this.activeHtml5Audio.clear();
+  }
+
+  /**
+   * Release all pooled Audio elements (call on replay exit to free memory)
+   */
+  public releaseAudioPool(): void {
+    this.stopAllHtml5Audio();
+    this.audioPool.clear();
   }
 
   /**

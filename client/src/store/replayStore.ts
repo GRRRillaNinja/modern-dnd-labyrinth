@@ -155,7 +155,7 @@ export const useReplayStore = create<ReplayStore>((set, get) => ({
   exitReplay: () => {
     const { playbackTimer } = get();
     if (playbackTimer) clearInterval(playbackTimer);
-    audioService.stopAllHtml5Audio();
+    audioService.releaseAudioPool();
 
     set({
       isReplaying: false,
