@@ -28,8 +28,10 @@ export class AudioService {
   private currentSound: Howl | null = null;
   private activeHtml5Audio: Set<HTMLAudioElement> = new Set();
   private audioPool: Map<SoundType, HTMLAudioElement[]> = new Map();
+  private lastPlayTime: Map<SoundType, number> = new Map();
   private audioUnlocked: boolean = false;
   private static readonly POOL_SIZE = 3; // max concurrent instances per sound
+  private static readonly DEBOUNCE_MS = 80; // min gap between same sound
 
   constructor() {
     this.loadSounds();
@@ -222,6 +224,12 @@ export class AudioService {
   public playAtRate(sound: SoundType, rate: number): void {
     if (!this.enabled) return;
 
+    // Debounce: skip if the same sound played very recently
+    const now = performance.now();
+    const last = this.lastPlayTime.get(sound) ?? 0;
+    if (now - last < AudioService.DEBOUNCE_MS) return;
+    this.lastPlayTime.set(sound, now);
+
     const audio = this.getPooledAudio(sound);
     if (!audio) return;
 
@@ -296,6 +304,7 @@ export class AudioService {
   public releaseAudioPool(): void {
     this.stopAllHtml5Audio();
     this.audioPool.clear();
+    this.lastPlayTime.clear();
   }
 
   /**
