@@ -63,11 +63,14 @@ export function calculateWallsDiscoveredPct(
   const max = size - 1;
 
   // Count total internal walls (East where col<max, South where row<max)
+  // PathType.Undefined (0) is also a wall — it's an unvisited DFS edge that blocks movement
   let totalWalls = 0;
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
-      if (c < max && chamberPaths[r][c][Direction.East] === PathType.Wall) totalWalls++;
-      if (r < max && chamberPaths[r][c][Direction.South] === PathType.Wall) totalWalls++;
+      const east = chamberPaths[r][c][Direction.East];
+      const south = chamberPaths[r][c][Direction.South];
+      if (c < max && (east === PathType.Wall || east === PathType.Undefined)) totalWalls++;
+      if (r < max && (south === PathType.Wall || south === PathType.Undefined)) totalWalls++;
     }
   }
 
