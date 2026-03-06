@@ -27,12 +27,9 @@ export class AudioService {
   private enabled: boolean = true;
   private currentSound: Howl | null = null;
   private activeHtml5Audio: Set<HTMLAudioElement> = new Set();
-  private audioPool: Map<SoundType, HTMLAudioElement[]> = new Map();
-  private lastPlayTime: Map<SoundType, number> = new Map();
+  private replayAudio: Map<SoundType, HTMLAudioElement> = new Map();
   private audioUnlocked: boolean = false;
   private replayMode: boolean = false;
-  private static readonly POOL_SIZE = 1; // one element per sound — prevents mobile echo
-  private static readonly DEBOUNCE_MS = 80; // min gap between same sound
 
   constructor() {
     this.loadSounds();
@@ -180,65 +177,40 @@ export class AudioService {
   }
 
   /**
-   * Get or create a pooled Audio element for a sound type.
-   * Reuses finished elements instead of creating new ones each time,
-   * which prevents mobile browsers from choking on too many Audio objects.
-   */
-  private getPooledAudio(sound: SoundType): HTMLAudioElement | null {
-    const src = this.soundPaths.get(sound);
-    if (!src) return null;
-
-    let pool = this.audioPool.get(sound);
-    if (!pool) {
-      pool = [];
-      this.audioPool.set(sound, pool);
-    }
-
-    // Find an idle element (paused or ended)
-    for (const audio of pool) {
-      if (audio.paused || audio.ended) {
-        audio.currentTime = 0;
-        return audio;
-      }
-    }
-
-    // Pool not full — create a new element
-    if (pool.length < AudioService.POOL_SIZE) {
-      const audio = new Audio(src);
-      audio.preservesPitch = true;
-      pool.push(audio);
-      return audio;
-    }
-
-    // Pool full and all busy — steal the oldest one
-    const oldest = pool[0];
-    oldest.pause();
-    oldest.currentTime = 0;
-    return oldest;
-  }
-
-  /**
    * Play a sound at a specific playback rate without pitch shift.
-   * Uses pooled HTML5 Audio elements with preservesPitch. Sounds overlap —
-   * nothing is stopped or awaited so multiple sounds can play simultaneously.
+   * Creates a fresh Audio element each time to avoid mobile reuse artifacts.
+   * Stops and discards the previous element for the same sound type.
    */
   public playAtRate(sound: SoundType, rate: number): void {
     if (!this.enabled) return;
 
-    // Debounce: skip if the same sound played very recently
-    const now = performance.now();
-    const last = this.lastPlayTime.get(sound) ?? 0;
-    if (now - last < AudioService.DEBOUNCE_MS) return;
-    this.lastPlayTime.set(sound, now);
+    const src = this.soundPaths.get(sound);
+    if (!src) return;
 
-    const audio = this.getPooledAudio(sound);
-    if (!audio) return;
+    // Stop previous instance of this sound type
+    const prev = this.replayAudio.get(sound);
+    if (prev) {
+      prev.pause();
+      prev.removeAttribute('src');
+      prev.load(); // release browser audio resource
+      this.activeHtml5Audio.delete(prev);
+    }
 
+    // Create a completely fresh element — no reuse, no residual state
+    const audio = new Audio(src);
+    audio.preservesPitch = true;
     audio.playbackRate = rate;
 
-    // Track it so stopAllHtml5Audio can clean up
+    this.replayAudio.set(sound, audio);
     this.activeHtml5Audio.add(audio);
-    const cleanup = () => this.activeHtml5Audio.delete(audio);
+
+    const cleanup = () => {
+      this.activeHtml5Audio.delete(audio);
+      // Only clear from map if this is still the current element for this sound
+      if (this.replayAudio.get(sound) === audio) {
+        this.replayAudio.delete(sound);
+      }
+    };
     audio.addEventListener('ended', cleanup, { once: true });
     audio.addEventListener('error', cleanup, { once: true });
 
@@ -304,8 +276,7 @@ export class AudioService {
    */
   public releaseAudioPool(): void {
     this.stopAllHtml5Audio();
-    this.audioPool.clear();
-    this.lastPlayTime.clear();
+    this.replayAudio.clear();
     this.replayMode = false;
   }
 
