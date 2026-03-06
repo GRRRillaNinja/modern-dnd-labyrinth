@@ -160,11 +160,38 @@ export const DailyLeaderboard: React.FC<DailyLeaderboardProps> = ({ challengeDat
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-center flex-shrink-0 w-7"
                           style={index === 0 ? { color: '#ffd700' } : index === 1 ? { color: '#c0c0c0' } : index === 2 ? { color: '#cd7f32' } : { color: '#6b7280' }}>
-                          {index === 0 ? '1st' : index === 1 ? '2nd' : index === 2 ? '3rd' : `#${index + 1}`}
+                          {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
                         </span>
-                        <span className="truncate min-w-0 text-xs sm:text-sm text-gray-200">
+                        <span className={`truncate min-w-0 text-xs sm:text-sm ${index === 0 ? 'font-semibold' : ''}`}
+                          style={index === 0 ? { color: '#fde68a' } : index === 1 ? { color: '#d1d5db' } : index === 2 ? { color: '#e0a870' } : { color: '#d1d5db' }}>
                           {entry.player_name || 'Anonymous'}
                         </span>
+                        {/* Difficulty Badge */}
+                        <span className={`px-1.5 sm:px-2 py-0.5 rounded font-bold flex-shrink-0 text-[10px] sm:text-xs ${
+                          entry.difficulty_level === 1
+                            ? 'bg-green-900/50 text-green-400 border border-green-700'
+                            : 'bg-red-900/50 text-red-400 border border-red-700'
+                        }`}>
+                          L{entry.difficulty_level}
+                        </span>
+                        {/* Dungeon Size Badge */}
+                        {entry.dungeon_size != null && (() => {
+                          const sizeColors: Record<number, string> = {
+                            8:  'bg-sky-900/50 text-sky-300 border-sky-500',
+                            10: 'bg-emerald-900/50 text-emerald-300 border-emerald-500',
+                            12: 'bg-violet-900/50 text-violet-300 border-violet-500',
+                            14: 'bg-amber-900/50 text-amber-300 border-amber-500',
+                            16: 'bg-rose-900/50 text-rose-300 border-rose-500',
+                            18: 'bg-cyan-900/50 text-cyan-300 border-cyan-500',
+                            20: 'bg-fuchsia-900/50 text-fuchsia-300 border-fuchsia-500',
+                          };
+                          const colorClass = sizeColors[entry.dungeon_size] ?? 'bg-sky-900/50 text-sky-300 border-sky-500';
+                          return (
+                            <span className={`px-1.5 sm:px-2 py-0.5 rounded font-bold flex-shrink-0 text-[10px] sm:text-xs ${colorClass}`}>
+                              {entry.dungeon_size}x{entry.dungeon_size}
+                            </span>
+                          );
+                        })()}
                         <span className="text-amber-400 font-bold text-xs sm:text-sm whitespace-nowrap flex-shrink-0 ml-auto">
                           {SupabaseService.formatTime(entry.game_time)}
                         </span>
@@ -175,6 +202,9 @@ export const DailyLeaderboard: React.FC<DailyLeaderboardProps> = ({ challengeDat
                         )}
                         {entry.total_deaths != null && (
                           <span className="text-red-400 font-semibold">{entry.total_deaths} Deaths</span>
+                        )}
+                        {entry.walls_discovered_pct != null && (
+                          <span className="text-green-400 font-semibold">{entry.walls_discovered_pct}% Walls</span>
                         )}
                       </div>
                     </motion.div>

@@ -31,6 +31,37 @@ export function getDailyChallengeSeed(): number {
   return now.getUTCFullYear() * 10000 + (now.getUTCMonth() + 1) * 100 + now.getUTCDate();
 }
 
+/** Derive deterministic daily challenge settings from the seed */
+export function getDailyChallengeSettings(seed: number): {
+  mode: GameMode;
+  players: number;
+  level: number;
+  dungeonSize: number;
+} {
+  // mulberry32 PRNG — same algorithm as MazeGenerator
+  let t = seed | 0;
+  function next(): number {
+    t = (t + 0x6D2B79F5) | 0;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  }
+
+  // Solo or vs CPU (50/50)
+  const isCPU = next() < 0.5;
+  const mode = isCPU ? GameMode.VsCPU : GameMode.SinglePlayer;
+  const players = isCPU ? 2 : 1;
+
+  // Difficulty level 1 or 2 (50/50)
+  const level = next() < 0.5 ? 1 : 2;
+
+  // Dungeon size: 8, 10, 12, 14 (even distribution)
+  const sizes = [8, 10, 12, 14];
+  const dungeonSize = sizes[Math.floor(next() * sizes.length)];
+
+  return { mode, players, level, dungeonSize };
+}
+
 /** Saved native Math.random — restored after seeded init or on game end */
 let savedMathRandom: (() => number) | null = null;
 
@@ -223,13 +254,20 @@ export const useGameStore = create<GameStore>()(subscribeWithSelector((set, get)
 
     const isDaily = seed !== undefined;
 
-    // Daily challenge: auto-place waystone at seeded position
+    // Daily challenge: auto-place waystones at seeded positions
     if (isDaily) {
       const size = settings.dungeonSize;
       const waystoneRow = Math.floor(Math.random() * size);
       const waystoneCol = Math.floor(Math.random() * size);
-      // This internally calls setTreasureRoom (seeded) and transitions to WarriorOneTurn
       engine.setWarriorSecretRoom(0, [waystoneRow, waystoneCol]);
+
+      // For vs CPU daily: also auto-place CPU's waystone
+      if (isCPU) {
+        const cpuRow = Math.floor(Math.random() * size);
+        const cpuCol = Math.floor(Math.random() * size);
+        engine.setWarriorSecretRoom(1, [cpuRow, cpuCol]);
+      }
+
       // Restore Math.random — gameplay randomness (dragon AI, respawns) stays natural
       restoreMathRandom();
     }

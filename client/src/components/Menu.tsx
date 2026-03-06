@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { GameMode } from '@shared/types';
 import { audioService } from '../services/AudioService';
 import { Leaderboard } from './Leaderboard';
+import { getDailyChallengeSeed, getDailyChallengeSettings } from '../store/gameStore';
 
 interface MenuProps {
   onStart: (mode: GameMode, players: number, level: number, dungeonSize: number) => void;
@@ -252,9 +253,14 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onStartDailyChallenge, onSh
               }}
             >
               Daily Challenge
-              <div className="text-[10px] font-normal text-green-300 mt-0.5">
-                Same maze for everyone today!
-              </div>
+              {(() => {
+                const dc = getDailyChallengeSettings(getDailyChallengeSeed());
+                return (
+                  <div className="text-[10px] font-normal text-green-300 mt-0.5">
+                    Today: {dc.dungeonSize}x{dc.dungeonSize} · L{dc.level} · {dc.mode === GameMode.VsCPU ? 'vs CPU' : 'Solo'}
+                  </div>
+                );
+              })()}
             </motion.button>
           </div>
 

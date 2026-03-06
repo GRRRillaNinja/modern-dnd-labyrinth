@@ -9,7 +9,7 @@ import { PlayerNameModal } from './components/PlayerNameModal';
 import { PostGameOverlay } from './components/PostGameOverlay';
 import { ReplayViewer } from './components/ReplayViewer';
 import { DailyLeaderboard } from './components/DailyLeaderboard';
-import { useGameStore, calculateWallsDiscoveredPct, getDailyChallengeSeed } from './store/gameStore';
+import { useGameStore, calculateWallsDiscoveredPct, getDailyChallengeSeed, getDailyChallengeSettings } from './store/gameStore';
 import { useReplayStore } from './store/replayStore';
 import { GameMode } from '@shared/types';
 
@@ -88,7 +88,8 @@ function App() {
 
   const handleStartDailyChallenge = () => {
     const seed = getDailyChallengeSeed();
-    initGame(GameMode.SinglePlayer, 1, 2, 8, seed);
+    const { mode, players, level, dungeonSize } = getDailyChallengeSettings(seed);
+    initGame(mode, players, level, dungeonSize, seed);
     setGameStarted(true);
   };
 
