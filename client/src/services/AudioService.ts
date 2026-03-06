@@ -30,6 +30,7 @@ export class AudioService {
   private audioPool: Map<SoundType, HTMLAudioElement[]> = new Map();
   private lastPlayTime: Map<SoundType, number> = new Map();
   private audioUnlocked: boolean = false;
+  private replayMode: boolean = false;
   private static readonly POOL_SIZE = 1; // one element per sound — prevents mobile echo
   private static readonly DEBOUNCE_MS = 80; // min gap between same sound
 
@@ -97,7 +98,7 @@ export class AudioService {
    * Play a sound
    */
   public async play(sound: SoundType): Promise<void> {
-    if (!this.enabled) return;
+    if (!this.enabled || this.replayMode) return;
 
     // Stop current sound if playing, and remove its pending 'end' listener.
     // Without this cleanup, the orphaned listener fires when the same Howl
@@ -305,6 +306,15 @@ export class AudioService {
     this.stopAllHtml5Audio();
     this.audioPool.clear();
     this.lastPlayTime.clear();
+    this.replayMode = false;
+  }
+
+  /**
+   * Enable/disable replay mode.
+   * When active, Howler play() is suppressed so only playAtRate() produces sound.
+   */
+  public setReplayMode(active: boolean): void {
+    this.replayMode = active;
   }
 
   /**

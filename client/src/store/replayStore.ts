@@ -36,6 +36,7 @@ export const useReplayStore = create<ReplayStore>((set, get) => ({
   loadFromData: (data: ReplayData) => {
     const { playbackTimer, playbackSpeed } = get();
     if (playbackTimer) clearInterval(playbackTimer);
+    audioService.setReplayMode(true);
 
     set({
       isReplaying: true,
