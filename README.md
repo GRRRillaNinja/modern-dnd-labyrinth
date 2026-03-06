@@ -2,7 +2,7 @@
 
 A modern dungeon crawler inspired by [Bob Whitley's web recreation](https://dndlabyrinth.com/), rebuilt with React, TypeScript, and modern web technologies.
 
-![Game Status](https://img.shields.io/badge/status-v1.0_released-success)
+![Game Status](https://img.shields.io/badge/status-v2.2_released-success)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-web-lightgrey)
 
@@ -13,8 +13,8 @@ This project was inspired by **[Bob Whitley's web-based recreation](https://dndl
 ## 🎮 Features
 
 ### Gameplay
-- ✅ **Single-player and local 2-player modes** - Play solo or with a friend
-- ✅ **Procedural maze generation** - Unique 8×8 labyrinth every game
+- ✅ **Single-player, local 2-player, and VS CPU modes** - Play solo or with a friend
+- ✅ **Procedural maze generation** - Unique labyrinth every game
 - ✅ **Two difficulty levels** - Level 1 (open passages) and Level 2 (locking doors)
 - ✅ **Strategic Waystone placement** - Choose your secret safe room
 - ✅ **Dragon AI** - Intelligent enemy that wakes, hunts, and patrols
@@ -22,7 +22,9 @@ This project was inspired by **[Bob Whitley's web-based recreation](https://dndl
 - ✅ **Warrior battles** - Fight for treasure possession in two-player mode
 - ✅ **Lives system** - 3 lives per warrior with strategic respawn
 - ✅ **Move-based turns** - Tactical gameplay with limited moves per turn
-- ✅ **Leaderboards** - Top 10 Leaderboards to flex your skills
+- ✅ **Leaderboards** - Top 100 Leaderboards to flex your skills
+- ✅ **Daily Challenge** - Same seeded maze for everyone each day with randomized settings
+- ✅ **Replay System** - Watch replays of completed games with transport controls
 
 ### Level 2 Advanced Features
 - 🚪 **Locking door system** - Doors randomly start locked (35%) or unlocked (65%)
@@ -176,31 +178,36 @@ export const DEFAULT_SETTINGS: GameSettings = {
 
 ## 🎯 Roadmap
 
-### ✅ Version 1.0 (Current)
+### ✅ Version 1.0
 - Complete single-player and two-player gameplay
 - Two difficulty levels with locking doors
 - Full audio and visual effects
 - Responsive design
 
-### 🔮 Future Versions
+### ✅ Version 2.0
+- VS CPU mode with AI opponent
+- Variable dungeon sizes (8x8 to 20x20)
+- Leaderboards via Supabase
 
-**Phase 2: Visual Polish**
-- Particle effects (dragon fire, sparkles)
-- Enhanced animations
-- Multiple theme options
+### ✅ Version 2.1
+- Replay system with transport controls
+- Post-game overlay with replay/score options
+
+### ✅ Version 2.2 (Current)
+- Daily Challenge with seeded dungeon generation
+- Randomized daily settings (mode, difficulty, size)
+- Dedicated daily leaderboard
+- Fixed walls discovered percentage tracking
+
+### 🔮 Future Versions
 
 **Phase 3: Online Multiplayer**
 - WebSocket real-time gameplay
 - Room creation system
 - Chat functionality
 
-**Phase 4: Enhancements**
-- Statistics tracking
-- Achievement system
-- Replay system
-
-**Phase 5: New Game Modes**
-- Time attack mode
+**Phase 4: New Game Modes**
+- Role reversal mode (play as the dragon)
 - Co-op mode
 - Survival mode
 - Custom maze designer
