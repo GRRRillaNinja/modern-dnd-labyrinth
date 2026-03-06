@@ -30,7 +30,7 @@ export class AudioService {
   private audioPool: Map<SoundType, HTMLAudioElement[]> = new Map();
   private lastPlayTime: Map<SoundType, number> = new Map();
   private audioUnlocked: boolean = false;
-  private static readonly POOL_SIZE = 3; // max concurrent instances per sound
+  private static readonly POOL_SIZE = 1; // one element per sound — prevents mobile echo
   private static readonly DEBOUNCE_MS = 80; // min gap between same sound
 
   constructor() {
