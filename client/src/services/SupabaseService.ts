@@ -14,6 +14,7 @@ export interface LeaderboardEntry {
   walls_discovered_pct?: number | null;
   vs_cpu?: boolean | null;
   dungeon_size?: number | null;
+  challenge_date?: string | null;
   created_at?: string;
 }
 
@@ -93,7 +94,8 @@ export class SupabaseService {
     totalDeaths?: number,
     wallsDiscoveredPct?: number,
     vsCpu?: boolean,
-    dungeonSize?: number
+    dungeonSize?: number,
+    challengeDate?: string
   ): Promise<boolean> {
     if (!this.client) {
       console.warn('Cannot submit score: Supabase not configured');
@@ -113,6 +115,7 @@ export class SupabaseService {
         walls_discovered_pct: wallsDiscoveredPct ?? null,
         vs_cpu: vsCpu ?? null,
         dungeon_size: dungeonSize ?? null,
+        challenge_date: challengeDate ?? null,
       };
 
       const { error } = await this.client
@@ -261,6 +264,68 @@ export class SupabaseService {
       return { rank, isTop100 };
     } catch (error) {
       console.error('Exception getting score rank:', error);
+      return { rank: 0, isTop100: false };
+    }
+  }
+
+  /**
+   * Get daily challenge scores (fastest wins for a specific date)
+   */
+  public async getDailyChallengeScores(
+    challengeDate: string,
+    limit: number = 100
+  ): Promise<LeaderboardEntry[]> {
+    if (!this.client) return [];
+
+    try {
+      const { data, error } = await this.client
+        .from('leaderboard')
+        .select('*')
+        .eq('challenge_date', challengeDate)
+        .eq('game_result', 'win')
+        .order('game_time', { ascending: true })
+        .limit(limit);
+
+      if (error) {
+        console.error('Error fetching daily challenge scores:', error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error('Exception fetching daily challenge scores:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get the rank of a daily challenge score
+   */
+  public async getDailyChallengeRank(
+    gameTime: number,
+    challengeDate: string
+  ): Promise<{ rank: number; isTop100: boolean }> {
+    if (!this.client) {
+      return { rank: 0, isTop100: false };
+    }
+
+    try {
+      const { count, error } = await this.client
+        .from('leaderboard')
+        .select('id', { count: 'exact', head: true })
+        .eq('challenge_date', challengeDate)
+        .eq('game_result', 'win')
+        .lt('game_time', gameTime);
+
+      if (error) {
+        console.error('Error getting daily rank:', error);
+        return { rank: 0, isTop100: false };
+      }
+
+      const rank = (count || 0) + 1;
+      return { rank, isTop100: rank <= 100 };
+    } catch (error) {
+      console.error('Exception getting daily rank:', error);
       return { rank: 0, isTop100: false };
     }
   }

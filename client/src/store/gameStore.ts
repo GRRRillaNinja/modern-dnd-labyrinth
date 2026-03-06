@@ -20,6 +20,27 @@ import { AIController } from '../game/AIController';
 import { audioService } from '../services/AudioService';
 import { supabaseService } from '../services/SupabaseService';
 
+// Daily challenge utilities
+export function getDailyChallengeDate(): string {
+  const now = new Date();
+  return now.toISOString().split('T')[0]; // UTC YYYY-MM-DD
+}
+
+export function getDailyChallengeSeed(): number {
+  const now = new Date();
+  return now.getUTCFullYear() * 10000 + (now.getUTCMonth() + 1) * 100 + now.getUTCDate();
+}
+
+/** Saved native Math.random — restored after seeded init or on game end */
+let savedMathRandom: (() => number) | null = null;
+
+function restoreMathRandom(): void {
+  if (savedMathRandom) {
+    Math.random = savedMathRandom;
+    savedMathRandom = null;
+  }
+}
+
 // Dragon turn delay (milliseconds) - time to wait for dragon flying sound and movement animation
 const DRAGON_TURN_DELAY = 2500;
 
@@ -97,9 +118,11 @@ interface GameStore {
   recordingStartTime: number | null;
   pendingEvents: GameEvent[];
   showPostGameOverlay: boolean; // Show post-game overlay with replay/score options
+  isDailyChallenge: boolean;
+  challengeDate: string | null;
 
   // Actions
-  initGame: (mode: GameMode, numberOfWarriors: number, level: number, dungeonSize?: number) => void;
+  initGame: (mode: GameMode, numberOfWarriors: number, level: number, dungeonSize?: number, seed?: number) => void;
   setWarriorRoom: (warriorNumber: number, position: Position) => void;
   skipWarriorTwo: () => void;
   moveWarrior: (warriorNumber: number, position: Position) => void;
@@ -146,22 +169,32 @@ export const useGameStore = create<GameStore>()(subscribeWithSelector((set, get)
   recordingStartTime: null,
   pendingEvents: [],
   showPostGameOverlay: false,
+  isDailyChallenge: false,
+  challengeDate: null,
 
   // Initialize game
-  initGame: (mode: GameMode, numberOfWarriors: number, level: number, dungeonSize?: number) => {
+  initGame: (mode: GameMode, numberOfWarriors: number, level: number, dungeonSize?: number, seed?: number) => {
     // Abort any running AI turn from a previous game
     const prevAI = get().aiController;
     if (prevAI) prevAI.abort();
 
+    // Restore any previously seeded Math.random
+    restoreMathRandom();
+
     const { settings: baseSettings } = get();
     const settings = { ...baseSettings, dungeonSize: dungeonSize ?? baseSettings.dungeonSize };
+
+    // Save native Math.random before seeded generation
+    if (seed !== undefined) {
+      savedMathRandom = Math.random;
+    }
 
     // Create game engine
     const engine = new GameEngine(settings);
 
-    // Generate maze
+    // Generate maze (seeds Math.random if seed provided)
     const mazeGen = new MazeGenerator(settings);
-    const maze = mazeGen.generate();
+    const maze = mazeGen.generate(seed);
 
     // Start game
     engine.startGame(numberOfWarriors);
@@ -172,6 +205,7 @@ export const useGameStore = create<GameStore>()(subscribeWithSelector((set, get)
     state.mode = mode;
 
     // Now set the maze (this will initialize locked doors for level 2)
+    // Math.random is still seeded here, so locked doors are deterministic
     engine.setMaze(maze.chamberPaths);
 
     // Subscribe to events
@@ -184,17 +218,32 @@ export const useGameStore = create<GameStore>()(subscribeWithSelector((set, get)
       ai = new AIController();
     }
 
+    const isDaily = seed !== undefined;
+
+    // Daily challenge: auto-place waystone at seeded position
+    if (isDaily) {
+      const size = settings.dungeonSize;
+      const waystoneRow = Math.floor(Math.random() * size);
+      const waystoneCol = Math.floor(Math.random() * size);
+      // This internally calls setTreasureRoom (seeded) and transitions to WarriorOneTurn
+      engine.setWarriorSecretRoom(0, [waystoneRow, waystoneCol]);
+      // Restore Math.random — gameplay randomness (dragon AI, respawns) stays natural
+      restoreMathRandom();
+    }
+
     set({
       gameEngine: engine,
-      gameState: engine.getState(),
+      gameState: { ...engine.getState() },
       chamberPaths: maze.chamberPaths,
-      helpMessage: numberOfWarriors === 1
-        ? 'Pick a Waystone location for warrior one'
-        : isCPU
+      helpMessage: isDaily
+        ? "Daily Challenge! Find the treasure and return to your Waystone!"
+        : numberOfWarriors === 1
           ? 'Pick a Waystone location for warrior one'
-          : 'Player 1: Pick a Waystone location for warrior one',
-      gameWon: false, // Reset game result
-      gameStartTime: null, // Reset timer
+          : isCPU
+            ? 'Pick a Waystone location for warrior one'
+            : 'Player 1: Pick a Waystone location for warrior one',
+      gameWon: false,
+      gameStartTime: null,
       gameEndTime: null,
       showPlayerNameModal: false,
       showLeaderboardAfterGame: false,
@@ -204,15 +253,20 @@ export const useGameStore = create<GameStore>()(subscribeWithSelector((set, get)
       aiController: ai,
       isCPUMode: isCPU,
       isAIThinking: false,
-      // Replay recording
       isRecording: true,
       replayFrames: [],
       recordingStartTime: null,
       pendingEvents: [],
-          showPostGameOverlay: false,
+      showPostGameOverlay: false,
+      isDailyChallenge: isDaily,
+      challengeDate: isDaily ? getDailyChallengeDate() : null,
     });
 
-    audioService.announceWarrior(0);
+    if (isDaily) {
+      audioService.play('on');
+    } else {
+      audioService.announceWarrior(0);
+    }
   },
 
   // Set warrior secret room
@@ -560,12 +614,14 @@ export const useGameStore = create<GameStore>()(subscribeWithSelector((set, get)
 
   // Reset game
   resetGame: () => {
-    const { gameState, aiController, isCPUMode } = get();
+    const { gameState, aiController, isCPUMode, isDailyChallenge } = get();
     // Abort any running AI turn
     if (aiController) aiController.abort();
+    restoreMathRandom();
     if (gameState) {
       const mode = isCPUMode ? GameMode.VsCPU : gameState.mode;
-      get().initGame(mode, gameState.numberOfWarriors, gameState.level, gameState.dungeonSize);
+      const seed = isDailyChallenge ? getDailyChallengeSeed() : undefined;
+      get().initGame(mode, gameState.numberOfWarriors, gameState.level, gameState.dungeonSize, seed);
     }
   },
 
@@ -844,7 +900,7 @@ export const useGameStore = create<GameStore>()(subscribeWithSelector((set, get)
 
   // Submit score to leaderboard
   submitScore: async (playerName: string) => {
-    const { gameState, gameStartTime, gameEndTime, gameWon, chamberPaths, totalMoves, totalDeaths } = get();
+    const { gameState, gameStartTime, gameEndTime, gameWon, chamberPaths, totalMoves, totalDeaths, challengeDate } = get();
 
     if (!gameState || !gameStartTime || !gameEndTime) {
       console.error('Cannot submit score: missing game data');
@@ -869,14 +925,19 @@ export const useGameStore = create<GameStore>()(subscribeWithSelector((set, get)
       totalDeaths,
       wallsDiscoveredPct,
       vsCpu,
-      dungeonSize
+      dungeonSize,
+      challengeDate ?? undefined
     );
 
     if (success) {
       // Get the rank of the submitted score
-      // For wins, we use 'fastest' category; for losses, we also use 'fastest' (fastest loss)
-      const category = 'fastest';
-      const rankResult = await supabaseService.getScoreRank(gameTime, gameResult, gameMode, category);
+      let rankResult: { rank: number; isTop100: boolean };
+      if (challengeDate) {
+        rankResult = await supabaseService.getDailyChallengeRank(gameTime, challengeDate);
+      } else {
+        const category = 'fastest';
+        rankResult = await supabaseService.getScoreRank(gameTime, gameResult, gameMode, category);
+      }
 
       // Store submission result and show leaderboard
       set({

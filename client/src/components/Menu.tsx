@@ -6,10 +6,11 @@ import { Leaderboard } from './Leaderboard';
 
 interface MenuProps {
   onStart: (mode: GameMode, players: number, level: number, dungeonSize: number) => void;
+  onStartDailyChallenge: () => void;
   onShowLeaderboard: () => void;
 }
 
-export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowLeaderboard }) => {
+export const Menu: React.FC<MenuProps> = ({ onStart, onStartDailyChallenge, onShowLeaderboard: _onShowLeaderboard }) => {
   const [players, setPlayers] = useState<number>(1);
   const [level, setLevel] = useState<number>(1);
   const [dungeonSize, setDungeonSize] = useState<number>(8);
@@ -230,6 +231,30 @@ export const Menu: React.FC<MenuProps> = ({ onStart, onShowLeaderboard: _onShowL
               }}
             >
               ⚔️ Begin Adventure ⚔️
+            </motion.button>
+          </div>
+
+          {/* Daily Challenge button */}
+          <div id="menu-daily-wrapper" className="text-center mb-2">
+            <motion.button
+              id="menu-daily-btn"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => {
+                audioService.stopCurrent();
+                onStartDailyChallenge();
+              }}
+              className="px-8 py-2.5 text-white rounded-lg font-medieval text-base transition-all"
+              style={{
+                background: 'linear-gradient(180deg, #1a4a2e 0%, #0f3320 50%, #082215 100%)',
+                border: '3px solid #22c55e',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -2px 0 rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.5), 0 0 15px rgba(34, 197, 94, 0.3)',
+              }}
+            >
+              Daily Challenge
+              <div className="text-[10px] font-normal text-green-300 mt-0.5">
+                Same maze for everyone today!
+              </div>
             </motion.button>
           </div>
 

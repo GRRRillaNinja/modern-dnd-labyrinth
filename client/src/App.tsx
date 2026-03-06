@@ -8,7 +8,8 @@ import { Leaderboard } from './components/Leaderboard';
 import { PlayerNameModal } from './components/PlayerNameModal';
 import { PostGameOverlay } from './components/PostGameOverlay';
 import { ReplayViewer } from './components/ReplayViewer';
-import { useGameStore, calculateWallsDiscoveredPct } from './store/gameStore';
+import { DailyLeaderboard } from './components/DailyLeaderboard';
+import { useGameStore, calculateWallsDiscoveredPct, getDailyChallengeSeed } from './store/gameStore';
 import { useReplayStore } from './store/replayStore';
 import { GameMode } from '@shared/types';
 
@@ -32,6 +33,8 @@ function App() {
     skipScoreSubmission,
     closeLeaderboard,
     submissionResult,
+    isDailyChallenge,
+    challengeDate,
   } = useGameStore();
   const { isReplaying } = useReplayStore();
 
@@ -83,6 +86,12 @@ function App() {
     setGameStarted(true);
   };
 
+  const handleStartDailyChallenge = () => {
+    const seed = getDailyChallengeSeed();
+    initGame(GameMode.SinglePlayer, 1, 2, 8, seed);
+    setGameStarted(true);
+  };
+
   const handleExit = () => {
     if (isReplaying) {
       useReplayStore.getState().exitReplay();
@@ -91,7 +100,7 @@ function App() {
   };
 
   if (!gameStarted) {
-    return <Menu onStart={handleStartGame} onShowLeaderboard={() => setShowLeaderboard(true)} />;
+    return <Menu onStart={handleStartGame} onStartDailyChallenge={handleStartDailyChallenge} onShowLeaderboard={() => setShowLeaderboard(true)} />;
   }
 
   return (
@@ -111,8 +120,8 @@ function App() {
             <span id="app-header-exit-label" className="hidden sm:inline">Exit to Menu</span>
           </button>
           {/* Game Title */}
-          <h1 id="app-header-title" className="text-xl sm:text-2xl font-medieval text-red-500">
-            Delve & Dash
+          <h1 id="app-header-title" className={`text-xl sm:text-2xl font-medieval ${isDailyChallenge ? 'text-green-400' : 'text-red-500'}`}>
+            {isDailyChallenge ? 'Daily Challenge' : 'Delve & Dash'}
           </h1>
           {/* Live Game Timer */}
           <div
@@ -392,10 +401,19 @@ function App() {
       )}
 
       {/* Leaderboard Modal - After Game Completion */}
-      {showLeaderboardAfterGame && gameState && (
+      {showLeaderboardAfterGame && gameState && !isDailyChallenge && (
         <Leaderboard
           gameMode={gameState.numberOfWarriors === 1 ? 'solo' : 'multiplayer'}
           difficultyLevel={gameState.level as 1 | 2}
+          onClose={closeLeaderboard}
+          submissionResult={submissionResult}
+        />
+      )}
+
+      {/* Daily Challenge Leaderboard - After Daily Challenge Completion */}
+      {showLeaderboardAfterGame && isDailyChallenge && challengeDate && (
+        <DailyLeaderboard
+          challengeDate={challengeDate}
           onClose={closeLeaderboard}
           submissionResult={submissionResult}
         />
